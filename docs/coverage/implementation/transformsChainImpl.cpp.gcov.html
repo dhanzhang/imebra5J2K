@@ -1,0 +1,363 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/transformsChainImpl.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - transformsChainImpl.cpp<span style="font-size: 80%;"> (source / <a href="transformsChainImpl.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">61</td>
+            <td class="headerCovTableEntry">80</td>
+            <td class="headerCovTableEntryMed">76.2 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">56</td>
+            <td class="headerCovTableEntry">232</td>
+            <td class="headerCovTableEntryLo">24.1 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement 
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial 
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file transformsChain.cpp
+<span class="lineNum">      15 </span>                :            :     \brief Implementation of the class transformsChain.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #include &quot;exceptionImpl.h&quot;
+<span class="lineNum">      20 </span>                :            : #include &quot;transformsChainImpl.h&quot;
+<span class="lineNum">      21 </span>                :            : #include &quot;imageImpl.h&quot;
+<span class="lineNum">      22 </span>                :            : #include &quot;dataSetImpl.h&quot;
+<span class="lineNum">      23 </span>                :            : #include &quot;transformHighBitImpl.h&quot;
+<span class="lineNum">      24 </span>                :            : 
+<span class="lineNum">      25 </span>                :            : namespace imebra
+<span class="lineNum">      26 </span>                :            : {
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :            : namespace implementation
+<span class="lineNum">      29 </span>                :            : {
+<span class="lineNum">      30 </span>                :            : 
+<span class="lineNum">      31 </span>                :            : namespace transforms
+<span class="lineNum">      32 </span>                :            : {
+<span class="lineNum">      33 </span>                :            : 
+<a name="34"><span class="lineNum">      34 </span>                :            : </a>
+<span class="lineNum">      35 </span>                :            : 
+<span class="lineNum">      36 </span>                :<span class="lineCov">        224 : transformsChain::transformsChain()</span>
+<span class="lineNum">      37 </span>                :<span class="lineCov">        112 : {}</span>
+<span class="lineNum">      38 </span>                :            : 
+<span class="lineNum">      39 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      40 </span>                :            : //
+<span class="lineNum">      41 </span>                :            : // Add a new transform to the chain
+<a name="42"><span class="lineNum">      42 </span>                :            : //</a>
+<span class="lineNum">      43 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      44 </span>                :<span class="lineCov">        270 : void transformsChain::addTransform(std::shared_ptr&lt;transform&gt; pTransform)</span>
+<span class="lineNum">      45 </span>                :            : {
+<span class="lineNum">      46 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">      47 </span>                :            : 
+<span class="lineNum">      48 </span>[<span class="branchCov" title="Branch 1 was taken 166 times"> + </span><span class="branchCov" title="Branch 2 was taken 104 times"> + </span>][<span class="branchCov" title="Branch 5 was taken 166 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">        270 :         if(pTransform != 0 &amp;&amp; !pTransform-&gt;isEmpty())</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 164 times"> + </span><span class="branchCov" title="Branch 8 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 9 was taken 164 times"> + </span><span class="branchCov" title="Branch 10 was taken 106 times"> + </span>]
+<span class="lineNum">      49 </span>                :            :         {
+<span class="lineNum">      50 </span>        [<span class="branchCov" title="Branch 1 was taken 164 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        164 :             m_transformsList.push_back(pTransform);</span>
+<span class="lineNum">      51 </span>                :            :         }
+<span class="lineNum">      52 </span>                :            : 
+<span class="lineNum">      53 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :         IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">      54 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineCov">        270 : }</span>
+<span class="lineNum">      55 </span>                :            : 
+<span class="lineNum">      56 </span>                :            : 
+<span class="lineNum">      57 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      58 </span>                :            : //
+<span class="lineNum">      59 </span>                :            : // Returns true if no transform has been defined
+<a name="60"><span class="lineNum">      60 </span>                :            : //</a>
+<span class="lineNum">      61 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      62 </span>                :<span class="lineCov">        495 : bool transformsChain::isEmpty() const</span>
+<span class="lineNum">      63 </span>                :            : {
+<span class="lineNum">      64 </span>                :<span class="lineCov">        495 :         return m_transformsList.empty();</span>
+<span class="lineNum">      65 </span>                :            : }
+<a name="66"><span class="lineNum">      66 </span>                :            : </a>
+<span class="lineNum">      67 </span>                :            : 
+<span class="lineNum">      68 </span>                :<span class="lineCov">        109 : void transformsChain::runTransformHandlers(</span>
+<span class="lineNum">      69 </span>                :            :         std::shared_ptr&lt;handlers::readingDataHandlerNumericBase&gt; inputHandler, bitDepth_t inputDepth, std::uint32_t inputHandlerWidth, const std::string&amp; inputHandlerColorSpace,
+<span class="lineNum">      70 </span>                :            :         std::shared_ptr&lt;palette&gt; inputPalette,
+<span class="lineNum">      71 </span>                :            :         std::uint32_t inputHighBit,
+<span class="lineNum">      72 </span>                :            :         std::uint32_t inputTopLeftX, std::uint32_t inputTopLeftY, std::uint32_t inputWidth, std::uint32_t inputHeight,
+<span class="lineNum">      73 </span>                :            :         std::shared_ptr&lt;handlers::writingDataHandlerNumericBase&gt; outputHandler, bitDepth_t outputDepth, std::uint32_t outputHandlerWidth, const std::string&amp; outputHandlerColorSpace,
+<span class="lineNum">      74 </span>                :            :         std::shared_ptr&lt;palette&gt; outputPalette,
+<span class="lineNum">      75 </span>                :            :         std::uint32_t outputHighBit,
+<span class="lineNum">      76 </span>                :            :         std::uint32_t outputTopLeftX, std::uint32_t outputTopLeftY) const
+<span class="lineNum">      77 </span>                :            : {
+<span class="lineNum">      78 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">      79 </span>                :            : 
+<span class="lineNum">      80 </span>[<span class="branchCov" title="Branch 1 was taken 109 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchCov" title="Branch 4 was taken 109 times"> + </span>]:<span class="lineCov">        109 :     if(isEmpty())</span>
+<span class="lineNum">      81 </span>                :            :     {
+<span class="lineNum">      82 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         std::shared_ptr&lt;transformHighBit&gt; highBit(std::make_shared&lt;transformHighBit&gt;());</span>
+<span class="lineNum">      83 </span>        [<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :         highBit-&gt;runTransformHandlers(inputHandler, inputDepth, inputHandlerWidth, inputHandlerColorSpace,</span>
+<span class="lineNum">      84 </span>                :            :                                       inputPalette,
+<span class="lineNum">      85 </span>                :            :                                       inputHighBit,
+<span class="lineNum">      86 </span>                :            :                                       inputTopLeftX, inputTopLeftY, inputWidth, inputHeight,
+<span class="lineNum">      87 </span>                :            :                                       outputHandler, outputDepth, outputHandlerWidth, outputHandlerColorSpace,
+<span class="lineNum">      88 </span>                :            :                                       outputPalette,
+<span class="lineNum">      89 </span>                :            :                                       outputHighBit,
+<span class="lineNum">      90 </span>                :<span class="lineNoCov">          0 :                                       outputTopLeftX, outputTopLeftY);</span>
+<span class="lineNum">      91 </span>                :<span class="lineNoCov">          0 :         return;</span>
+<span class="lineNum">      92 </span>                :            :     }
+<span class="lineNum">      93 </span>                :            : 
+<span class="lineNum">      94 </span>        [<span class="branchCov" title="Branch 1 was taken 54 times"> + </span><span class="branchCov" title="Branch 2 was taken 55 times"> + </span>]:<span class="lineCov">        109 :     if(m_transformsList.size() == 1)</span>
+<span class="lineNum">      95 </span>                :            :     {
+<span class="lineNum">      96 </span>        [<span class="branchCov" title="Branch 7 was taken 54 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>]:<span class="lineCov">         54 :         m_transformsList.front()-&gt;runTransformHandlers(inputHandler, inputDepth, inputHandlerWidth, inputHandlerColorSpace,</span>
+<span class="lineNum">      97 </span>                :            :                                                inputPalette,
+<span class="lineNum">      98 </span>                :            :                                                inputHighBit,
+<span class="lineNum">      99 </span>                :            :                                                inputTopLeftX, inputTopLeftY, inputWidth, inputHeight,
+<span class="lineNum">     100 </span>                :            :                                                outputHandler, outputDepth, outputHandlerWidth, outputHandlerColorSpace,
+<span class="lineNum">     101 </span>                :            :                                                outputPalette,
+<span class="lineNum">     102 </span>                :            :                                                outputHighBit,
+<span class="lineNum">     103 </span>                :<span class="lineCov">         54 :                                                outputTopLeftX, outputTopLeftY);</span>
+<span class="lineNum">     104 </span>                :<span class="lineCov">         54 :         return;</span>
+<span class="lineNum">     105 </span>                :            :     }
+<span class="lineNum">     106 </span>                :            : 
+<span class="lineNum">     107 </span>                :<span class="lineCov">         55 :     std::uint32_t allocateRows = 65536 / inputWidth;</span>
+<span class="lineNum">     108 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 55 times"> + </span>]:<span class="lineCov">         55 :     if(allocateRows == 0)</span>
+<span class="lineNum">     109 </span>                :            :     {
+<span class="lineNum">     110 </span>                :<span class="lineNoCov">          0 :         allocateRows = 1;</span>
+<span class="lineNum">     111 </span>                :            :     }
+<span class="lineNum">     112 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 53 times"> + </span>]:<span class="lineCov">         55 :     if(allocateRows &gt; inputHeight)</span>
+<span class="lineNum">     113 </span>                :            :     {
+<span class="lineNum">     114 </span>                :<span class="lineCov">          2 :         allocateRows = inputHeight;</span>
+<span class="lineNum">     115 </span>                :            :     }
+<span class="lineNum">     116 </span>                :            : 
+<span class="lineNum">     117 </span>                :            :     // Allocate temporary images
+<span class="lineNum">     118 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     119 </span>                :            :     typedef std::vector&lt;std::shared_ptr&lt;image&gt; &gt; tTemporaryImagesList;
+<span class="lineNum">     120 </span>        [<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">        164 :     tTemporaryImagesList temporaryImages;</span>
+<span class="lineNum">     121 </span>                :            : 
+<span class="lineNum">     122 </span>[<span class="branchCov" title="Branch 1 was taken 55 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 55 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]:<span class="lineCov">         55 :     temporaryImages.push_back(m_transformsList.at(0)-&gt;allocateOutputImage(inputDepth,</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 9 was taken 55 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]
+<span class="lineNum">     123 </span>                :            :                                                                           inputHandlerColorSpace,
+<span class="lineNum">     124 </span>                :            :                                                                           inputHighBit,
+<span class="lineNum">     125 </span>                :            :                                                                           inputPalette,
+<span class="lineNum">     126 </span>                :<span class="lineCov">         55 :                                                                           inputWidth, allocateRows));</span>
+<span class="lineNum">     127 </span>                :            : 
+<span class="lineNum">     128 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 55 times"> + </span>]:<span class="lineCov">         55 :     for(size_t scanTransforms(1); scanTransforms != m_transformsList.size() - 1; ++scanTransforms)</span>
+<span class="lineNum">     129 </span>                :            :     {
+<span class="lineNum">     130 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         std::shared_ptr&lt;image&gt; inputTemporaryImage = temporaryImages.at(scanTransforms - 1);</span>
+<span class="lineNum">     131 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :         temporaryImages.push_back(m_transformsList.at(scanTransforms)-&gt;allocateOutputImage(inputTemporaryImage-&gt;getDepth(),</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>][<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>]
+<span class="lineNum">     132 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                                                                            inputTemporaryImage-&gt;getColorSpace(),</span>
+<span class="lineNum">     133 </span>                :            :                                                                                            inputTemporaryImage-&gt;getHighBit(),
+<span class="lineNum">     134 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                                                                            inputTemporaryImage-&gt;getPalette(),</span>
+<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :                                                                                            inputWidth, allocateRows));</span>
+<span class="lineNum">     136 </span>                :            :     }
+<span class="lineNum">     137 </span>                :            : 
+<span class="lineNum">     138 </span>                :            : 
+<span class="lineNum">     139 </span>                :            : 
+<span class="lineNum">     140 </span>                :            :     // Run all the transforms. Split the images into several
+<span class="lineNum">     141 </span>                :            :     //  parts
+<span class="lineNum">     142 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     143 </span>        [<span class="branchCov" title="Branch 0 was taken 108 times"> + </span><span class="branchCov" title="Branch 1 was taken 55 times"> + </span>]:<span class="lineCov">        163 :     while(inputHeight != 0)</span>
+<span class="lineNum">     144 </span>                :            :     {
+<span class="lineNum">     145 </span>                :<span class="lineCov">        108 :         std::uint32_t rows = allocateRows;</span>
+<span class="lineNum">     146 </span>        [<span class="branchCov" title="Branch 0 was taken 53 times"> + </span><span class="branchCov" title="Branch 1 was taken 55 times"> + </span>]:<span class="lineCov">        108 :         if(rows &gt; inputHeight)</span>
+<span class="lineNum">     147 </span>                :            :         {
+<span class="lineNum">     148 </span>                :<span class="lineCov">         53 :             rows = inputHeight;</span>
+<span class="lineNum">     149 </span>                :            :         }
+<span class="lineNum">     150 </span>                :<span class="lineCov">        108 :         inputHeight -= rows;</span>
+<span class="lineNum">     151 </span>                :            : 
+<span class="lineNum">     152 </span>        [<span class="branchCov" title="Branch 1 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        432 :         m_transformsList.at(0)-&gt;runTransformHandlers(inputHandler, inputDepth, inputHandlerWidth, inputHandlerColorSpace,</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 6 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span><span class="branchCov" title="Branch 10 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 15 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 16 was not taken"> - </span>]
+<span class="lineNum">     153 </span>                :            :                                                      inputPalette,
+<span class="lineNum">     154 </span>                :            :                                                      inputHighBit,
+<span class="lineNum">     155 </span>                :            :                                                      inputTopLeftX, inputTopLeftY, inputWidth, rows,
+<span class="lineNum">     156 </span>        [<span class="branchCov" title="Branch 3 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">        216 :                                                      temporaryImages.front()-&gt;getWritingDataHandler(),</span>
+<span class="lineNum">     157 </span>                :<span class="lineCov">        108 :                                                      temporaryImages.front()-&gt;getDepth(), inputWidth,</span>
+<span class="lineNum">     158 </span>        [<span class="branchCov" title="Branch 3 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">        216 :                                                      temporaryImages.front()-&gt;getColorSpace(),</span>
+<span class="lineNum">     159 </span>        [<span class="branchCov" title="Branch 3 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">        216 :                                                      temporaryImages.front()-&gt;getPalette(),</span>
+<span class="lineNum">     160 </span>                :<span class="lineCov">        108 :                                                      temporaryImages.front()-&gt;getHighBit(),</span>
+<span class="lineNum">     161 </span>                :<span class="lineCov">        108 :                                                      0, 0);</span>
+<span class="lineNum">     162 </span>                :<span class="lineCov">        108 :         inputTopLeftY += rows;</span>
+<span class="lineNum">     163 </span>                :            : 
+<span class="lineNum">     164 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 108 times"> + </span>]:<span class="lineCov">        108 :         for(size_t scanTransforms(1); scanTransforms != m_transformsList.size() - 1; ++scanTransforms)</span>
+<span class="lineNum">     165 </span>                :            :         {
+<span class="lineNum">     166 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :             m_transformsList.at(scanTransforms)-&gt;runTransform(temporaryImages.at(scanTransforms - 1), 0, 0, inputWidth, rows, temporaryImages.at(scanTransforms), 0, 0);</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span>]
+<span class="lineNum">     167 </span>                :            :         }
+<span class="lineNum">     168 </span>                :            : 
+<span class="lineNum">     169 </span>  [<span class="branchCov" title="Branch 6 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span><span class="branchCov" title="Branch 10 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]:<span class="lineCov">        432 :         m_transformsList.back()-&gt;runTransformHandlers(temporaryImages.back()-&gt;getReadingDataHandler(),</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 15 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 16 was not taken"> - </span>][<span class="branchCov" title="Branch 18 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 19 was not taken"> - </span>]
+<span class="lineNum">     170 </span>                :<span class="lineCov">        108 :                                                       temporaryImages.back()-&gt;getDepth(), inputWidth,</span>
+<span class="lineNum">     171 </span>        [<span class="branchCov" title="Branch 3 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">        216 :                                                       temporaryImages.back()-&gt;getColorSpace(),</span>
+<span class="lineNum">     172 </span>        [<span class="branchCov" title="Branch 3 was taken 108 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">        216 :                                                       temporaryImages.back()-&gt;getPalette(),</span>
+<span class="lineNum">     173 </span>                :<span class="lineCov">        108 :                                                       temporaryImages.back()-&gt;getHighBit(),</span>
+<span class="lineNum">     174 </span>                :            :                                                       0, 0, inputWidth, rows,
+<span class="lineNum">     175 </span>                :            :                                                       outputHandler, outputDepth, outputHandlerWidth, outputHandlerColorSpace,
+<span class="lineNum">     176 </span>                :            :                                                       outputPalette,
+<span class="lineNum">     177 </span>                :            :                                                       outputHighBit,
+<span class="lineNum">     178 </span>                :<span class="lineCov">        108 :                                                       outputTopLeftX, outputTopLeftY);</span>
+<span class="lineNum">     179 </span>                :<span class="lineCov">        108 :         outputTopLeftY += rows;</span>
+<span class="lineNum">     180 </span>                :            :     }
+<span class="lineNum">     181 </span>                :            : 
+<span class="lineNum">     182 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     183 </span>                :            : }
+<a name="184"><span class="lineNum">     184 </span>                :            : </a>
+<span class="lineNum">     185 </span>                :            : 
+<span class="lineNum">     186 </span>                :<span class="lineCov">         57 : std::shared_ptr&lt;image&gt; transformsChain::allocateOutputImage(</span>
+<span class="lineNum">     187 </span>                :            :         bitDepth_t inputDepth,
+<span class="lineNum">     188 </span>                :            :         const std::string&amp; inputColorSpace,
+<span class="lineNum">     189 </span>                :            :         std::uint32_t inputHighBit,
+<span class="lineNum">     190 </span>                :            :         std::shared_ptr&lt;palette&gt; inputPalette,
+<span class="lineNum">     191 </span>                :            :         std::uint32_t outputWidth, std::uint32_t outputHeight) const
+<span class="lineNum">     192 </span>                :            : {
+<span class="lineNum">     193 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     194 </span>                :            : 
+<span class="lineNum">     195 </span>[<span class="branchCov" title="Branch 1 was taken 57 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchCov" title="Branch 4 was taken 56 times"> + </span>]:<span class="lineCov">         57 :     if(isEmpty())</span>
+<span class="lineNum">     196 </span>                :            :         {
+<span class="lineNum">     197 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :         return std::make_shared&lt;image&gt;(outputWidth, outputHeight, inputDepth, inputColorSpace, inputHighBit);</span>
+<span class="lineNum">     198 </span>                :            :         }
+<span class="lineNum">     199 </span>                :            : 
+<span class="lineNum">     200 </span>        [<span class="branchCov" title="Branch 1 was taken 55 times"> + </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span>]:<span class="lineCov">         56 :         if(m_transformsList.size() == 1)</span>
+<span class="lineNum">     201 </span>                :            :         {
+<span class="lineNum">     202 </span>                :<span class="lineCov">         55 :         return m_transformsList.front()-&gt;allocateOutputImage(inputDepth,</span>
+<span class="lineNum">     203 </span>                :            :                                                              inputColorSpace,
+<span class="lineNum">     204 </span>                :            :                                                              inputHighBit,
+<span class="lineNum">     205 </span>                :            :                                                              inputPalette,
+<span class="lineNum">     206 </span>        [<span class="branchCov" title="Branch 2 was taken 55 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         55 :                                                              outputWidth, outputHeight);</span>
+<span class="lineNum">     207 </span>                :            :         }
+<span class="lineNum">     208 </span>                :            : 
+<span class="lineNum">     209 </span>                :            :         // Get the position of the last transform
+<span class="lineNum">     210 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     211 </span>                :<span class="lineCov">          1 :     tTransformsList::const_iterator lastTransform(m_transformsList.end());</span>
+<span class="lineNum">     212 </span>                :<span class="lineCov">          1 :         --lastTransform;</span>
+<span class="lineNum">     213 </span>                :            : 
+<span class="lineNum">     214 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">         57 :         std::shared_ptr&lt;image&gt; temporaryImage;</span>
+<span class="lineNum">     215 </span>                :            : 
+<span class="lineNum">     216 </span>        [<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>]:<span class="lineCov">          2 :     for(tTransformsList::const_iterator scanTransforms(m_transformsList.begin()); scanTransforms != lastTransform; ++scanTransforms)</span>
+<span class="lineNum">     217 </span>                :            :         {
+<span class="lineNum">     218 </span>        [<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :                 if(scanTransforms == m_transformsList.begin())</span>
+<span class="lineNum">     219 </span>                :            :                 {
+<span class="lineNum">     220 </span>        [<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          1 :             temporaryImage = (*scanTransforms)-&gt;allocateOutputImage(inputDepth,</span>
+<span class="lineNum">     221 </span>                :            :                                                                     inputColorSpace,
+<span class="lineNum">     222 </span>                :            :                                                                     inputHighBit,
+<span class="lineNum">     223 </span>                :            :                                                                     inputPalette,
+<span class="lineNum">     224 </span>                :<span class="lineCov">          1 :                                                                     1, 1);</span>
+<span class="lineNum">     225 </span>                :            :                 }
+<span class="lineNum">     226 </span>                :            :                 else
+<span class="lineNum">     227 </span>                :            :                 {
+<span class="lineNum">     228 </span>                :<span class="lineNoCov">          0 :             std::shared_ptr &lt;image&gt; newImage( (*scanTransforms)-&gt;allocateOutputImage(temporaryImage-&gt;getDepth(),</span>
+<span class="lineNum">     229 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                                                                      temporaryImage-&gt;getColorSpace(),</span>
+<span class="lineNum">     230 </span>                :            :                                                                                      temporaryImage-&gt;getHighBit(),
+<span class="lineNum">     231 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                                                                      temporaryImage-&gt;getPalette(),</span>
+<span class="lineNum">     232 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                                                                      1, 1) );</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>]
+<span class="lineNum">     233 </span>                :<span class="lineNoCov">          0 :                         temporaryImage = newImage;</span>
+<span class="lineNum">     234 </span>                :            :                 }
+<span class="lineNum">     235 </span>                :            :         }
+<span class="lineNum">     236 </span>                :<span class="lineCov">          1 :     return (*lastTransform)-&gt;allocateOutputImage(temporaryImage-&gt;getDepth(),</span>
+<span class="lineNum">     237 </span>        [<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          2 :                                                  temporaryImage-&gt;getColorSpace(),</span>
+<span class="lineNum">     238 </span>                :            :                                                  temporaryImage-&gt;getHighBit(),
+<span class="lineNum">     239 </span>        [<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          2 :                                                  temporaryImage-&gt;getPalette(),</span>
+<span class="lineNum">     240 </span>[<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]:<span class="lineCov">          2 :                                                  outputWidth, outputHeight);</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 9 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]
+<span class="lineNum">     241 </span>                :            : 
+<span class="lineNum">     242 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     243 </span>                :            : }
+<span class="lineNum">     244 </span>                :            : 
+<span class="lineNum">     245 </span>                :            : 
+<span class="lineNum">     246 </span>                :            : } // namespace transforms
+<span class="lineNum">     247 </span>                :            : 
+<a name="248"><span class="lineNum">     248 </span>                :            : } // namespace implementation</a>
+<span class="lineNum">     249 </span>                :            : 
+<span class="lineNum">     250 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 : } // namespace imebra</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

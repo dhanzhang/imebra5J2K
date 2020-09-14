@@ -1,0 +1,587 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/dicomNativeImageCodecImpl.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - dicomNativeImageCodecImpl.h<span style="font-size: 80%;"> (source / <a href="dicomNativeImageCodecImpl.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">131</td>
+            <td class="headerCovTableEntry">131</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">36</td>
+            <td class="headerCovTableEntry">53</td>
+            <td class="headerCovTableEntryLo">67.9 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">192</td>
+            <td class="headerCovTableEntry">272</td>
+            <td class="headerCovTableEntryLo">70.6 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file dicomNativeImageCodecImpl.h
+<span class="lineNum">      15 </span>                :            :     \brief Declaration of the class dicomnativeImageCodec.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #if !defined(imebraDicomNativeImageCodec_CC44A2C5_2B8C_42c1_9704_3F9C582643B9__INCLUDED_)
+<span class="lineNum">      20 </span>                :            : #define imebraDicomNativeImageCodec_CC44A2C5_2B8C_42c1_9704_3F9C582643B9__INCLUDED_
+<span class="lineNum">      21 </span>                :            : 
+<span class="lineNum">      22 </span>                :            : #include &quot;imageCodecImpl.h&quot;
+<span class="lineNum">      23 </span>                :            : #include &quot;dataImpl.h&quot;
+<span class="lineNum">      24 </span>                :            : #include &quot;dataSetImpl.h&quot;
+<span class="lineNum">      25 </span>                :            : #include &quot;streamControllerImpl.h&quot;
+<span class="lineNum">      26 </span>                :            : 
+<span class="lineNum">      27 </span>                :            : namespace imebra
+<span class="lineNum">      28 </span>                :            : {
+<span class="lineNum">      29 </span>                :            : 
+<span class="lineNum">      30 </span>                :            : namespace implementation
+<span class="lineNum">      31 </span>                :            : {
+<span class="lineNum">      32 </span>                :            : 
+<span class="lineNum">      33 </span>                :            : namespace codecs
+<span class="lineNum">      34 </span>                :            : {
+<span class="lineNum">      35 </span>                :            : 
+<span class="lineNum">      36 </span>                :            : /// \addtogroup group_codecs
+<span class="lineNum">      37 </span>                :            : ///
+<span class="lineNum">      38 </span>                :            : /// @{
+<span class="lineNum">      39 </span>                :            : 
+<span class="lineNum">      40 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      41 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      42 </span>                :            : /// \brief The Dicom Native codec.
+<span class="lineNum">      43 </span>                :            : ///
+<span class="lineNum">      44 </span>                :            : /// This class is used to decode and encode a native DICOM
+<span class="lineNum">      45 </span>                :            : /// image.
+<span class="lineNum">      46 </span>                :            : ///
+<a name="47"><span class="lineNum">      47 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      48 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      49 </span>                :<span class="lineCov">        140 : class dicomNativeImageCodec : public imageCodec</span>
+<span class="lineNum">      50 </span>                :            : {
+<span class="lineNum">      51 </span>                :            : public:
+<span class="lineNum">      52 </span>                :            :     // Get an image from a dicom structure
+<span class="lineNum">      53 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      54 </span>                :            :     virtual std::shared_ptr&lt;image&gt; getImage(const std::string&amp; transferSyntax,
+<span class="lineNum">      55 </span>                :            :                                             const std::string&amp; colorSpace,
+<span class="lineNum">      56 </span>                :            :                                             std::uint32_t channelsNumber,
+<span class="lineNum">      57 </span>                :            :                                             std::uint32_t imageWidth,
+<span class="lineNum">      58 </span>                :            :                                             std::uint32_t imageHeight,
+<span class="lineNum">      59 </span>                :            :                                             bool bSubSampledX,
+<span class="lineNum">      60 </span>                :            :                                             bool bSubSampledY,
+<span class="lineNum">      61 </span>                :            :                                             bool bInterleaved,
+<span class="lineNum">      62 </span>                :            :                                             bool b2Complement,
+<span class="lineNum">      63 </span>                :            :                                             std::uint8_t allocatedBits,
+<span class="lineNum">      64 </span>                :            :                                             std::uint8_t storedBits,
+<span class="lineNum">      65 </span>                :            :                                             std::uint8_t highBit,
+<span class="lineNum">      66 </span>                :            :                                             std::shared_ptr&lt;streamReader&gt; pSourceStream) const override;
+<span class="lineNum">      67 </span>                :            : 
+<span class="lineNum">      68 </span>                :            :     // Return the default planar configuration
+<span class="lineNum">      69 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      70 </span>                :            :     virtual bool defaultInterleaved() const override;
+<span class="lineNum">      71 </span>                :            : 
+<span class="lineNum">      72 </span>                :            :     // Write an image into a dicom structure
+<span class="lineNum">      73 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      74 </span>                :            :     virtual void setImage(
+<span class="lineNum">      75 </span>                :            :         std::shared_ptr&lt;streamWriter&gt; pDestStream,
+<span class="lineNum">      76 </span>                :            :         std::shared_ptr&lt;const image&gt; pImage,
+<span class="lineNum">      77 </span>                :            :         const std::string&amp; transferSyntax,
+<span class="lineNum">      78 </span>                :            :         imageQuality_t imageQuality,
+<span class="lineNum">      79 </span>                :            :         std::uint32_t allocatedBits,
+<span class="lineNum">      80 </span>                :            :         bool bSubSampledX,
+<span class="lineNum">      81 </span>                :            :         bool bSubSampledY,
+<span class="lineNum">      82 </span>                :            :         bool bInterleaved,
+<span class="lineNum">      83 </span>                :            :         bool b2Complement) const override;
+<span class="lineNum">      84 </span>                :            : 
+<span class="lineNum">      85 </span>                :            :     // Returns true if the codec can handle the transfer
+<span class="lineNum">      86 </span>                :            :     //  syntax
+<span class="lineNum">      87 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      88 </span>                :            :     virtual bool canHandleTransferSyntax(const std::string&amp; transferSyntax) const override;
+<span class="lineNum">      89 </span>                :            : 
+<span class="lineNum">      90 </span>                :            :     // Returns true if the transfer syntax has to be
+<span class="lineNum">      91 </span>                :            :     //  encapsulated
+<span class="lineNum">      92 </span>                :            :     //
+<span class="lineNum">      93 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      94 </span>                :            :     virtual bool encapsulated(const std::string&amp; transferSyntax) const override;
+<span class="lineNum">      95 </span>                :            : 
+<span class="lineNum">      96 </span>                :            :     // Returns the suggested allocated bits
+<span class="lineNum">      97 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      98 </span>                :            :     virtual std::uint32_t suggestAllocatedBits(const std::string&amp; transferSyntax, std::uint32_t highBit) const override;
+<span class="lineNum">      99 </span>                :            : 
+<span class="lineNum">     100 </span>                :            :     // Returns the image size, in bits
+<span class="lineNum">     101 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     102 </span>                :            :     static size_t getNativeImageSizeBits(std::uint32_t allocatedBits,
+<span class="lineNum">     103 </span>                :            :                                       std::uint32_t imageWidth,
+<span class="lineNum">     104 </span>                :            :                                       std::uint32_t imageHeight,
+<span class="lineNum">     105 </span>                :            :                                       std::uint32_t channelsNumber,
+<span class="lineNum">     106 </span>                :            :                                       bool bSubsampledX,
+<span class="lineNum">     107 </span>                :            :                                       bool bSubsampledY);
+<span class="lineNum">     108 </span>                :            : 
+<span class="lineNum">     109 </span>                :            : protected:
+<a name="110"><span class="lineNum">     110 </span>                :            : </a>
+<span class="lineNum">     111 </span>                :            : 
+<span class="lineNum">     112 </span>                :<span class="lineCov">      10354 :     template&lt;typename samplesType_t&gt; static void writeInterleavedNotSubsampled(</span>
+<span class="lineNum">     113 </span>                :            :             const samplesType_t* pImageSamples,
+<span class="lineNum">     114 </span>                :            :             std::uint32_t allocatedBits,
+<span class="lineNum">     115 </span>                :            :             std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     116 </span>                :            :             size_t numPixels,
+<span class="lineNum">     117 </span>                :            :             size_t numChannels)
+<span class="lineNum">     118 </span>                :            :     {
+<span class="lineNum">     119 </span>                :<span class="lineCov">      10354 :         std::uint32_t allocatedBytes = allocatedBits / 8;</span>
+<span class="lineNum">     120 </span>                :<span class="lineCov">      10354 :         const std::uint8_t mask(0xff);</span>
+<span class="lineNum">     121 </span>[<span class="branchCov" title="Branch 0 was taken 140669568 times"> + </span><span class="branchCov" title="Branch 1 was taken 2304 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 200739728 times"> + </span><span class="branchCov" title="Branch 3 was taken 2984 times"> + </span>]:<span class="lineCov">  839686557 :         for(size_t numSamples(numPixels * numChannels); numSamples != 0; --numSamples)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 70334784 times"> + </span><span class="branchCov" title="Branch 5 was taken 1152 times"> + </span>][<span class="branchCov" title="Branch 6 was taken 87816960 times"> + </span><span class="branchCov" title="Branch 7 was taken 1440 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 61542942 times"> + </span><span class="branchCov" title="Branch 9 was taken 1009 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 278572221 times"> + </span><span class="branchCov" title="Branch 11 was taken 1465 times"> + </span>]
+<span class="lineNum">     122 </span>                :            :         {
+<span class="lineNum">     123 </span>[<span class="branchCov" title="Branch 0 was taken 492343488 times"> + </span><span class="branchCov" title="Branch 1 was taken 140669568 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 655274256 times"> + </span><span class="branchCov" title="Branch 3 was taken 200739728 times"> + </span>]:<span class="lineCov"> 2643712598 :             for(std::uint32_t shiftRight(0); shiftRight != allocatedBytes; ++shiftRight)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 140669568 times"> + </span><span class="branchCov" title="Branch 5 was taken 70334784 times"> + </span>][<span class="branchCov" title="Branch 6 was taken 175633920 times"> + </span><span class="branchCov" title="Branch 7 was taken 87816960 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 61542942 times"> + </span><span class="branchCov" title="Branch 9 was taken 61542942 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 278572221 times"> + </span><span class="branchCov" title="Branch 11 was taken 278572221 times"> + </span>]
+<span class="lineNum">     124 </span>                :            :             {
+<span class="lineNum">     125 </span>                :<span class="lineCov"> 1804036395 :                 *(pLittleEndianTagData++) = static_cast&lt;std::uint8_t&gt;((*pImageSamples &gt;&gt; (shiftRight * 8)) &amp; mask);</span>
+<span class="lineNum">     126 </span>                :            :             }
+<span class="lineNum">     127 </span>                :<span class="lineCov">  839676203 :             ++pImageSamples;</span>
+<span class="lineNum">     128 </span>                :            :         }
+<span class="lineNum">     129 </span>                :<span class="lineCov">      10354 :     }</span>
+<span class="lineNum">     130 </span>                :            : 
+<span class="lineNum">     131 </span>                :            :     static void writeInterleavedNotSubsampled(
+<span class="lineNum">     132 </span>                :            :             const std::uint8_t* pImageSamples,
+<span class="lineNum">     133 </span>                :            :             std::uint32_t allocatedBits,
+<span class="lineNum">     134 </span>                :            :             bitDepth_t samplesDepth,
+<span class="lineNum">     135 </span>                :            :             std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     136 </span>                :            :             size_t numPixels,
+<a name="137"><span class="lineNum">     137 </span>                :            :             size_t numChannels);</a>
+<span class="lineNum">     138 </span>                :            : 
+<span class="lineNum">     139 </span>                :<span class="lineCov">      27179 :     template&lt;typename samplesType_t&gt; static void readInterleavedNotSubsampled(</span>
+<span class="lineNum">     140 </span>                :            :             samplesType_t* pImageSamples,
+<span class="lineNum">     141 </span>                :            :             std::uint32_t allocatedBits,
+<span class="lineNum">     142 </span>                :            :             const std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     143 </span>                :            :             size_t numPixels,
+<span class="lineNum">     144 </span>                :            :             size_t numChannels)
+<span class="lineNum">     145 </span>                :            :     {
+<span class="lineNum">     146 </span>                :<span class="lineCov">      27179 :         std::uint32_t allocatedBytes = allocatedBits / 8;</span>
+<span class="lineNum">     147 </span>[<span class="branchCov" title="Branch 0 was taken 422008704 times"> + </span><span class="branchCov" title="Branch 1 was taken 6912 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 422008704 times"> + </span><span class="branchCov" title="Branch 3 was taken 6912 times"> + </span>]:<span class="lineCov"> 2038324133 :         for(size_t numSamples(numPixels * numChannels); numSamples != 0; --numSamples)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 211004352 times"> + </span><span class="branchCov" title="Branch 5 was taken 3456 times"> + </span>][<span class="branchCov" title="Branch 6 was taken 211004352 times"> + </span><span class="branchCov" title="Branch 7 was taken 3456 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 184628814 times"> + </span><span class="branchCov" title="Branch 9 was taken 3025 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 587642028 times"> + </span><span class="branchCov" title="Branch 11 was taken 3418 times"> + </span>]
+<span class="lineNum">     148 </span>                :            :         {
+<span class="lineNum">     149 </span>                :<span class="lineCov"> 2038296954 :             samplesType_t value(0);</span>
+<span class="lineNum">     150 </span>[<span class="branchCov" title="Branch 0 was taken 1477030464 times"> + </span><span class="branchCov" title="Branch 1 was taken 422008704 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 1477030464 times"> + </span><span class="branchCov" title="Branch 3 was taken 422008704 times"> + </span>]:<span class="lineCov"> 6608646132 :             for(std::uint32_t shiftLeft(0); shiftLeft != allocatedBytes; ++shiftLeft)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 422008704 times"> + </span><span class="branchCov" title="Branch 5 was taken 211004352 times"> + </span>][<span class="branchCov" title="Branch 6 was taken 422008704 times"> + </span><span class="branchCov" title="Branch 7 was taken 211004352 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 184628814 times"> + </span><span class="branchCov" title="Branch 9 was taken 184628814 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 587642028 times"> + </span><span class="branchCov" title="Branch 11 was taken 587642028 times"> + </span>]
+<span class="lineNum">     151 </span>                :            :             {
+<span class="lineNum">     152 </span>                :<span class="lineCov"> 4570349178 :                 value = static_cast&lt;samplesType_t&gt;(value | static_cast&lt;samplesType_t&gt;(*(pLittleEndianTagData++)) &lt;&lt; (shiftLeft * 8));</span>
+<span class="lineNum">     153 </span>                :            :             }
+<span class="lineNum">     154 </span>                :<span class="lineCov"> 2038296954 :             *(pImageSamples++) = value;</span>
+<span class="lineNum">     155 </span>                :            :         }
+<span class="lineNum">     156 </span>                :<span class="lineCov">      27179 :     }</span>
+<span class="lineNum">     157 </span>                :            : 
+<span class="lineNum">     158 </span>                :            :     static void readInterleavedNotSubsampled(
+<span class="lineNum">     159 </span>                :            :             std::uint8_t* pImageSamples,
+<span class="lineNum">     160 </span>                :            :             std::uint32_t allocatedBits,
+<span class="lineNum">     161 </span>                :            :             bitDepth_t samplesDepth,
+<span class="lineNum">     162 </span>                :            :             const std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     163 </span>                :            :             size_t numPixels,
+<span class="lineNum">     164 </span>                :            :             size_t numChannels);
+<a name="165"><span class="lineNum">     165 </span>                :            : </a>
+<span class="lineNum">     166 </span>                :            : 
+<span class="lineNum">     167 </span>                :<span class="lineCov">       5022 :     template&lt;typename samplesType_t&gt; static void writeNotInterleavedNotSubsampled(</span>
+<span class="lineNum">     168 </span>                :            :             const samplesType_t* pImageSamples,
+<span class="lineNum">     169 </span>                :            :             std::uint32_t allocatedBits,
+<span class="lineNum">     170 </span>                :            :             std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     171 </span>                :            :             size_t numPixels,
+<span class="lineNum">     172 </span>                :            :             size_t numChannels)
+<span class="lineNum">     173 </span>                :            :     {
+<span class="lineNum">     174 </span>                :<span class="lineCov">       5022 :         std::uint32_t allocatedBytes = allocatedBits / 8;</span>
+<span class="lineNum">     175 </span>                :<span class="lineCov">       5022 :         const std::uint8_t mask(0xff);</span>
+<span class="lineNum">     176 </span>[<span class="branchCov" title="Branch 0 was taken 3456 times"> + </span><span class="branchCov" title="Branch 1 was taken 1152 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 4320 times"> + </span><span class="branchCov" title="Branch 3 was taken 1440 times"> + </span>]:<span class="lineCov">      20088 :         for(size_t scanChannels(0); scanChannels != numChannels; ++scanChannels)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 1728 times"> + </span><span class="branchCov" title="Branch 5 was taken 576 times"> + </span>][<span class="branchCov" title="Branch 6 was taken 2160 times"> + </span><span class="branchCov" title="Branch 7 was taken 720 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 1512 times"> + </span><span class="branchCov" title="Branch 9 was taken 504 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 1890 times"> + </span><span class="branchCov" title="Branch 11 was taken 630 times"> + </span>]
+<span class="lineNum">     177 </span>                :            :         {
+<span class="lineNum">     178 </span>                :<span class="lineCov">      15066 :             const samplesType_t* pScanImageSamples = pImageSamples + scanChannels;</span>
+<span class="lineNum">     179 </span>[<span class="branchCov" title="Branch 0 was taken 105502176 times"> + </span><span class="branchCov" title="Branch 1 was taken 3456 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 131725440 times"> + </span><span class="branchCov" title="Branch 3 was taken 4320 times"> + </span>]:<span class="lineCov">  459643572 :             for(size_t scanPixels(numPixels); scanPixels != 0; --scanPixels)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 52751088 times"> + </span><span class="branchCov" title="Branch 5 was taken 1728 times"> + </span>][<span class="branchCov" title="Branch 6 was taken 65862720 times"> + </span><span class="branchCov" title="Branch 7 was taken 2160 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 46157202 times"> + </span><span class="branchCov" title="Branch 9 was taken 1512 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 57629880 times"> + </span><span class="branchCov" title="Branch 11 was taken 1890 times"> + </span>]
+<span class="lineNum">     180 </span>                :            :             {
+<span class="lineNum">     181 </span>[<span class="branchCov" title="Branch 0 was taken 369257616 times"> + </span><span class="branchCov" title="Branch 1 was taken 105502176 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 461039040 times"> + </span><span class="branchCov" title="Branch 3 was taken 131725440 times"> + </span>]:<span class="lineCov"> 1630939860 :                 for(std::uint32_t shiftRight(0); shiftRight != allocatedBytes; ++shiftRight)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 105502176 times"> + </span><span class="branchCov" title="Branch 5 was taken 52751088 times"> + </span>][<span class="branchCov" title="Branch 6 was taken 131725440 times"> + </span><span class="branchCov" title="Branch 7 was taken 65862720 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 46157202 times"> + </span><span class="branchCov" title="Branch 9 was taken 46157202 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 57629880 times"> + </span><span class="branchCov" title="Branch 11 was taken 57629880 times"> + </span>]
+<span class="lineNum">     182 </span>                :            :                 {
+<span class="lineNum">     183 </span>                :<span class="lineCov"> 1171311354 :                     *(pLittleEndianTagData++) = static_cast&lt;std::uint8_t&gt;((*pScanImageSamples &gt;&gt; (shiftRight * 8)) &amp; mask);</span>
+<span class="lineNum">     184 </span>                :            :                 }
+<span class="lineNum">     185 </span>                :<span class="lineCov">  459628506 :                 pScanImageSamples += numChannels;</span>
+<span class="lineNum">     186 </span>                :            :             }
+<span class="lineNum">     187 </span>                :            :         }
+<span class="lineNum">     188 </span>                :<span class="lineCov">       5022 :     }</span>
+<span class="lineNum">     189 </span>                :            : 
+<span class="lineNum">     190 </span>                :            : 
+<span class="lineNum">     191 </span>                :            :     static void writeNotInterleavedNotSubsampled(
+<span class="lineNum">     192 </span>                :            :             const std::uint8_t* pImageSamples,
+<span class="lineNum">     193 </span>                :            :             std::uint32_t allocatedBits,
+<span class="lineNum">     194 </span>                :            :             bitDepth_t samplesDepth,
+<span class="lineNum">     195 </span>                :            :             std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     196 </span>                :            :             size_t numPixels,
+<a name="197"><span class="lineNum">     197 </span>                :            :             size_t numChannels);</a>
+<span class="lineNum">     198 </span>                :            : 
+<span class="lineNum">     199 </span>                :<span class="lineCov">      13392 :     template&lt;typename samplesType_t&gt; static void readNotInterleavedNotSubsampled(</span>
+<span class="lineNum">     200 </span>                :            :             samplesType_t* pImageSamples,
+<span class="lineNum">     201 </span>                :            :             std::uint32_t allocatedBits,
+<span class="lineNum">     202 </span>                :            :             const std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     203 </span>                :            :             size_t numPixels,
+<span class="lineNum">     204 </span>                :            :             size_t numChannels)
+<span class="lineNum">     205 </span>                :            :     {
+<span class="lineNum">     206 </span>                :<span class="lineCov">      13392 :         std::uint32_t allocatedBytes = allocatedBits / 8;</span>
+<span class="lineNum">     207 </span>[<span class="branchCov" title="Branch 0 was taken 10368 times"> + </span><span class="branchCov" title="Branch 1 was taken 3456 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 10368 times"> + </span><span class="branchCov" title="Branch 3 was taken 3456 times"> + </span>]:<span class="lineCov">      53568 :         for(size_t scanChannels(0); scanChannels != numChannels; ++scanChannels)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 5184 times"> + </span><span class="branchCov" title="Branch 5 was taken 1728 times"> + </span>][<span class="branchCov" title="Branch 6 was taken 5184 times"> + </span><span class="branchCov" title="Branch 7 was taken 1728 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 4536 times"> + </span><span class="branchCov" title="Branch 9 was taken 1512 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 4536 times"> + </span><span class="branchCov" title="Branch 11 was taken 1512 times"> + </span>]
+<span class="lineNum">     208 </span>                :            :         {
+<span class="lineNum">     209 </span>                :<span class="lineCov">      40176 :             samplesType_t* pScanImageSamples = pImageSamples + scanChannels;</span>
+<span class="lineNum">     210 </span>[<span class="branchCov" title="Branch 0 was taken 316506528 times"> + </span><span class="branchCov" title="Branch 1 was taken 10368 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 316506528 times"> + </span><span class="branchCov" title="Branch 3 was taken 10368 times"> + </span>]:<span class="lineCov"> 1226502972 :             for(size_t scanPixels(numPixels); scanPixels != 0; --scanPixels)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 158253264 times"> + </span><span class="branchCov" title="Branch 5 was taken 5184 times"> + </span>][<span class="branchCov" title="Branch 6 was taken 158253264 times"> + </span><span class="branchCov" title="Branch 7 was taken 5184 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 138471606 times"> + </span><span class="branchCov" title="Branch 9 was taken 4536 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 138471606 times"> + </span><span class="branchCov" title="Branch 11 was taken 4536 times"> + </span>]
+<span class="lineNum">     211 </span>                :            :             {
+<span class="lineNum">     212 </span>                :<span class="lineCov"> 1226462796 :                 samplesType_t value(0);</span>
+<span class="lineNum">     213 </span>[<span class="branchCov" title="Branch 0 was taken 1107772848 times"> + </span><span class="branchCov" title="Branch 1 was taken 316506528 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 1107772848 times"> + </span><span class="branchCov" title="Branch 3 was taken 316506528 times"> + </span>]:<span class="lineCov"> 4351964760 :                 for(std::uint32_t shiftLeft(0); shiftLeft != allocatedBytes; ++shiftLeft)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 316506528 times"> + </span><span class="branchCov" title="Branch 5 was taken 158253264 times"> + </span>][<span class="branchCov" title="Branch 6 was taken 316506528 times"> + </span><span class="branchCov" title="Branch 7 was taken 158253264 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 138471606 times"> + </span><span class="branchCov" title="Branch 9 was taken 138471606 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 138471606 times"> + </span><span class="branchCov" title="Branch 11 was taken 138471606 times"> + </span>]
+<span class="lineNum">     214 </span>                :            :                 {
+<span class="lineNum">     215 </span>                :<span class="lineCov"> 3125501964 :                     value = static_cast&lt;samplesType_t&gt;(value | (static_cast&lt;samplesType_t&gt;(*(pLittleEndianTagData++)) &lt;&lt; (shiftLeft * 8)));</span>
+<span class="lineNum">     216 </span>                :            :                 }
+<span class="lineNum">     217 </span>                :<span class="lineCov"> 1226462796 :                 *pScanImageSamples = value;</span>
+<span class="lineNum">     218 </span>                :<span class="lineCov"> 1226462796 :                 pScanImageSamples += numChannels;</span>
+<span class="lineNum">     219 </span>                :            :             }
+<span class="lineNum">     220 </span>                :            :         }
+<span class="lineNum">     221 </span>                :<span class="lineCov">      13392 :     }</span>
+<span class="lineNum">     222 </span>                :            : 
+<span class="lineNum">     223 </span>                :            : 
+<span class="lineNum">     224 </span>                :            :     static void readNotInterleavedNotSubsampled(
+<span class="lineNum">     225 </span>                :            :             std::uint8_t* pImageSamples,
+<span class="lineNum">     226 </span>                :            :             std::uint32_t allocatedBits,
+<span class="lineNum">     227 </span>                :            :             bitDepth_t samplesDepth,
+<span class="lineNum">     228 </span>                :            :             const std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     229 </span>                :            :             size_t numPixels,
+<span class="lineNum">     230 </span>                :            :             size_t numChannels);
+<a name="231"><span class="lineNum">     231 </span>                :            : </a>
+<span class="lineNum">     232 </span>                :            : 
+<span class="lineNum">     233 </span>                :<span class="lineCov">       5346 :     template&lt;typename samplesType_t&gt; static void writeInterleavedSubsampled(</span>
+<span class="lineNum">     234 </span>                :            :             const std::vector&lt;std::shared_ptr&lt;channel&gt;&gt; pImageSamples,
+<span class="lineNum">     235 </span>                :            :             std::uint32_t allocatedBits,
+<span class="lineNum">     236 </span>                :            :             std::uint8_t* pLittleEndianTagData)
+<span class="lineNum">     237 </span>                :            :     {
+<span class="lineNum">     238 </span>                :<span class="lineCov">       5346 :         const std::uint32_t allocatedBytes = allocatedBits / 8;</span>
+<span class="lineNum">     239 </span>                :            : 
+<span class="lineNum">     240 </span>                :<span class="lineCov">       5346 :         std::uint32_t maxSamplingFactorX = 1;</span>
+<span class="lineNum">     241 </span>                :<span class="lineCov">       5346 :         std::uint32_t maxSamplingFactorY = 1;</span>
+<span class="lineNum">     242 </span>        [<span class="branchCov" title="Branch 3 was taken 16038 times"> + </span><span class="branchCov" title="Branch 4 was taken 5346 times"> + </span>]:<span class="lineCov">      21384 :         for (const std::shared_ptr&lt;const channel&gt;&amp; pChannel: pImageSamples)</span>
+<span class="lineNum">     243 </span>                :            :         {
+<span class="lineNum">     244 </span>                :<span class="lineCov">      16038 :             maxSamplingFactorX = std::max(maxSamplingFactorX, pChannel-&gt;m_samplingFactorX);</span>
+<span class="lineNum">     245 </span>                :<span class="lineCov">      16038 :             maxSamplingFactorY = std::max(maxSamplingFactorY, pChannel-&gt;m_samplingFactorY);</span>
+<span class="lineNum">     246 </span>                :            :         }
+<span class="lineNum">     247 </span>                :            : 
+<span class="lineNum">     248 </span>                :<span class="lineCov">       5346 :         const std::uint8_t mask(0xff);</span>
+<span class="lineNum">     249 </span>                :            : 
+<span class="lineNum">     250 </span>                :            :         // First copy the first channel
+<span class="lineNum">     251 </span>                :<span class="lineCov">       5346 :         size_t blocksX = pImageSamples[0]-&gt;m_width / maxSamplingFactorX;</span>
+<span class="lineNum">     252 </span>                :<span class="lineCov">       5346 :         size_t blocksY = pImageSamples[0]-&gt;m_height / maxSamplingFactorY;</span>
+<span class="lineNum">     253 </span>                :<span class="lineCov">       5346 :         size_t imageWidth = pImageSamples[0]-&gt;m_width;</span>
+<span class="lineNum">     254 </span>                :            : 
+<span class="lineNum">     255 </span>                :<span class="lineCov">       5346 :         std::uint8_t* pScanDestination(pLittleEndianTagData);</span>
+<span class="lineNum">     256 </span>        [<span class="branchCov" title="Branch 0 was taken 418446 times"> + </span><span class="branchCov" title="Branch 1 was taken 5346 times"> + </span>]:<span class="lineCov">     423792 :         for(size_t scanBlocksY(0); scanBlocksY != blocksY; ++scanBlocksY )</span>
+<span class="lineNum">     257 </span>                :            :         {
+<span class="lineNum">     258 </span>                :<span class="lineCov">     418446 :             const samplesType_t* pScanImageSamples =</span>
+<span class="lineNum">     259 </span>                :<span class="lineCov">     418446 :                     reinterpret_cast&lt;const samplesType_t*&gt;(pImageSamples[0]-&gt;m_pBuffer) + scanBlocksY * imageWidth * maxSamplingFactorY;</span>
+<span class="lineNum">     260 </span>        [<span class="branchCov" title="Branch 0 was taken 42263046 times"> + </span><span class="branchCov" title="Branch 1 was taken 418446 times"> + </span>]:<span class="lineCov">   42681492 :             for(size_t scanBlocksX(0); scanBlocksX != blocksX; ++scanBlocksX )</span>
+<span class="lineNum">     261 </span>                :            :             {
+<span class="lineNum">     262 </span>        [<span class="branchCov" title="Branch 0 was taken 82055430 times"> + </span><span class="branchCov" title="Branch 1 was taken 42263046 times"> + </span>]:<span class="lineCov">  124318476 :                 for(size_t scanInsideBlockY(0); scanInsideBlockY != maxSamplingFactorY; ++scanInsideBlockY)</span>
+<span class="lineNum">     263 </span>                :            :                 {
+<span class="lineNum">     264 </span>        [<span class="branchCov" title="Branch 0 was taken 164110860 times"> + </span><span class="branchCov" title="Branch 1 was taken 82055430 times"> + </span>]:<span class="lineCov">  246166290 :                     for(size_t scanInsideBlockX(0); scanInsideBlockX != maxSamplingFactorX; ++scanInsideBlockX)</span>
+<span class="lineNum">     265 </span>                :            :                     {
+<span class="lineNum">     266 </span>                :<span class="lineCov">  164110860 :                         const samplesType_t pixel = *(pScanImageSamples + scanInsideBlockX + scanInsideBlockY * imageWidth);</span>
+<span class="lineNum">     267 </span>        [<span class="branchCov" title="Branch 0 was taken 410277150 times"> + </span><span class="branchCov" title="Branch 1 was taken 164110860 times"> + </span>]:<span class="lineCov">  574388010 :                         for(std::uint32_t shiftRight(0); shiftRight != allocatedBytes; ++shiftRight)</span>
+<span class="lineNum">     268 </span>                :            :                         {
+<span class="lineNum">     269 </span>                :<span class="lineCov">  410277150 :                             *(pScanDestination++) = static_cast&lt;std::uint8_t&gt;((pixel &gt;&gt; (shiftRight * 8)) &amp; mask);</span>
+<span class="lineNum">     270 </span>                :            :                         }
+<span class="lineNum">     271 </span>                :            :                     }
+<span class="lineNum">     272 </span>                :            :                 }
+<span class="lineNum">     273 </span>                :<span class="lineCov">   42263046 :                 pScanImageSamples += maxSamplingFactorX;</span>
+<span class="lineNum">     274 </span>        [<span class="branchCov" title="Branch 1 was taken 84526092 times"> + </span><span class="branchCov" title="Branch 2 was taken 42263046 times"> + </span>]:<span class="lineCov">  126789138 :                 for(size_t channelNumber(1u); channelNumber &lt; pImageSamples.size(); ++channelNumber)</span>
+<span class="lineNum">     275 </span>                :            :                 {
+<span class="lineNum">     276 </span>                :<span class="lineCov">   84526092 :                     const samplesType_t pixel = pImageSamples[channelNumber]-&gt;m_pBuffer[scanBlocksY * blocksX + scanBlocksX];</span>
+<span class="lineNum">     277 </span>        [<span class="branchCov" title="Branch 0 was taken 211315230 times"> + </span><span class="branchCov" title="Branch 1 was taken 84526092 times"> + </span>]:<span class="lineCov">  295841322 :                     for(std::uint32_t shiftRight(0); shiftRight != allocatedBytes; ++shiftRight)</span>
+<span class="lineNum">     278 </span>                :            :                     {
+<span class="lineNum">     279 </span>                :<span class="lineCov">  211315230 :                         *(pScanDestination++) = static_cast&lt;std::uint8_t&gt;((pixel &gt;&gt; (shiftRight * 8)) &amp; mask);</span>
+<span class="lineNum">     280 </span>                :            :                     }
+<span class="lineNum">     281 </span>                :            :                 }
+<span class="lineNum">     282 </span>                :            :             }
+<span class="lineNum">     283 </span>                :            :         }
+<span class="lineNum">     284 </span>                :<span class="lineCov">       5346 :     }</span>
+<a name="285"><span class="lineNum">     285 </span>                :            : </a>
+<span class="lineNum">     286 </span>                :            : 
+<span class="lineNum">     287 </span>                :<span class="lineCov">      15552 :     template&lt;typename samplesType_t&gt; static void readInterleavedSubsampled(</span>
+<span class="lineNum">     288 </span>                :            :             const std::vector&lt;std::shared_ptr&lt;channel&gt;&gt; pImageSamples,
+<span class="lineNum">     289 </span>                :            :             std::uint32_t allocatedBits,
+<span class="lineNum">     290 </span>                :            :             const std::uint8_t* pLittleEndianTagData)
+<span class="lineNum">     291 </span>                :            :     {
+<span class="lineNum">     292 </span>                :<span class="lineCov">      15552 :         const std::uint32_t allocatedBytes = allocatedBits / 8;</span>
+<span class="lineNum">     293 </span>                :            : 
+<span class="lineNum">     294 </span>                :<span class="lineCov">      15552 :         std::uint32_t maxSamplingFactorX = 1;</span>
+<span class="lineNum">     295 </span>                :<span class="lineCov">      15552 :         std::uint32_t maxSamplingFactorY = 1;</span>
+<span class="lineNum">     296 </span>        [<span class="branchCov" title="Branch 3 was taken 46656 times"> + </span><span class="branchCov" title="Branch 4 was taken 15552 times"> + </span>]:<span class="lineCov">      62208 :         for (const std::shared_ptr&lt;const channel&gt;&amp; pChannel: pImageSamples)</span>
+<span class="lineNum">     297 </span>                :            :         {
+<span class="lineNum">     298 </span>                :<span class="lineCov">      46656 :             maxSamplingFactorX = std::max(maxSamplingFactorX, pChannel-&gt;m_samplingFactorX);</span>
+<span class="lineNum">     299 </span>                :<span class="lineCov">      46656 :             maxSamplingFactorY = std::max(maxSamplingFactorY, pChannel-&gt;m_samplingFactorY);</span>
+<span class="lineNum">     300 </span>                :            :         }
+<span class="lineNum">     301 </span>                :            : 
+<span class="lineNum">     302 </span>                :            :         // First copy the first channel
+<span class="lineNum">     303 </span>                :<span class="lineCov">      15552 :         size_t blocksX = pImageSamples[0]-&gt;m_width / maxSamplingFactorX;</span>
+<span class="lineNum">     304 </span>                :<span class="lineCov">      15552 :         size_t blocksY = pImageSamples[0]-&gt;m_height / maxSamplingFactorY;</span>
+<span class="lineNum">     305 </span>                :<span class="lineCov">      15552 :         size_t imageWidth = pImageSamples[0]-&gt;m_width;</span>
+<span class="lineNum">     306 </span>                :            : 
+<span class="lineNum">     307 </span>                :<span class="lineCov">      15552 :         const std::uint8_t* pScanSource(pLittleEndianTagData);</span>
+<span class="lineNum">     308 </span>        [<span class="branchCov" title="Branch 0 was taken 1181952 times"> + </span><span class="branchCov" title="Branch 1 was taken 15552 times"> + </span>]:<span class="lineCov">    1197504 :         for(size_t scanBlocksY(0); scanBlocksY != blocksY; ++scanBlocksY )</span>
+<span class="lineNum">     309 </span>                :            :         {
+<span class="lineNum">     310 </span>                :<span class="lineCov">    1181952 :             samplesType_t* pScanImageSamples =</span>
+<span class="lineNum">     311 </span>                :<span class="lineCov">    1181952 :                     reinterpret_cast&lt;samplesType_t*&gt;(pImageSamples[0]-&gt;m_pBuffer) + scanBlocksY * imageWidth * maxSamplingFactorY;</span>
+<span class="lineNum">     312 </span>        [<span class="branchCov" title="Branch 0 was taken 119377152 times"> + </span><span class="branchCov" title="Branch 1 was taken 1181952 times"> + </span>]:<span class="lineCov">  120559104 :             for(size_t scanBlocksX(0); scanBlocksX != blocksX; ++scanBlocksX )</span>
+<span class="lineNum">     313 </span>                :            :             {
+<span class="lineNum">     314 </span>        [<span class="branchCov" title="Branch 0 was taken 238754304 times"> + </span><span class="branchCov" title="Branch 1 was taken 119377152 times"> + </span>]:<span class="lineCov">  358131456 :                 for(size_t scanInsideBlockY(0); scanInsideBlockY != maxSamplingFactorY; ++scanInsideBlockY)</span>
+<span class="lineNum">     315 </span>                :            :                 {
+<span class="lineNum">     316 </span>        [<span class="branchCov" title="Branch 0 was taken 477508608 times"> + </span><span class="branchCov" title="Branch 1 was taken 238754304 times"> + </span>]:<span class="lineCov">  716262912 :                     for(size_t scanInsideBlockX(0); scanInsideBlockX != maxSamplingFactorX; ++scanInsideBlockX)</span>
+<span class="lineNum">     317 </span>                :            :                     {
+<span class="lineNum">     318 </span>                :<span class="lineCov">  477508608 :                         samplesType_t pixel(0);</span>
+<span class="lineNum">     319 </span>        [<span class="branchCov" title="Branch 0 was taken 1193771520 times"> + </span><span class="branchCov" title="Branch 1 was taken 477508608 times"> + </span>]:<span class="lineCov"> 1671280128 :                         for(std::uint32_t shiftLeft(0); shiftLeft != allocatedBytes; ++shiftLeft)</span>
+<span class="lineNum">     320 </span>                :            :                         {
+<span class="lineNum">     321 </span>                :<span class="lineCov"> 1193771520 :                             pixel = pixel | (static_cast&lt;samplesType_t&gt;(*(pScanSource++)) &lt;&lt; (shiftLeft * 8));</span>
+<span class="lineNum">     322 </span>                :            :                         }
+<span class="lineNum">     323 </span>                :<span class="lineCov">  477508608 :                         *(pScanImageSamples + scanInsideBlockX + scanInsideBlockY * imageWidth) = pixel;</span>
+<span class="lineNum">     324 </span>                :            :                     }
+<span class="lineNum">     325 </span>                :            :                 }
+<span class="lineNum">     326 </span>                :<span class="lineCov">  119377152 :                 pScanImageSamples += maxSamplingFactorX;</span>
+<span class="lineNum">     327 </span>        [<span class="branchCov" title="Branch 1 was taken 238754304 times"> + </span><span class="branchCov" title="Branch 2 was taken 119377152 times"> + </span>]:<span class="lineCov">  358131456 :                 for(size_t channelNumber(1u); channelNumber &lt; pImageSamples.size(); ++channelNumber)</span>
+<span class="lineNum">     328 </span>                :            :                 {
+<span class="lineNum">     329 </span>                :<span class="lineCov">  238754304 :                     samplesType_t pixel(0);</span>
+<span class="lineNum">     330 </span>        [<span class="branchCov" title="Branch 0 was taken 596885760 times"> + </span><span class="branchCov" title="Branch 1 was taken 238754304 times"> + </span>]:<span class="lineCov">  835640064 :                     for(std::uint32_t shiftLeft(0); shiftLeft != allocatedBytes; ++shiftLeft)</span>
+<span class="lineNum">     331 </span>                :            :                     {
+<span class="lineNum">     332 </span>                :<span class="lineCov">  596885760 :                         pixel = pixel | (static_cast&lt;samplesType_t&gt;(*(pScanSource++)) &lt;&lt; (shiftLeft * 8));</span>
+<span class="lineNum">     333 </span>                :            :                     }
+<span class="lineNum">     334 </span>                :<span class="lineCov">  238754304 :                     pImageSamples[channelNumber]-&gt;m_pBuffer[scanBlocksY * blocksX + scanBlocksX] = pixel;</span>
+<span class="lineNum">     335 </span>                :            :                 }
+<span class="lineNum">     336 </span>                :            :             }
+<span class="lineNum">     337 </span>                :            :         }
+<span class="lineNum">     338 </span>                :<span class="lineCov">      15552 :     }</span>
+<a name="339"><span class="lineNum">     339 </span>                :            : </a>
+<span class="lineNum">     340 </span>                :            : 
+<span class="lineNum">     341 </span>                :<span class="lineCov">        344 :     template&lt;typename samplesType_t&gt; static void write1bitInterleaved(</span>
+<span class="lineNum">     342 </span>                :            :             const samplesType_t* pImageSamples,
+<span class="lineNum">     343 </span>                :            :             std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     344 </span>                :            :             size_t numPixels,
+<span class="lineNum">     345 </span>                :            :             size_t numChannels)
+<span class="lineNum">     346 </span>                :            :     {
+<span class="lineNum">     347 </span>                :<span class="lineCov">        344 :         size_t leftShift(0);</span>
+<span class="lineNum">     348 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   20257647 :         for(size_t numSamples(numPixels * numChannels); numSamples != 0; --numSamples)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 8791848 times"> + </span><span class="branchCov" title="Branch 9 was taken 144 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 11465455 times"> + </span><span class="branchCov" title="Branch 11 was taken 200 times"> + </span>]
+<span class="lineNum">     349 </span>                :            :         {
+<span class="lineNum">     350 </span>                :<span class="lineCov">   20257303 :             *pLittleEndianTagData = *pLittleEndianTagData | static_cast&lt;std::uint8_t&gt;((*pImageSamples++ &amp; 1) &lt;&lt; leftShift);</span>
+<span class="lineNum">     351 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   20257303 :             if(++leftShift == 8)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 1098936 times"> + </span><span class="branchCov" title="Branch 9 was taken 7692912 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 1433102 times"> + </span><span class="branchCov" title="Branch 11 was taken 10032353 times"> + </span>]
+<span class="lineNum">     352 </span>                :            :             {
+<span class="lineNum">     353 </span>                :<span class="lineCov">    2532038 :                 leftShift = 0;</span>
+<span class="lineNum">     354 </span>                :<span class="lineCov">    2532038 :                 ++pLittleEndianTagData;</span>
+<span class="lineNum">     355 </span>                :            :             }
+<span class="lineNum">     356 </span>                :            :         }
+<span class="lineNum">     357 </span>                :<span class="lineCov">        344 :     }</span>
+<span class="lineNum">     358 </span>                :            : 
+<span class="lineNum">     359 </span>                :            :     static void write1bitInterleaved(
+<span class="lineNum">     360 </span>                :            :             const std::uint8_t* pImageSamples,
+<span class="lineNum">     361 </span>                :            :             bitDepth_t samplesDepth,
+<span class="lineNum">     362 </span>                :            :             std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     363 </span>                :            :             size_t numPixels,
+<a name="364"><span class="lineNum">     364 </span>                :            :             size_t numChannels);</a>
+<span class="lineNum">     365 </span>                :            : 
+<span class="lineNum">     366 </span>                :<span class="lineCov">        162 :     template&lt;typename samplesType_t&gt; static void write1bitNotInterleaved(</span>
+<span class="lineNum">     367 </span>                :            :             const samplesType_t* pImageSamples,
+<span class="lineNum">     368 </span>                :            :             std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     369 </span>                :            :             size_t numPixels,
+<span class="lineNum">     370 </span>                :            :             size_t numChannels)
+<span class="lineNum">     371 </span>                :            :     {
+<span class="lineNum">     372 </span>                :<span class="lineCov">        162 :         size_t leftShift(0);</span>
+<span class="lineNum">     373 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">        648 :         for(size_t channel(0); channel != numChannels; ++channel)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 216 times"> + </span><span class="branchCov" title="Branch 9 was taken 72 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 270 times"> + </span><span class="branchCov" title="Branch 11 was taken 90 times"> + </span>]
+<span class="lineNum">     374 </span>                :            :         {
+<span class="lineNum">     375 </span>                :<span class="lineCov">        486 :             const samplesType_t* pScanImageSamples(pImageSamples + channel);</span>
+<span class="lineNum">     376 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   14827212 :             for(size_t numSamples(numPixels); numSamples != 0; --numSamples)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 6593886 times"> + </span><span class="branchCov" title="Branch 9 was taken 216 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 8232840 times"> + </span><span class="branchCov" title="Branch 11 was taken 270 times"> + </span>]
+<span class="lineNum">     377 </span>                :            :             {
+<span class="lineNum">     378 </span>                :<span class="lineCov">   14826726 :                 *pLittleEndianTagData = *pLittleEndianTagData | static_cast&lt;std::uint8_t&gt;((*pScanImageSamples &amp; 1) &lt;&lt; leftShift);</span>
+<span class="lineNum">     379 </span>                :<span class="lineCov">   14826726 :                 pScanImageSamples += numChannels;</span>
+<span class="lineNum">     380 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   14826726 :                 if(++leftShift == 8)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 824220 times"> + </span><span class="branchCov" title="Branch 9 was taken 5769666 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 1029078 times"> + </span><span class="branchCov" title="Branch 11 was taken 7203762 times"> + </span>]
+<span class="lineNum">     381 </span>                :            :                 {
+<span class="lineNum">     382 </span>                :<span class="lineCov">    1853298 :                     leftShift = 0;</span>
+<span class="lineNum">     383 </span>                :<span class="lineCov">    1853298 :                     ++pLittleEndianTagData;</span>
+<span class="lineNum">     384 </span>                :            :                 }
+<span class="lineNum">     385 </span>                :            :             }
+<span class="lineNum">     386 </span>                :            :         }
+<span class="lineNum">     387 </span>                :<span class="lineCov">        162 :     }</span>
+<span class="lineNum">     388 </span>                :            : 
+<span class="lineNum">     389 </span>                :            :     static void write1bitNotInterleaved(
+<span class="lineNum">     390 </span>                :            :             const std::uint8_t* pImageSamples,
+<span class="lineNum">     391 </span>                :            :             bitDepth_t samplesDepth,
+<span class="lineNum">     392 </span>                :            :             std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     393 </span>                :            :             size_t numPixels,
+<a name="394"><span class="lineNum">     394 </span>                :            :             size_t numChannels);</a>
+<span class="lineNum">     395 </span>                :            : 
+<span class="lineNum">     396 </span>                :<span class="lineCov">        912 :     template&lt;typename samplesType_t&gt; static void read1bitInterleaved(</span>
+<span class="lineNum">     397 </span>                :            :             samplesType_t* pImageSamples,
+<span class="lineNum">     398 </span>                :            :             const std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     399 </span>                :            :             size_t numPixels,
+<span class="lineNum">     400 </span>                :            :             size_t numChannels)
+<span class="lineNum">     401 </span>                :            :     {
+<span class="lineNum">     402 </span>                :<span class="lineCov">        912 :         size_t rightShift(0);</span>
+<span class="lineNum">     403 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   54156203 :         for(size_t numSamples(numPixels * numChannels); numSamples != 0; --numSamples)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 26375544 times"> + </span><span class="branchCov" title="Branch 9 was taken 432 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 27779747 times"> + </span><span class="branchCov" title="Branch 11 was taken 480 times"> + </span>]
+<span class="lineNum">     404 </span>                :            :         {
+<span class="lineNum">     405 </span>                :<span class="lineCov">   54155291 :             *pImageSamples++ = (*pLittleEndianTagData &gt;&gt; rightShift) &amp; 1;</span>
+<span class="lineNum">     406 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   54155291 :             if(++rightShift == 8)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 3296808 times"> + </span><span class="branchCov" title="Branch 9 was taken 23078736 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 3472314 times"> + </span><span class="branchCov" title="Branch 11 was taken 24307433 times"> + </span>]
+<span class="lineNum">     407 </span>                :            :             {
+<span class="lineNum">     408 </span>                :<span class="lineCov">    6769122 :                 rightShift = 0;</span>
+<span class="lineNum">     409 </span>                :<span class="lineCov">    6769122 :                 ++pLittleEndianTagData;</span>
+<span class="lineNum">     410 </span>                :            :             }
+<span class="lineNum">     411 </span>                :            :         }
+<span class="lineNum">     412 </span>                :<span class="lineCov">        912 :     }</span>
+<span class="lineNum">     413 </span>                :            : 
+<span class="lineNum">     414 </span>                :            :     static void read1bitInterleaved(
+<span class="lineNum">     415 </span>                :            :             std::uint8_t* pImageSamples,
+<span class="lineNum">     416 </span>                :            :             bitDepth_t samplesDepth,
+<span class="lineNum">     417 </span>                :            :             const std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     418 </span>                :            :             size_t numPixels,
+<a name="419"><span class="lineNum">     419 </span>                :            :             size_t numChannels);</a>
+<span class="lineNum">     420 </span>                :            : 
+<span class="lineNum">     421 </span>                :<span class="lineCov">        432 :     template&lt;typename samplesType_t&gt; static void read1bitNotInterleaved(</span>
+<span class="lineNum">     422 </span>                :            :             samplesType_t* pImageSamples,
+<span class="lineNum">     423 </span>                :            :             const std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     424 </span>                :            :             size_t numPixels,
+<span class="lineNum">     425 </span>                :            :             size_t numChannels)
+<span class="lineNum">     426 </span>                :            :     {
+<span class="lineNum">     427 </span>                :<span class="lineCov">        432 :         size_t rightShift(0);</span>
+<span class="lineNum">     428 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">       1728 :         for(size_t channel(0); channel != numChannels; ++channel)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 648 times"> + </span><span class="branchCov" title="Branch 9 was taken 216 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 648 times"> + </span><span class="branchCov" title="Branch 11 was taken 216 times"> + </span>]
+<span class="lineNum">     429 </span>                :            :         {
+<span class="lineNum">     430 </span>                :<span class="lineCov">       1296 :             samplesType_t* pScanImageSamples(pImageSamples + channel);</span>
+<span class="lineNum">     431 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   39564612 :             for(size_t numSamples(numPixels); numSamples != 0; --numSamples)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 19781658 times"> + </span><span class="branchCov" title="Branch 9 was taken 648 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 19781658 times"> + </span><span class="branchCov" title="Branch 11 was taken 648 times"> + </span>]
+<span class="lineNum">     432 </span>                :            :             {
+<span class="lineNum">     433 </span>                :<span class="lineCov">   39563316 :                 *pScanImageSamples = (*pLittleEndianTagData &gt;&gt; rightShift) &amp; 1;</span>
+<span class="lineNum">     434 </span>                :<span class="lineCov">   39563316 :                 pScanImageSamples += numChannels;</span>
+<span class="lineNum">     435 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   39563316 :                 if(++rightShift == 8)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 2472660 times"> + </span><span class="branchCov" title="Branch 9 was taken 17308998 times"> + </span>][<span class="branchCov" title="Branch 10 was taken 2472660 times"> + </span><span class="branchCov" title="Branch 11 was taken 17308998 times"> + </span>]
+<span class="lineNum">     436 </span>                :            :                 {
+<span class="lineNum">     437 </span>                :<span class="lineCov">    4945320 :                     rightShift = 0;</span>
+<span class="lineNum">     438 </span>                :<span class="lineCov">    4945320 :                     ++pLittleEndianTagData;</span>
+<span class="lineNum">     439 </span>                :            :                 }
+<span class="lineNum">     440 </span>                :            :             }
+<span class="lineNum">     441 </span>                :            :         }
+<span class="lineNum">     442 </span>                :<span class="lineCov">        432 :     }</span>
+<span class="lineNum">     443 </span>                :            : 
+<span class="lineNum">     444 </span>                :            :     static void read1bitNotInterleaved(
+<span class="lineNum">     445 </span>                :            :             std::uint8_t* pImageSamples,
+<span class="lineNum">     446 </span>                :            :             bitDepth_t samplesDepth,
+<span class="lineNum">     447 </span>                :            :             const std::uint8_t* pLittleEndianTagData,
+<span class="lineNum">     448 </span>                :            :             size_t numPixels,
+<span class="lineNum">     449 </span>                :            :             size_t numChannels);
+<span class="lineNum">     450 </span>                :            : 
+<span class="lineNum">     451 </span>                :            : };
+<span class="lineNum">     452 </span>                :            : 
+<span class="lineNum">     453 </span>                :            : 
+<span class="lineNum">     454 </span>                :            : /// @}
+<span class="lineNum">     455 </span>                :            : 
+<span class="lineNum">     456 </span>                :            : } // namespace codecs
+<span class="lineNum">     457 </span>                :            : 
+<span class="lineNum">     458 </span>                :            : } // namespace implementation
+<span class="lineNum">     459 </span>                :            : 
+<span class="lineNum">     460 </span>                :            : } // namespace imebra
+<span class="lineNum">     461 </span>                :            : 
+<span class="lineNum">     462 </span>                :            : #endif // !defined(imebraDicomNativeImageCodec_CC44A2C5_2B8C_42c1_9704_3F9C582643B9__INCLUDED_)
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

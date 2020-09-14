@@ -1,0 +1,724 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/memoryImpl.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - memoryImpl.cpp<span style="font-size: 80%;"> (source / <a href="memoryImpl.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">140</td>
+            <td class="headerCovTableEntry">157</td>
+            <td class="headerCovTableEntryMed">89.2 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">29</td>
+            <td class="headerCovTableEntry">30</td>
+            <td class="headerCovTableEntryHi">96.7 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">125</td>
+            <td class="headerCovTableEntry">415</td>
+            <td class="headerCovTableEntryLo">30.1 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file memory.cpp
+<span class="lineNum">      15 </span>                :            :     \brief Implementation of the memory manager and the memory class.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #include &quot;memoryImpl.h&quot;
+<span class="lineNum">      20 </span>                :            : #include &quot;exceptionImpl.h&quot;
+<span class="lineNum">      21 </span>                :            : #include &quot;../include/imebra/exceptions.h&quot;
+<span class="lineNum">      22 </span>                :            : #include &lt;cstring&gt;
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : namespace imebra
+<span class="lineNum">      25 </span>                :            : {
+<span class="lineNum">      26 </span>                :            : 
+<span class="lineNum">      27 </span>                :            : namespace implementation
+<span class="lineNum">      28 </span>                :            : {
+<span class="lineNum">      29 </span>                :            : 
+<span class="lineNum">      30 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      31 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      32 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      33 </span>                :            : //
+<span class="lineNum">      34 </span>                :            : //
+<span class="lineNum">      35 </span>                :            : //
+<span class="lineNum">      36 </span>                :            : // memory
+<span class="lineNum">      37 </span>                :            : //
+<span class="lineNum">      38 </span>                :            : //
+<span class="lineNum">      39 </span>                :            : //
+<span class="lineNum">      40 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      41 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      42 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      43 </span>                :            : 
+<span class="lineNum">      44 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      45 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      46 </span>                :            : //
+<span class="lineNum">      47 </span>                :            : //
+<span class="lineNum">      48 </span>                :            : // Constructors
+<span class="lineNum">      49 </span>                :            : //
+<span class="lineNum">      50 </span>                :            : //
+<a name="51"><span class="lineNum">      51 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      52 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      53 </span>                :<span class="lineCov">     165604 : memory::memory():</span>
+<span class="lineNum">      54 </span>                :<span class="lineCov">     165604 :     m_pMemoryBuffer(new stringUint8())</span>
+<span class="lineNum">      55 </span>                :            : {
+<a name="56"><span class="lineNum">      56 </span>                :<span class="lineCov">     165601 : }</span></a>
+<span class="lineNum">      57 </span>                :            : 
+<span class="lineNum">      58 </span>                :<span class="lineCov">       3013 : memory::memory(stringUint8* pBuffer):</span>
+<span class="lineNum">      59 </span>                :<span class="lineCov">       3013 :     m_pMemoryBuffer(pBuffer)</span>
+<span class="lineNum">      60 </span>                :            : {
+<a name="61"><span class="lineNum">      61 </span>                :<span class="lineCov">       3013 : }</span></a>
+<span class="lineNum">      62 </span>                :            : 
+<span class="lineNum">      63 </span>                :<span class="lineCov">    1686489 : memory::memory(size_t initialSize):</span>
+<span class="lineNum">      64 </span>                :<span class="lineCov">    1686489 :     m_pMemoryBuffer(memoryPoolGetter::getMemoryPoolGetter().getMemoryPoolLocal().getMemory(initialSize))</span>
+<span class="lineNum">      65 </span>                :            : {
+<span class="lineNum">      66 </span>                :<span class="lineCov">    1686551 : }</span>
+<span class="lineNum">      67 </span>                :            : 
+<span class="lineNum">      68 </span>                :            : 
+<span class="lineNum">      69 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      70 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      71 </span>                :            : //
+<span class="lineNum">      72 </span>                :            : //
+<span class="lineNum">      73 </span>                :            : // Destructor
+<span class="lineNum">      74 </span>                :            : //
+<span class="lineNum">      75 </span>                :            : //
+<a name="76"><span class="lineNum">      76 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      77 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      78 </span>                :<span class="lineCov">    3715650 : memory::~memory()</span>
+<span class="lineNum">      79 </span>                :            : {
+<span class="lineNum">      80 </span>                :<span class="lineCov">    1857944 :     memoryPoolGetter::getMemoryPoolGetter().getMemoryPoolLocal().reuseMemory(m_pMemoryBuffer.release());</span>
+<span class="lineNum">      81 </span>                :<span class="lineCov">    1857706 : }</span>
+<span class="lineNum">      82 </span>                :            : 
+<span class="lineNum">      83 </span>                :            : 
+<span class="lineNum">      84 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      85 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      86 </span>                :            : //
+<span class="lineNum">      87 </span>                :            : //
+<span class="lineNum">      88 </span>                :            : // Copy the content from another memory object
+<span class="lineNum">      89 </span>                :            : //
+<span class="lineNum">      90 </span>                :            : //
+<a name="91"><span class="lineNum">      91 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      92 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      93 </span>                :<span class="lineCov">         20 : void memory::copyFrom(const std::shared_ptr&lt;const memory&gt;&amp; sourceMemory)</span>
+<span class="lineNum">      94 </span>                :            : {
+<span class="lineNum">      95 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">      96 </span>                :            : 
+<span class="lineNum">      97 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 20 times"> + </span>]:<span class="lineCov">         20 :     if(m_pMemoryBuffer.get() == 0)</span>
+<span class="lineNum">      98 </span>                :            :     {
+<span class="lineNum">      99 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         m_pMemoryBuffer.reset(new stringUint8);</span>
+<span class="lineNum">     100 </span>                :            :     }
+<span class="lineNum">     101 </span>[<span class="branchCov" title="Branch 5 was taken 20 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>][<span class="branchCov" title="Branch 8 was taken 20 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>]:<span class="lineCov">         20 :     m_pMemoryBuffer-&gt;assign(sourceMemory-&gt;data(), sourceMemory-&gt;size());</span>
+<span class="lineNum">     102 </span>                :            : 
+<span class="lineNum">     103 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     104 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineCov">         20 : }</span>
+<span class="lineNum">     105 </span>                :            : 
+<span class="lineNum">     106 </span>                :            : 
+<span class="lineNum">     107 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     108 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     109 </span>                :            : //
+<span class="lineNum">     110 </span>                :            : //
+<span class="lineNum">     111 </span>                :            : // Clear the managed string
+<span class="lineNum">     112 </span>                :            : //
+<span class="lineNum">     113 </span>                :            : //
+<a name="114"><span class="lineNum">     114 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     115 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     116 </span>                :<span class="lineCov">          1 : void memory::clear()</span>
+<span class="lineNum">     117 </span>                :            : {
+<span class="lineNum">     118 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     if(m_pMemoryBuffer.get() != 0)</span>
+<span class="lineNum">     119 </span>                :            :     {
+<span class="lineNum">     120 </span>                :<span class="lineCov">          1 :         m_pMemoryBuffer-&gt;clear();</span>
+<span class="lineNum">     121 </span>                :            :     }
+<span class="lineNum">     122 </span>                :<span class="lineCov">          1 : }</span>
+<span class="lineNum">     123 </span>                :            : 
+<span class="lineNum">     124 </span>                :            : 
+<span class="lineNum">     125 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     126 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     127 </span>                :            : //
+<span class="lineNum">     128 </span>                :            : //
+<span class="lineNum">     129 </span>                :            : // Resize the memory buffer
+<span class="lineNum">     130 </span>                :            : //
+<span class="lineNum">     131 </span>                :            : //
+<a name="132"><span class="lineNum">     132 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     133 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     134 </span>                :<span class="lineCov">     841239 : void memory::resize(size_t newSize)</span>
+<span class="lineNum">     135 </span>                :            : {
+<span class="lineNum">     136 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     137 </span>                :            : 
+<span class="lineNum">     138 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 840557 times"> + </span>]:<span class="lineCov">     841239 :     if(m_pMemoryBuffer.get() == 0)</span>
+<span class="lineNum">     139 </span>                :            :     {
+<span class="lineNum">     140 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :         m_pMemoryBuffer.reset(new stringUint8((size_t)newSize, (std::uint8_t)0));</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">     141 </span>                :            :     }
+<span class="lineNum">     142 </span>                :            :     else
+<span class="lineNum">     143 </span>                :            :     {
+<span class="lineNum">     144 </span>        [<span class="branchCov" title="Branch 2 was taken 841884 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     840557 :         m_pMemoryBuffer-&gt;resize((size_t)newSize, (std::uint8_t)0);</span>
+<span class="lineNum">     145 </span>                :            :     }
+<span class="lineNum">     146 </span>                :            : 
+<span class="lineNum">     147 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     148 </span>                :<span class="lineCov">     841884 : }</span>
+<span class="lineNum">     149 </span>                :            : 
+<span class="lineNum">     150 </span>                :            : 
+<span class="lineNum">     151 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     152 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     153 </span>                :            : //
+<span class="lineNum">     154 </span>                :            : //
+<span class="lineNum">     155 </span>                :            : // Reserve memory
+<span class="lineNum">     156 </span>                :            : //
+<span class="lineNum">     157 </span>                :            : //
+<a name="158"><span class="lineNum">     158 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     159 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     160 </span>                :<span class="lineCov">     290549 : void memory::reserve(size_t reserveSize)</span>
+<span class="lineNum">     161 </span>                :            : {
+<span class="lineNum">     162 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     163 </span>                :            : 
+<span class="lineNum">     164 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 290557 times"> + </span>]:<span class="lineCov">     290549 :     if(m_pMemoryBuffer.get() == 0)</span>
+<span class="lineNum">     165 </span>                :            :     {
+<span class="lineNum">     166 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         m_pMemoryBuffer.reset(new stringUint8());</span>
+<span class="lineNum">     167 </span>                :            :     }
+<span class="lineNum">     168 </span>        [<span class="branchCov" title="Branch 2 was taken 290546 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     290557 :     m_pMemoryBuffer-&gt;reserve(reserveSize);</span>
+<span class="lineNum">     169 </span>                :            : 
+<span class="lineNum">     170 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     171 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineCov">     290546 : }</span>
+<span class="lineNum">     172 </span>                :            : 
+<span class="lineNum">     173 </span>                :            : 
+<span class="lineNum">     174 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     175 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     176 </span>                :            : //
+<span class="lineNum">     177 </span>                :            : //
+<span class="lineNum">     178 </span>                :            : // Return the size of the managed string
+<span class="lineNum">     179 </span>                :            : //
+<span class="lineNum">     180 </span>                :            : //
+<a name="181"><span class="lineNum">     181 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     182 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     183 </span>                :<span class="lineCov"> 1875856100 : size_t memory::size() const</span>
+<span class="lineNum">     184 </span>                :            : {
+<span class="lineNum">     185 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 1875848388 times"> + </span>]:<span class="lineCov"> 1875856100 :     if(m_pMemoryBuffer.get() == 0)</span>
+<span class="lineNum">     186 </span>                :            :     {
+<span class="lineNum">     187 </span>                :<span class="lineNoCov">          0 :         return 0;</span>
+<span class="lineNum">     188 </span>                :            :     }
+<span class="lineNum">     189 </span>                :<span class="lineCov"> 1875848388 :     return m_pMemoryBuffer-&gt;size();</span>
+<span class="lineNum">     190 </span>                :            : }
+<span class="lineNum">     191 </span>                :            : 
+<span class="lineNum">     192 </span>                :            : 
+<span class="lineNum">     193 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     194 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     195 </span>                :            : //
+<span class="lineNum">     196 </span>                :            : //
+<span class="lineNum">     197 </span>                :            : // Return a pointer to the data
+<span class="lineNum">     198 </span>                :            : //
+<span class="lineNum">     199 </span>                :            : //
+<a name="200"><span class="lineNum">     200 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     201 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     202 </span>                :<span class="lineCov"> 1815981750 : std::uint8_t* memory::data()</span>
+<span class="lineNum">     203 </span>                :            : {
+<span class="lineNum">     204 </span>[<span class="branchCov" title="Branch 1 was taken 1815980814 times"> + </span><span class="branchCov" title="Branch 2 was taken 6 times"> + </span>][<span class="branchCov" title="Branch 5 was taken 227 times"> + </span><span class="branchCov" title="Branch 6 was taken 1815979983 times"> + </span>]:<span class="lineCov"> 1815981750 :     if(m_pMemoryBuffer.get() == 0 || m_pMemoryBuffer-&gt;empty())</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 7 was taken 1 time"> + </span><span class="branchCov" title="Branch 8 was taken 1815980215 times"> + </span>]
+<span class="lineNum">     205 </span>                :            :     {
+<span class="lineNum">     206 </span>                :<span class="lineCov">          1 :         return 0;</span>
+<span class="lineNum">     207 </span>                :            :     }
+<span class="lineNum">     208 </span>                :<span class="lineCov"> 1815980215 :     return &amp;( (*(m_pMemoryBuffer.get()))[0]);</span>
+<a name="209"><span class="lineNum">     209 </span>                :            : }</a>
+<span class="lineNum">     210 </span>                :            : 
+<span class="lineNum">     211 </span>                :<span class="lineCov">   62983603 : const std::uint8_t* memory::data() const</span>
+<span class="lineNum">     212 </span>                :            : {
+<span class="lineNum">     213 </span>   [<span class="branchCov" title="Branch 1 was taken 62984156 times"> + </span><span class="branchCov" title="Branch 2 was taken 797 times"> + </span>][<span class="branchCov" title="Branch 6 was taken 62984192 times"> + </span>]:<span class="lineCov">   62983603 :     if(m_pMemoryBuffer.get() == 0 || m_pMemoryBuffer-&gt;empty())</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 7 was taken 15 times"> + </span><span class="branchCov" title="Branch 8 was taken 62984402 times"> + </span>]
+<span class="lineNum">     214 </span>                :            :     {
+<span class="lineNum">     215 </span>                :<span class="lineCov">         15 :         return 0;</span>
+<span class="lineNum">     216 </span>                :            :     }
+<span class="lineNum">     217 </span>                :<span class="lineCov">   62984402 :     return &amp;( ( (*m_pMemoryBuffer.get()))[0]);</span>
+<span class="lineNum">     218 </span>                :            : }
+<span class="lineNum">     219 </span>                :            : 
+<span class="lineNum">     220 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     221 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     222 </span>                :            : //
+<span class="lineNum">     223 </span>                :            : //
+<span class="lineNum">     224 </span>                :            : // Return true if the managed string is empty
+<span class="lineNum">     225 </span>                :            : //
+<span class="lineNum">     226 </span>                :            : //
+<a name="227"><span class="lineNum">     227 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     228 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     229 </span>                :<span class="lineCov">          4 : bool memory::empty() const</span>
+<span class="lineNum">     230 </span>                :            : {
+<span class="lineNum">     231 </span>[<span class="branchCov" title="Branch 1 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 1 time"> + </span><span class="branchCov" title="Branch 6 was taken 3 times"> + </span>]:<span class="lineCov">          4 :     return m_pMemoryBuffer.get() == 0 || m_pMemoryBuffer-&gt;empty();</span>
+<span class="lineNum">     232 </span>                :            : }
+<span class="lineNum">     233 </span>                :            : 
+<span class="lineNum">     234 </span>                :            : 
+<span class="lineNum">     235 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     236 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     237 </span>                :            : //
+<span class="lineNum">     238 </span>                :            : //
+<span class="lineNum">     239 </span>                :            : // Copy the content of a buffer in the managed string
+<span class="lineNum">     240 </span>                :            : //
+<span class="lineNum">     241 </span>                :            : //
+<a name="242"><span class="lineNum">     242 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     243 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     244 </span>                :<span class="lineCov">     866231 : void memory::assign(const std::uint8_t* pSource, const size_t sourceLength)</span>
+<span class="lineNum">     245 </span>                :            : {
+<span class="lineNum">     246 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     247 </span>                :            : 
+<span class="lineNum">     248 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 866301 times"> + </span>]:<span class="lineCov">     866231 :     if(m_pMemoryBuffer.get() == 0)</span>
+<span class="lineNum">     249 </span>                :            :     {
+<span class="lineNum">     250 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         m_pMemoryBuffer.reset(new stringUint8);</span>
+<span class="lineNum">     251 </span>                :            :     }
+<span class="lineNum">     252 </span>        [<span class="branchCov" title="Branch 2 was taken 866403 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     866301 :     m_pMemoryBuffer-&gt;assign(pSource, sourceLength);</span>
+<span class="lineNum">     253 </span>                :            : 
+<span class="lineNum">     254 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<a name="255"><span class="lineNum">     255 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineCov">     866403 : }</span></a>
+<span class="lineNum">     256 </span>                :            : 
+<span class="lineNum">     257 </span>                :<span class="lineCov">         17 : void memory::assignRegion(const std::uint8_t* pSource, const size_t sourceLength, const size_t destinationOffset)</span>
+<span class="lineNum">     258 </span>                :            : {
+<span class="lineNum">     259 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     260 </span>                :            : 
+<span class="lineNum">     261 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 17 times"> + </span>]:<span class="lineCov">         17 :     if(m_pMemoryBuffer.get() == 0)</span>
+<span class="lineNum">     262 </span>                :            :     {
+<span class="lineNum">     263 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         m_pMemoryBuffer.reset(new stringUint8);</span>
+<span class="lineNum">     264 </span>                :            :     }
+<span class="lineNum">     265 </span>        [<span class="branchCov" title="Branch 2 was taken 2 times"> + </span><span class="branchCov" title="Branch 3 was taken 15 times"> + </span>]:<span class="lineCov">         17 :     if(m_pMemoryBuffer-&gt;size() &lt; destinationOffset + sourceLength)</span>
+<span class="lineNum">     266 </span>                :            :     {
+<span class="lineNum">     267 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          2 :         IMEBRA_THROW(MemorySizeError, &quot;The memory size is too small to accept the source region&quot;);</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 16 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 17 was not taken"> - </span>][<span class="branchCov" title="Branch 21 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 22 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 25 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 26 was not taken"> - </span>][<span class="branchCov" title="Branch 29 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 30 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 32 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 33 was not taken"> - </span>][<span class="branchCov" title="Branch 43 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 44 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 46 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 47 was not taken"> - </span>][<span class="branchCov" title="Branch 49 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 50 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 53 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 54 was not taken"> - </span>][<span class="branchCov" title="Branch 68 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 69 was not taken"> - </span>]
+<span class="lineNum">     268 </span>                :            :     }
+<span class="lineNum">     269 </span>        [<span class="branchCov" title="Branch 2 was taken 15 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         15 :     ::memcpy(&amp;(m_pMemoryBuffer-&gt;at(destinationOffset)), pSource, sourceLength);</span>
+<span class="lineNum">     270 </span>                :            : 
+<span class="lineNum">     271 </span>[<span class="branchCov" title="Branch 4 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">          2 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 17 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 34 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span>][<span class="branchCov" title="Branch 37 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span><span class="branchNoExec" title="Branch 73 was not executed"> # </span> 
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     272 </span>                :            : 
+<span class="lineNum">     273 </span>                :<span class="lineCov">         15 : }</span>
+<span class="lineNum">     274 </span>                :            : 
+<span class="lineNum">     275 </span>                :            : 
+<span class="lineNum">     276 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     277 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     278 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     279 </span>                :            : //
+<span class="lineNum">     280 </span>                :            : //
+<span class="lineNum">     281 </span>                :            : //
+<span class="lineNum">     282 </span>                :            : // memoryPool
+<span class="lineNum">     283 </span>                :            : //
+<span class="lineNum">     284 </span>                :            : //
+<span class="lineNum">     285 </span>                :            : //
+<span class="lineNum">     286 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     287 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     288 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     289 </span>                :            : 
+<span class="lineNum">     290 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     291 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     292 </span>                :            : //
+<span class="lineNum">     293 </span>                :            : //
+<span class="lineNum">     294 </span>                :            : // Constructor
+<span class="lineNum">     295 </span>                :            : //
+<span class="lineNum">     296 </span>                :            : //
+<a name="297"><span class="lineNum">     297 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     298 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     299 </span>                :<span class="lineCov">        116 : memoryPool::memoryPool(size_t memoryMinSize, size_t poolMaxSize):</span>
+<span class="lineNum">     300 </span>                :            :     m_minMemoryBlockSize(memoryMinSize), m_maxMemoryUsageSize(poolMaxSize),
+<span class="lineNum">     301 </span>                :<span class="lineCov">        116 :     m_actualSize(0), m_firstUsedCell(0), m_firstFreeCell(0)</span>
+<span class="lineNum">     302 </span>                :            : {
+<a name="303"><span class="lineNum">     303 </span>                :<span class="lineCov">        116 : }</span></a>
+<span class="lineNum">     304 </span>                :            : 
+<span class="lineNum">     305 </span>                :<span class="lineCov">        109 : memoryPool::~memoryPool()</span>
+<span class="lineNum">     306 </span>                :            : {
+<span class="lineNum">     307 </span>        [<span class="branchCov" title="Branch 0 was taken 1231 times"> + </span><span class="branchCov" title="Branch 1 was taken 116 times"> + </span>]:<span class="lineCov">       1347 :     while(m_actualSize != 0)</span>
+<span class="lineNum">     308 </span>                :            :     {
+<span class="lineNum">     309 </span>                :<span class="lineCov">       1231 :         m_actualSize -= m_memorySize[m_firstUsedCell];</span>
+<span class="lineNum">     310 </span>        [<span class="branchCov" title="Branch 1 was taken 1188 times"> + </span><span class="branchCov" title="Branch 2 was taken 4 times"> + </span>]:<span class="lineCov">       1202 :         delete m_memoryPointer[m_firstUsedCell++];</span>
+<span class="lineNum">     311 </span>        [<span class="branchCov" title="Branch 1 was taken 5 times"> + </span><span class="branchCov" title="Branch 2 was taken 1233 times"> + </span>]:<span class="lineCov">       1272 :         if(m_firstUsedCell == m_memoryPointer.size())</span>
+<span class="lineNum">     312 </span>                :            :         {
+<span class="lineNum">     313 </span>                :<span class="lineCov">          5 :             m_firstUsedCell = 0;</span>
+<span class="lineNum">     314 </span>                :            :         }
+<span class="lineNum">     315 </span>                :            :     }
+<a name="316"><span class="lineNum">     316 </span>                :<span class="lineCov">        116 : }</span></a>
+<span class="lineNum">     317 </span>                :            : 
+<span class="lineNum">     318 </span>                :<span class="lineCov">          3 : void memoryPool::setMinMaxMemory(size_t memoryMinSize, size_t poolMaxSize)</span>
+<span class="lineNum">     319 </span>                :            : {
+<span class="lineNum">     320 </span>                :<span class="lineCov">          3 :     flush();</span>
+<span class="lineNum">     321 </span>                :<span class="lineCov">          3 :     m_minMemoryBlockSize = memoryMinSize;</span>
+<span class="lineNum">     322 </span>                :<span class="lineCov">          3 :     m_maxMemoryUsageSize = poolMaxSize;</span>
+<span class="lineNum">     323 </span>                :            : 
+<span class="lineNum">     324 </span>                :<span class="lineCov">          3 : }</span>
+<span class="lineNum">     325 </span>                :            : 
+<span class="lineNum">     326 </span>                :            : 
+<span class="lineNum">     327 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     328 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     329 </span>                :            : //
+<span class="lineNum">     330 </span>                :            : //
+<span class="lineNum">     331 </span>                :            : // Save a memory object to reuse it
+<span class="lineNum">     332 </span>                :            : //
+<span class="lineNum">     333 </span>                :            : //
+<a name="334"><span class="lineNum">     334 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     335 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     336 </span>                :<span class="lineCov">    1856248 : void memoryPool::reuseMemory(stringUint8* pString)</span>
+<span class="lineNum">     337 </span>                :            : {
+<span class="lineNum">     338 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     339 </span>                :            : 
+<span class="lineNum">     340 </span>        [<span class="branchCov" title="Branch 0 was taken 30 times"> + </span><span class="branchCov" title="Branch 1 was taken 1856218 times"> + </span>]:<span class="lineCov">    1856248 :     if(pString == 0)</span>
+<span class="lineNum">     341 </span>                :            :     {
+<span class="lineNum">     342 </span>                :<span class="lineCov">    1522891 :         return;</span>
+<span class="lineNum">     343 </span>                :            :     }
+<span class="lineNum">     344 </span>                :<span class="lineCov">    2191862 :     std::unique_ptr&lt;stringUint8&gt; pBuffer(pString);</span>
+<span class="lineNum">     345 </span>                :            : 
+<span class="lineNum">     346 </span>                :            :     // Check for the memory size. Don't reuse it if the memory
+<span class="lineNum">     347 </span>                :            :     //  doesn't match the requested parameters
+<span class="lineNum">     348 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     349 </span>                :<span class="lineCov">    1856570 :     size_t memorySize = pBuffer-&gt;size();</span>
+<span class="lineNum">     350 </span>[<span class="branchCov" title="Branch 0 was taken 1758046 times"> + </span><span class="branchCov" title="Branch 1 was taken 98093 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 335655 times"> + </span><span class="branchCov" title="Branch 3 was taken 1422391 times"> + </span>]:<span class="lineCov">    1856139 :     if(memorySize == 0 || memorySize &lt; m_minMemoryBlockSize || memorySize &gt; m_maxMemoryUsageSize)</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 9 times"> + </span><span class="branchCov" title="Branch 5 was taken 335646 times"> + </span>]
+<span class="lineNum">     351 </span>                :            :     {
+<span class="lineNum">     352 </span>                :<span class="lineCov">    1520493 :         return;</span>
+<span class="lineNum">     353 </span>                :            :     }
+<span class="lineNum">     354 </span>                :            : 
+<span class="lineNum">     355 </span>                :            :     // Store the memory object in the pool
+<span class="lineNum">     356 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     357 </span>                :<span class="lineCov">     335646 :     m_memorySize[m_firstFreeCell] = memorySize;</span>
+<span class="lineNum">     358 </span>                :<span class="lineCov">     335646 :     m_memoryPointer[m_firstFreeCell] = pBuffer.release();</span>
+<span class="lineNum">     359 </span>                :<span class="lineCov">     335646 :     m_actualSize += memorySize;</span>
+<span class="lineNum">     360 </span>        [<span class="branchCov" title="Branch 1 was taken 1301 times"> + </span><span class="branchCov" title="Branch 2 was taken 334344 times"> + </span>]:<span class="lineCov">     335646 :     if(++m_firstFreeCell &gt;= m_memorySize.size())</span>
+<span class="lineNum">     361 </span>                :            :     {
+<span class="lineNum">     362 </span>                :<span class="lineCov">       1301 :         m_firstFreeCell = 0;</span>
+<span class="lineNum">     363 </span>                :            :     }
+<span class="lineNum">     364 </span>                :            : 
+<span class="lineNum">     365 </span>                :            :     // Remove old unused memory objects
+<span class="lineNum">     366 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     367 </span>        [<span class="branchCov" title="Branch 0 was taken 18116 times"> + </span><span class="branchCov" title="Branch 1 was taken 317529 times"> + </span>]:<span class="lineCov">     335645 :     if(m_firstFreeCell == m_firstUsedCell)</span>
+<span class="lineNum">     368 </span>                :            :     {
+<span class="lineNum">     369 </span>                :<span class="lineCov">      18116 :         m_actualSize -= m_memorySize[m_firstUsedCell];</span>
+<span class="lineNum">     370 </span>        [<span class="branchCov" title="Branch 1 was taken 18116 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">      18116 :         delete m_memoryPointer[m_firstUsedCell];</span>
+<span class="lineNum">     371 </span>        [<span class="branchCov" title="Branch 1 was taken 66 times"> + </span><span class="branchCov" title="Branch 2 was taken 18051 times"> + </span>]:<span class="lineCov">      18119 :         if(++m_firstUsedCell &gt;= m_memorySize.size())</span>
+<span class="lineNum">     372 </span>                :            :         {
+<span class="lineNum">     373 </span>                :<span class="lineCov">         66 :             m_firstUsedCell = 0;</span>
+<span class="lineNum">     374 </span>                :            :         }
+<span class="lineNum">     375 </span>                :            :     }
+<span class="lineNum">     376 </span>                :            : 
+<span class="lineNum">     377 </span>                :            :     // Remove old unused memory objects if the total unused
+<span class="lineNum">     378 </span>                :            :     //  memory is bigger than the specified parameters
+<span class="lineNum">     379 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     380 </span>[<span class="branchCov" title="Branch 0 was taken 382156 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>][<span class="branchCov" title="Branch 2 was taken 46511 times"> + </span><span class="branchCov" title="Branch 3 was taken 335645 times"> + </span>]:<span class="lineCov">    1902650 :     while(m_actualSize != 0 &amp;&amp; m_actualSize &gt; m_maxMemoryUsageSize)</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 335644 times"> + </span><span class="branchCov" title="Branch 6 was taken 1522861 times"> + </span>]
+<span class="lineNum">     381 </span>                :            :     {
+<span class="lineNum">     382 </span>                :<span class="lineCov">      46511 :         m_actualSize -= m_memorySize[m_firstUsedCell];</span>
+<span class="lineNum">     383 </span>        [<span class="branchCov" title="Branch 1 was taken 46511 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">      46511 :         delete m_memoryPointer[m_firstUsedCell];</span>
+<span class="lineNum">     384 </span>        [<span class="branchCov" title="Branch 0 was taken 186 times"> + </span><span class="branchCov" title="Branch 1 was taken 46325 times"> + </span>]:<span class="lineCov">      46511 :         if(++m_firstUsedCell &gt;= IMEBRA_MEMORY_POOL_SLOTS)</span>
+<span class="lineNum">     385 </span>                :            :         {
+<span class="lineNum">     386 </span>                :<span class="lineCov">        186 :             m_firstUsedCell = 0;</span>
+<span class="lineNum">     387 </span>                :            :         }
+<span class="lineNum">     388 </span>                :            :     }
+<span class="lineNum">     389 </span>                :            : 
+<span class="lineNum">     390 </span>                :            :     IMEBRA_FUNCTION_END();
+<span class="lineNum">     391 </span>                :            : }
+<span class="lineNum">     392 </span>                :            : 
+<span class="lineNum">     393 </span>                :            : 
+<span class="lineNum">     394 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     395 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     396 </span>                :            : //
+<span class="lineNum">     397 </span>                :            : //
+<span class="lineNum">     398 </span>                :            : // Return the size of the unused memory
+<span class="lineNum">     399 </span>                :            : //
+<span class="lineNum">     400 </span>                :            : //
+<a name="401"><span class="lineNum">     401 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     402 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     403 </span>                :<span class="lineCov">         22 : size_t memoryPool::getUnusedMemorySize()</span>
+<span class="lineNum">     404 </span>                :            : {
+<span class="lineNum">     405 </span>                :<span class="lineCov">         22 :     return m_actualSize;</span>
+<span class="lineNum">     406 </span>                :            : }
+<span class="lineNum">     407 </span>                :            : 
+<span class="lineNum">     408 </span>                :            : 
+<span class="lineNum">     409 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     410 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     411 </span>                :            : //
+<span class="lineNum">     412 </span>                :            : //
+<span class="lineNum">     413 </span>                :            : // Discard the currently unused memory
+<span class="lineNum">     414 </span>                :            : //
+<span class="lineNum">     415 </span>                :            : //
+<a name="416"><span class="lineNum">     416 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     417 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     418 </span>                :<span class="lineCov">          8 : bool memoryPool::flush()</span>
+<span class="lineNum">     419 </span>                :            : {
+<span class="lineNum">     420 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     421 </span>                :            : 
+<span class="lineNum">     422 </span>                :<span class="lineCov">          8 :     bool bCleared(m_firstUsedCell != m_firstFreeCell);</span>
+<span class="lineNum">     423 </span>        [<span class="branchCov" title="Branch 0 was taken 5 times"> + </span><span class="branchCov" title="Branch 1 was taken 7 times"> + </span>]:<span class="lineCov">         12 :     while(m_firstUsedCell != m_firstFreeCell)</span>
+<span class="lineNum">     424 </span>                :            :     {
+<span class="lineNum">     425 </span>        [<span class="branchCov" title="Branch 1 was taken 5 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          5 :         delete m_memoryPointer[m_firstUsedCell];</span>
+<span class="lineNum">     426 </span>                :            : 
+<span class="lineNum">     427 </span>                :<span class="lineCov">          4 :         m_actualSize -= m_memorySize[m_firstUsedCell];</span>
+<span class="lineNum">     428 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 4 times"> + </span>]:<span class="lineCov">          4 :         if(++m_firstUsedCell &gt;= m_memorySize.size())</span>
+<span class="lineNum">     429 </span>                :            :         {
+<span class="lineNum">     430 </span>                :<span class="lineNoCov">          0 :             m_firstUsedCell = 0;</span>
+<span class="lineNum">     431 </span>                :            :         }
+<span class="lineNum">     432 </span>                :            :     }
+<span class="lineNum">     433 </span>                :<span class="lineCov">          7 :     return bCleared;</span>
+<span class="lineNum">     434 </span>                :            : 
+<span class="lineNum">     435 </span>                :            :     IMEBRA_FUNCTION_END();
+<span class="lineNum">     436 </span>                :            : }
+<span class="lineNum">     437 </span>                :            : 
+<span class="lineNum">     438 </span>                :            : 
+<span class="lineNum">     439 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     440 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     441 </span>                :            : //
+<span class="lineNum">     442 </span>                :            : //
+<span class="lineNum">     443 </span>                :            : // Look for a memory object to reuse or allocate a new one
+<span class="lineNum">     444 </span>                :            : //
+<span class="lineNum">     445 </span>                :            : //
+<a name="446"><span class="lineNum">     446 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     447 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     448 </span>                :<span class="lineCov">    1685668 : stringUint8* memoryPool::getMemory(size_t requestedSize)</span>
+<span class="lineNum">     449 </span>                :            : {
+<span class="lineNum">     450 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     451 </span>                :            : 
+<span class="lineNum">     452 </span>[<span class="branchCov" title="Branch 0 was taken 283250 times"> + </span><span class="branchCov" title="Branch 1 was taken 1402418 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 3 times"> + </span><span class="branchCov" title="Branch 3 was taken 283247 times"> + </span>]:<span class="lineCov">    1685668 :     if(requestedSize &lt; m_minMemoryBlockSize || requestedSize &gt; m_maxMemoryUsageSize)</span>
+<span class="lineNum">     453 </span>                :            :     {
+<span class="lineNum">     454 </span>[<span class="branchCov" title="Branch 2 was taken 1403078 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 1402980 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">    1402421 :         return new stringUint8(requestedSize, 0);</span>
+<span class="lineNum">     455 </span>                :            :     }
+<span class="lineNum">     456 </span>                :            : 
+<span class="lineNum">     457 </span>                :            :     // Look for an object to reuse
+<span class="lineNum">     458 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     459 </span>        [<span class="branchCov" title="Branch 0 was taken 18609663 times"> + </span><span class="branchCov" title="Branch 1 was taken 13520 times"> + </span>]:<span class="lineCov">   18623183 :     for(size_t findCell = m_firstUsedCell; findCell != m_firstFreeCell;)</span>
+<span class="lineNum">     460 </span>                :            :     {
+<span class="lineNum">     461 </span>        [<span class="branchCov" title="Branch 1 was taken 18339936 times"> + </span><span class="branchCov" title="Branch 2 was taken 269727 times"> + </span>]:<span class="lineCov">   18609663 :         if(m_memorySize[findCell] != requestedSize)</span>
+<span class="lineNum">     462 </span>                :            :         {
+<span class="lineNum">     463 </span>        [<span class="branchCov" title="Branch 1 was taken 71308 times"> + </span><span class="branchCov" title="Branch 2 was taken 18268628 times"> + </span>]:<span class="lineCov">   18339936 :             if(++findCell &gt;= m_memorySize.size())</span>
+<span class="lineNum">     464 </span>                :            :             {
+<span class="lineNum">     465 </span>                :<span class="lineCov">      71308 :                 findCell = 0;</span>
+<span class="lineNum">     466 </span>                :            :             }
+<span class="lineNum">     467 </span>                :<span class="lineCov">   18339936 :             continue;</span>
+<span class="lineNum">     468 </span>                :            :         }
+<span class="lineNum">     469 </span>                :            : 
+<span class="lineNum">     470 </span>                :            :         // Memory found
+<span class="lineNum">     471 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     472 </span>                :<span class="lineCov">     539454 :         std::unique_ptr&lt;stringUint8&gt; pMemory(m_memoryPointer[findCell]);</span>
+<span class="lineNum">     473 </span>                :<span class="lineCov">     269727 :         m_actualSize -= m_memorySize[findCell];</span>
+<span class="lineNum">     474 </span>        [<span class="branchCov" title="Branch 0 was taken 10138 times"> + </span><span class="branchCov" title="Branch 1 was taken 259589 times"> + </span>]:<span class="lineCov">     269727 :         if(findCell == m_firstUsedCell)</span>
+<span class="lineNum">     475 </span>                :            :         {
+<span class="lineNum">     476 </span>        [<span class="branchCov" title="Branch 0 was taken 50 times"> + </span><span class="branchCov" title="Branch 1 was taken 10088 times"> + </span>]:<span class="lineCov">      10138 :             if(++m_firstUsedCell &gt;= IMEBRA_MEMORY_POOL_SLOTS)</span>
+<span class="lineNum">     477 </span>                :            :             {
+<span class="lineNum">     478 </span>                :<span class="lineCov">         50 :                 m_firstUsedCell = 0;</span>
+<span class="lineNum">     479 </span>                :            :             }
+<span class="lineNum">     480 </span>        [<span class="branchCov" title="Branch 4 was taken 10137 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">      10138 :             ::memset(&amp;(pMemory-&gt;at(0)), 0, pMemory-&gt;size());</span>
+<span class="lineNum">     481 </span>                :<span class="lineCov">      10137 :             return pMemory.release();</span>
+<span class="lineNum">     482 </span>                :            :         }
+<span class="lineNum">     483 </span>                :            : 
+<span class="lineNum">     484 </span>        [<span class="branchCov" title="Branch 0 was taken 258596 times"> + </span><span class="branchCov" title="Branch 1 was taken 993 times"> + </span>]:<span class="lineCov">     259589 :         size_t lastUsedCell = m_firstFreeCell == 0 ? (IMEBRA_MEMORY_POOL_SLOTS - 1) : (m_firstFreeCell - 1);</span>
+<span class="lineNum">     485 </span>        [<span class="branchCov" title="Branch 0 was taken 14684 times"> + </span><span class="branchCov" title="Branch 1 was taken 244905 times"> + </span>]:<span class="lineCov">     259589 :         if(findCell == lastUsedCell)</span>
+<span class="lineNum">     486 </span>                :            :         {
+<span class="lineNum">     487 </span>                :<span class="lineCov">      14684 :             m_firstFreeCell = lastUsedCell;</span>
+<span class="lineNum">     488 </span>        [<span class="branchCov" title="Branch 4 was taken 14684 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">      14684 :             ::memset(&amp;(pMemory-&gt;at(0)), 0, pMemory-&gt;size());</span>
+<span class="lineNum">     489 </span>                :<span class="lineCov">      14684 :             return pMemory.release();</span>
+<span class="lineNum">     490 </span>                :            :         }
+<span class="lineNum">     491 </span>                :            : 
+<span class="lineNum">     492 </span>                :<span class="lineCov">     244905 :         m_memorySize[findCell] = m_memorySize[m_firstUsedCell];</span>
+<span class="lineNum">     493 </span>                :<span class="lineCov">     244905 :         m_memoryPointer[findCell] = m_memoryPointer[m_firstUsedCell];</span>
+<span class="lineNum">     494 </span>        [<span class="branchCov" title="Branch 0 was taken 944 times"> + </span><span class="branchCov" title="Branch 1 was taken 243961 times"> + </span>]:<span class="lineCov">     244905 :         if(++m_firstUsedCell &gt;= IMEBRA_MEMORY_POOL_SLOTS)</span>
+<span class="lineNum">     495 </span>                :            :         {
+<span class="lineNum">     496 </span>                :<span class="lineCov">        944 :             m_firstUsedCell = 0;</span>
+<span class="lineNum">     497 </span>                :            :         }
+<span class="lineNum">     498 </span>        [<span class="branchCov" title="Branch 4 was taken 244905 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">     244905 :         ::memset(&amp;(pMemory-&gt;at(0)), 0, pMemory-&gt;size());</span>
+<span class="lineNum">     499 </span>                :<span class="lineCov">     244905 :         return pMemory.release();</span>
+<span class="lineNum">     500 </span>                :            :     }
+<span class="lineNum">     501 </span>                :            : 
+<span class="lineNum">     502 </span>[<span class="branchCov" title="Branch 2 was taken 13520 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 13520 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">    1686349 :     return new stringUint8(requestedSize, 0);</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">     503 </span>                :            : 
+<span class="lineNum">     504 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     505 </span>                :            : }
+<a name="506"><span class="lineNum">     506 </span>                :            : </a>
+<span class="lineNum">     507 </span>                :            : 
+<span class="lineNum">     508 </span>                :<span class="lineCov">          1 : memoryPoolGetter::memoryPoolGetter()</span>
+<span class="lineNum">     509 </span>                :            : {
+<span class="lineNum">     510 </span>                :<span class="lineCov">          1 :     m_oldNewHandler = std::set_new_handler(memoryPoolGetter::newHandler);</span>
+<span class="lineNum">     511 </span>                :            : #ifdef __APPLE__
+<span class="lineNum">     512 </span>                :            :     ::pthread_key_create(&amp;m_key, &amp;memoryPoolGetter::deleteMemoryPool);
+<span class="lineNum">     513 </span>                :            : #endif
+<a name="514"><span class="lineNum">     514 </span>                :<span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     515 </span>                :            : 
+<span class="lineNum">     516 </span>                :<span class="lineCov">          1 : memoryPoolGetter::~memoryPoolGetter()</span>
+<span class="lineNum">     517 </span>                :            : {
+<span class="lineNum">     518 </span>                :<span class="lineCov">          1 :     std::set_new_handler(m_oldNewHandler);</span>
+<span class="lineNum">     519 </span>                :            : #ifdef __APPLE__
+<span class="lineNum">     520 </span>                :            :     ::pthread_key_delete(m_key);
+<span class="lineNum">     521 </span>                :            : #endif
+<a name="522"><span class="lineNum">     522 </span>                :<span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     523 </span>                :            : 
+<span class="lineNum">     524 </span>                :<span class="lineCov">    3540793 : memoryPoolGetter&amp; memoryPoolGetter::getMemoryPoolGetter()</span>
+<span class="lineNum">     525 </span>                :            : {
+<span class="lineNum">     526 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 3540792 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">    3540793 :     static memoryPoolGetter getter;</span>
+<span class="lineNum">     527 </span>                :<span class="lineCov">    3541007 :     return getter;</span>
+<span class="lineNum">     528 </span>                :            : }
+<span class="lineNum">     529 </span>                :            : 
+<span class="lineNum">     530 </span>                :            : #ifndef __APPLE__
+<span class="lineNum">     531 </span>                :<span class="lineCov">    7071354 : thread_local std::unique_ptr&lt;memoryPool&gt; memoryPoolGetter::m_pool = std::unique_ptr&lt;memoryPool&gt;();</span>
+<a name="532"><span class="lineNum">     532 </span>                :            : #endif</a>
+<span class="lineNum">     533 </span>                :            : 
+<span class="lineNum">     534 </span>                :<span class="lineCov">    3540410 : memoryPool&amp; memoryPoolGetter::getMemoryPoolLocal()</span>
+<span class="lineNum">     535 </span>                :            : {
+<span class="lineNum">     536 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     537 </span>                :            : 
+<span class="lineNum">     538 </span>                :            : #ifdef __APPLE__
+<span class="lineNum">     539 </span>                :            :     memoryPool* pPool = (memoryPool*)pthread_getspecific(m_key);
+<span class="lineNum">     540 </span>                :            :     if(pPool == 0)
+<span class="lineNum">     541 </span>                :            :     {
+<span class="lineNum">     542 </span>                :            :         pPool = new memoryPool(IMEBRA_MEMORY_POOL_MIN_SIZE, IMEBRA_MEMORY_POOL_MAX_SIZE);
+<span class="lineNum">     543 </span>                :            :         pthread_setspecific(m_key, pPool);
+<span class="lineNum">     544 </span>                :            :     }
+<a name="545"><span class="lineNum">     545 </span>                :            :     return *pPool;</a>
+<span class="lineNum">     546 </span>                :            : #else
+<span class="lineNum">     547 </span>[<span class="branchCov" title="Branch 1 was taken 3540979 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 116 times"> + </span><span class="branchCov" title="Branch 5 was taken 3537900 times"> + </span>]:<span class="lineCov">   10611648 :     if(m_pool.get() == 0)</span>
+<span class="lineNum">     548 </span>                :            :     {
+<span class="lineNum">     549 </span>[<span class="branchCov" title="Branch 1 was taken 116 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 116 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        116 :         m_pool.reset(new memoryPool(IMEBRA_MEMORY_POOL_MIN_SIZE, IMEBRA_MEMORY_POOL_MAX_SIZE));</span>
+<span class="lineNum">     550 </span>                :            :     }
+<span class="lineNum">     551 </span>[<span class="branchCov" title="Branch 1 was taken 3537118 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineCov">    3538016 :     return *(m_pool.get());</span>
+<span class="lineNum">     552 </span>                :            : #endif
+<span class="lineNum">     553 </span>                :            : 
+<span class="lineNum">     554 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     555 </span>                :            : }
+<span class="lineNum">     556 </span>                :            : 
+<span class="lineNum">     557 </span>                :            : #ifdef __APPLE__
+<span class="lineNum">     558 </span>                :            : void memoryPoolGetter::deleteMemoryPool(void* pMemoryPool)
+<span class="lineNum">     559 </span>                :            : {
+<span class="lineNum">     560 </span>                :            :     delete (memoryPool*)pMemoryPool;
+<span class="lineNum">     561 </span>                :            : }
+<span class="lineNum">     562 </span>                :            : #endif
+<span class="lineNum">     563 </span>                :            : 
+<span class="lineNum">     564 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     565 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     566 </span>                :            : //
+<span class="lineNum">     567 </span>                :            : //
+<span class="lineNum">     568 </span>                :            : // Set by std::set_new_handler() as new handler.
+<span class="lineNum">     569 </span>                :            : //
+<span class="lineNum">     570 </span>                :            : //
+<a name="571"><span class="lineNum">     571 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     572 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     573 </span>                :<span class="lineNoCov">          0 : void memoryPoolGetter::newHandler()</span>
+<span class="lineNum">     574 </span>                :            : {
+<span class="lineNum">     575 </span>        [<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if(!memoryPoolGetter::getMemoryPoolGetter().getMemoryPoolLocal().flush())</span>
+<span class="lineNum">     576 </span>                :            :     {
+<span class="lineNum">     577 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         throw ImebraBadAlloc();</span>
+<span class="lineNum">     578 </span>                :            :     }
+<span class="lineNum">     579 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     580 </span>                :            : 
+<a name="581"><span class="lineNum">     581 </span>                :            : } // namespace implementation</a>
+<span class="lineNum">     582 </span>                :            : 
+<span class="lineNum">     583 </span>[<span class="branchCov" title="Branch 1 was taken 116 times"> + </span><span class="branchCov" title="Branch 2 was taken 7070952 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">   14142140 : } // namespace imebra</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

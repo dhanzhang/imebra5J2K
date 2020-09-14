@@ -1,0 +1,187 @@
+2929J686-breaker:
+Multiframe RLE compressed. Tiny offset in between each RLE segments. dcmtk 3.5.4 corrupt the output (fixed in 3.5.4+~20081118)
+
+743AE19C:
+http://www.dcm4che.org/jira/browse/DCMEE-878
+http://www.dcm4che.org/jira/secure/attachment/10321/743AE19C
+bizarre jpeg file
+
+ACUSON-24-YBR_FULL-RLE-b_dcmdrle_dcmcjpeg.dcm:
+Manufactured example of true lossless JPEG compression and YBR_FULL color model
+Ref: http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Color_Space_Transformations
+
+ACUSON-24-YBR_FULL-RLE-b_gdcmconv_j2k.dcm
+Manufactured example of true lossless J2K compression and YBR_FULL color model
+Ref: http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Color_Space_Transformations
+
+ALOKA_SSD-8-MONO2-RLE-SQ.dcm:
+it is missing the very last output pixel.
+dcmtk 3.5.4 does not decompress it, gdcm fills in missing pixel with a 0 value.
+
+CT_OSIRIX_OddOverlay.dcm:
+Overlaydata is 302406, which is not a multiple of 8 ...
+
+CT_Phillips_JPEG2K_Decompr_Problem.dcm:
+Jasper 1.900 does not decompress this image properly (floating point precision error AFAIK).
+
+D_CLUNIE_CT1_IVRLE_BigEndian.dcm:
+This image was manufactured from D_CLUNIE_CT1_RLE.dcm.
+The file was set to implicit, and 0008,2112 (SQ) was purposely
+set to VR=UN so that an IVRLE SQ would be encoded in a BigEndian
+transfer syntax dataset (SQ with explicit length)
+
+D_CLUNIE_CT1_IVRLE_BigEndian_ELE.dcm:
+Manuafactured example for ...
+
+D_CLUNIE_CT1_RLE_FRAGS.dcm:
+Created using gdcmconv to produce a RLE split into fragment of max size: 65536
+./bin/gdcmconv --force --rle --split 65536 -i gdcmData/D_CLUNIE_CT1_RLE.dcm -o D_CLUNIE_CT1_RLE_FRAGS.dcm
+this is technically NOT standard
+
+DX_GE_FALCON_SNOWY-VOI.dcm:
+Watch out for the value of OverlayBitPosition :)
+
+DX_J2K_0Padding.dcm:
+OpenJPEG 1.0 cannot deal with this file. TomoVision/IrfanView/PowerDICOM all ok
+Need to explicitely remove the trailing 0 at end of encapsulated J2K stream
+
+ECHOPAC7_RLE_Problem.dcm:
+...at some point GDCM could not read this one...
+
+ELSCINT1_LOSSLESS_RICE.dcm:
+Example of "LOSSLESS RICE" from ELSCINT1
+
+ELSCINT1_PMSCT_RLE1.dcm:
+Example of PMSCT_RLE1 from ELSCINT1
+
+Enhanced_MR_Image_Storage_Illegal_CP246.dcm:
+Enhanced_MR_Image_Storage_Illegal_CP246_corrected.dcm:
+This file contains an illegal encoding for a sequence. See cp246
+and Enhanced_MR_Image_Storage_Illegal_CP246_corrected.dcm for the
+corrected version of the file.
+
+gdcm-US-ALOKA-16.dcm:
+Simple PALETTE COLOR file with Segmented Palette
+
+gdcm-US-ALOKA-16-LUT.dcm:
+This is the unsegmented version of the previous segmented palette one.
+http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/22626aabc4ac4306
+dcmtk 3.5.4 cannot display properly the image (fixed in 3.5.4+~20081118)
+
+JDDICOM_Sample2.dcm:
+The problem is that the JPEG bitstream in this image is in YCbCr color space, but DICOM 
+PhotometricInterpretation claims that the color space is RGB.
+
+kos.dcm:
+Extra ItemDelimitationItem (FFFE, E00D) emitted in DicomOutputStream.writeDicomObject()
+http://www.dcm4che.org/jira/browse/DCM-242
+dcmconv (3.5.4) correctly discard the final item del item...
+
+LEADTOOLS_FLOWERS-24-RGB-PC1-RLE.dcm:
+This is an inverted case, if a software (eg. TomoVision) display it properly then it means the viz
+pipeline is not setup properly (DICOM Planar Configuration:1 should be discarded)
+
+LEMPEL_ZIV_ACRNEMA2.acr:
+Example of compressed ACR-NEMA (PS2) file. Most people claims ACR NEMA support
+while this file is hardly ever supported (recent version of tomovision do)
+Ref: LEMPEL_ZIV compression
+
+OT-PAL-8-face.dcm:
+LUT is not complete (<255 vals)
+
+PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm:
+Brain dead JPEG stream. Totally illegal (PVRG 1.2.1 codec decompress it...)
+
+pvrg.dcm:
+Not much you can do about it, your only hope is to actually reuse PVRG to decompress the file,
+No other toolkit AFAIK were able to decompress this file properly
+
+RG3_JPLY:
+http://groups.google.com/group/comp.protocols.dicom/msg/c68f7152d72327b2
+You cannot have a value of 1024 in a 10 bits jpeg stream
+
+SC-RGB-16-RLE.dcm:
+Synthetic example to show a RLE compressed RGB 16bits image
+
+SignedShortLosslessBug.dcm:
+XA_GE_JPEG_02_with_Overlays.dcm:
+
+MG_SECTRA_MONOCHROME1_PixelPadding.dcm:
+Originally this image was not J2K compressed but the file size was prohibitively big. 
+This image comes from an itk user that detected an issue regarding MONOCHROME1 handling in GDCM 1.x as it is not taking Pixel Padding Value correctly.
+
+PartialFileMetaHeader_012345.002.050.dcm:
+Manually edited file (from gdcmData/012345.002.050.dcm) to reproduce an issue with dcmtk 20090216 (fixed in 20090302)
+Only 0x2,0x10 can be found in the file meta header which technically should be suficient to process the dicom file.
+
+SequenceWithUndefinedLengthNotConvertibleToDefinedLength.dcm:
+There is a flaw in the DICOM design were it is assumed that Sequence can be either represented as undefined length
+or defined length. This should work in most case, but the undefined length is a little more general and can stored
+sequence of items that a defined length cannot.
+Deflated syntax was used in this case since this synthetic example can be nicely compressed using this transfer syntax.
+Warning: do not try to compute the group length !
+
+SequenceWithUndefinedLengthConvertedToDefinedLength.dcm:
+See SequenceWithUndefinedLengthNotConvertibleToDefinedLength.dcm for the valid DICOM file. This file cannot be read.
+Some implementation (such as GDCM 2.0.10) could actually read it as the overflow bug is implemented symmetrically in the
+reader and thus the roll over would also happen during read time. thus the file would load fine (while it should not)
+This has been fixed since GDCM 2.0.11 
+
+CT1_J2KI_DuplicatePCDE.dcm:
+Illustrate one problem with most DICOM implementation, where duplicated Private element are not properly rejected.
+...
+"The Data Elements ... shall occur at most once in a Data Set"
+rule, since the data element is defined by the tuple
+(private creator,gggg,ee) where xxee is the element
+number and xx is arbitrary and has no inherent meaning and
+does not serve to disambiguate the data element. 
+...
+Ref:
+http://groups.google.com/group/comp.protocols.dicom/msg/b5d8e7ea0b4b2169
+
+ROMEXIS_EnhancedCT_Invalid.dcm:
+This file is supposed to be a new Enhanced CT Image Storage, but it still has some attribute at the root level
+of the dataset instead of the Shared Functional Groups Sequence for example.
+Ref:
+http://groups.google.com/group/comp.protocols.dicom/msg/fbd586b587ec4d2d
+
+alphatest_cmyk.dcm:
+Deprecated PhotometricInterpretation=CMYK, with Samples Per Pixel = 4
+
+alphatest_argb.dcm
+Deprecated PhotometricInterpretation=ARGB, with Samples Per Pixel = 4
+
+CR-MONO1-10-chest_LossyJ2K.dcm
+This file was generated using:
+dcj2k gdcmData/CR-MONO1-10-chest.dcm CR-MONO1-10-chest_LossyJ2K.dcm
+DICOM Transfer Syntax declares the J2K to be lossless, while upon inspection of the J2K stream it is clear
+that the J2K stream is lossy. This type of image should be rejected in clinical trial environment.
+
+DermaColorLossLessJPEG-YBR_RCT.dcm:
+This file was manufactured from gdcmData/DermaColorLossLess.dcm but PhotometricInterpretation was
+set to YBR_RCT, while it should be RGB for JPEG.
+
+dcm4chee_unusedbits_not_zero.dcm:
+This file was downloaded from bug report:
+http://www.dcm4che.org/jira/browse/DCMEE-700
+-> http://www.dcm4che.org/jira/secure/attachment/10245/CompressedLossless.dcm
+The basic idea is that unused bits are required to be 0. No overlay data is declared but
+still you have to go over each pixel cell and manually cleanup the unused bits -sigh-
+
+PAPYRUS_CR_InvalidIOP.dcm:
+Initially send by a user because of a bug in gdcm to compute the number of overlay found in the DataSet.
+This file contains a couple of issues:
+* Incorrect Instance UID (mismatch)
+* Invalid Image Orientation Patient
+
+RTStruct_VRDSAsVRUN.dcm:
+File created from gdcmDataExtra/gdcmNonImageData/RT/RTStruct.dcm
+This is meant to test conversion from Implicit to Explicit in the special case
+where VR:DS cannot be used because of the restriction that VL is meant to be 16bits only
+Obviously implementor need to convert to Implicit Transfer Syntax (easy) and check conversion to 
+Explicit works.
+
+UndefinedValueLengthIllegalNonEncapsulatedTS.dcm:
+This file was found on the internet. This file is totally invalid. One cannot have a Undefined Value Length in a Non-Encapsulated
+Transfer Syntax. Some toolkit allow dumping the DataSet. Up to GDCM 2.0.15, GDCM would simply refuse this
+kind of dataset. This is now possible to dump and extract fields from it.

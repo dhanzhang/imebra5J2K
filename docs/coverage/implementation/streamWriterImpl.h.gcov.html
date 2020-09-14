@@ -1,0 +1,330 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/streamWriterImpl.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - streamWriterImpl.h<span style="font-size: 80%;"> (source / <a href="streamWriterImpl.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">35</td>
+            <td class="headerCovTableEntry">39</td>
+            <td class="headerCovTableEntryMed">89.7 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">25</td>
+            <td class="headerCovTableEntry">140</td>
+            <td class="headerCovTableEntryLo">17.9 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement 
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial 
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file streamWriter.h
+<span class="lineNum">      15 </span>                :            :     \brief Declaration of the the class used to write the streams.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : 
+<span class="lineNum">      20 </span>                :            : #if !defined(imebraStreamWriter_2C008538_F046_401C_8C83_2F76E1077DB0__INCLUDED_)
+<span class="lineNum">      21 </span>                :            : #define imebraStreamWriter_2C008538_F046_401C_8C83_2F76E1077DB0__INCLUDED_
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : #include &quot;streamControllerImpl.h&quot;
+<span class="lineNum">      24 </span>                :            : 
+<span class="lineNum">      25 </span>                :            : namespace imebra
+<span class="lineNum">      26 </span>                :            : {
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :            : namespace implementation
+<span class="lineNum">      29 </span>                :            : {
+<span class="lineNum">      30 </span>                :            : 
+<span class="lineNum">      31 </span>                :            : /// \brief Use this class to write into a baseStream
+<span class="lineNum">      32 </span>                :            : ///         derived class.
+<span class="lineNum">      33 </span>                :            : ///
+<span class="lineNum">      34 </span>                :            : /// Like the streamReader, this class is not multithread
+<span class="lineNum">      35 </span>                :            : ///  safe, but several streamWriter (in several threads) 
+<span class="lineNum">      36 </span>                :            : ///  can be connected to a single stream.
+<span class="lineNum">      37 </span>                :            : ///
+<span class="lineNum">      38 </span>                :            : /// A streamWriter can also be connected only to a part
+<span class="lineNum">      39 </span>                :            : ///  of the original stream: when this feature is used then
+<span class="lineNum">      40 </span>                :            : ///  the streamWriter will act as if only the visible bytes
+<span class="lineNum">      41 </span>                :            : ///  exist.
+<span class="lineNum">      42 </span>                :            : ///
+<span class="lineNum">      43 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      44 </span>                :            : class streamWriter: public streamController
+<span class="lineNum">      45 </span>                :            : {
+<span class="lineNum">      46 </span>                :            : public:
+<span class="lineNum">      47 </span>                :            : 
+<span class="lineNum">      48 </span>                :            :     streamWriter(std::shared_ptr&lt;baseStreamOutput&gt; pControlledStream);
+<span class="lineNum">      49 </span>                :            : 
+<span class="lineNum">      50 </span>                :            :     /// \brief Creates the streamWriter and connects it to a
+<span class="lineNum">      51 </span>                :            :         ///         baseStream object.
+<span class="lineNum">      52 </span>                :            :         ///
+<span class="lineNum">      53 </span>                :            :         /// @param pControlledStream   the stream used by the 
+<span class="lineNum">      54 </span>                :            :         ///                             streamWriter to write
+<span class="lineNum">      55 </span>                :            :         /// @param virtualStart        the first stream's byte
+<span class="lineNum">      56 </span>                :            :         ///                             visible to the streamWriter
+<span class="lineNum">      57 </span>                :            :         /// @param virtualLength       the number of stream's bytes
+<span class="lineNum">      58 </span>                :            :         ///                             visible to the 
+<span class="lineNum">      59 </span>                :            :         ///                             streamWriter. Set to 0 to
+<span class="lineNum">      60 </span>                :            :         ///                             allow the streamWriter to
+<span class="lineNum">      61 </span>                :            :         ///                             see all the bytes
+<span class="lineNum">      62 </span>                :            :         ///
+<span class="lineNum">      63 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">      64 </span>                :            :     streamWriter(std::shared_ptr&lt;baseStreamOutput&gt; pControlledStream, size_t virtualStart, size_t virtualLength);
+<span class="lineNum">      65 </span>                :            : 
+<span class="lineNum">      66 </span>                :            :     /// \brief Flushes the internal buffer, disconnects the
+<span class="lineNum">      67 </span>                :            :     ///         stream and destroys the streamWriter.
+<span class="lineNum">      68 </span>                :            :     ///
+<span class="lineNum">      69 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      70 </span>                :            :     virtual ~streamWriter();
+<span class="lineNum">      71 </span>                :            : 
+<span class="lineNum">      72 </span>                :            :         /// \brief Writes the internal buffer into the connected
+<span class="lineNum">      73 </span>                :            :         ///         stream. This function is automatically called
+<span class="lineNum">      74 </span>                :            :         ///         when needed, but your application can call it
+<span class="lineNum">      75 </span>                :            :         ///         when  syncronization between the cached data
+<span class="lineNum">      76 </span>                :            :         ///         and the stream is needed.
+<span class="lineNum">      77 </span>                :            :         ///
+<span class="lineNum">      78 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">      79 </span>                :            :         void flushDataBuffer();
+<span class="lineNum">      80 </span>                :            : 
+<span class="lineNum">      81 </span>                :            :         /// \brief Write raw data into the stream.
+<span class="lineNum">      82 </span>                :            :         ///
+<span class="lineNum">      83 </span>                :            :         /// The data stored in the pBuffer parameter will be
+<span class="lineNum">      84 </span>                :            :         ///  written into the stream.
+<span class="lineNum">      85 </span>                :            :         /// 
+<span class="lineNum">      86 </span>                :            :         /// The function throws a streamExceptionWrite exception
+<span class="lineNum">      87 </span>                :            :         ///  if an error occurs.
+<span class="lineNum">      88 </span>                :            :         ///
+<span class="lineNum">      89 </span>                :            :         /// @param pBuffer   a pointer to the buffer which stores
+<span class="lineNum">      90 </span>                :            :         ///                   the data that must be written into
+<span class="lineNum">      91 </span>                :            :         ///                   the stream
+<span class="lineNum">      92 </span>                :            :         /// @param bufferLength the number of bytes that must be
+<span class="lineNum">      93 </span>                :            :         ///                   written to the stream
+<span class="lineNum">      94 </span>                :            :         ///
+<span class="lineNum">      95 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">      96 </span>                :            :     void write(const std::uint8_t* pBuffer, size_t bufferLength);
+<span class="lineNum">      97 </span>                :            : 
+<span class="lineNum">      98 </span>                :            :         /// \brief Write the specified amount of bits to the
+<span class="lineNum">      99 </span>                :            :         ///         stream.
+<span class="lineNum">     100 </span>                :            :         ///
+<span class="lineNum">     101 </span>                :            :         /// The functions uses a special bit pointer to keep track
+<span class="lineNum">     102 </span>                :            :         ///  of the bytes that haven't been completly written.
+<span class="lineNum">     103 </span>                :            :         ///
+<span class="lineNum">     104 </span>                :            :         /// The function throws a streamExceptionWrite exception
+<span class="lineNum">     105 </span>                :            :         ///  if an error occurs.
+<span class="lineNum">     106 </span>                :            :         ///
+<span class="lineNum">     107 </span>                :            :         /// @param buffer    bits to be written.
+<span class="lineNum">     108 </span>                :            :         ///                  The bits must be right aligned
+<span class="lineNum">     109 </span>                :            :         /// @param bitsNum   the number of bits to write.
+<span class="lineNum">     110 </span>                :            :         ///                  The function can write max 32 bits
+<a name="111"><span class="lineNum">     111 </span>                :            :         ///                   </a>
+<span class="lineNum">     112 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     113 </span>                :<span class="lineCov">  277978550 :     inline void writeBits(const std::uint32_t buffer, size_t bitsNum)</span>
+<span class="lineNum">     114 </span>                :            :         {
+<span class="lineNum">     115 </span>                :            :         IMEBRA_FUNCTION_START();
+<span class="lineNum">     116 </span>                :            : 
+<span class="lineNum">     117 </span>                :<span class="lineCov">  277978550 :                 std::uint32_t tempBuffer(buffer);</span>
+<span class="lineNum">     118 </span>                :            : 
+<span class="lineNum">     119 </span>[<span class="branchCov" title="Branch 0 was taken 281256048 times"> + </span><span class="branchCov" title="Branch 1 was taken 32 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">  559234598 :                 while(bitsNum != 0)</span>
+<span class="lineNum">     120 </span>                :            :                 {
+<span class="lineNum">     121 </span>        [<span class="branchCov" title="Branch 0 was taken 277978518 times"> + </span><span class="branchCov" title="Branch 1 was taken 3277530 times"> + </span>]:<span class="lineCov">  281256048 :                         if(bitsNum &lt;= (8 - m_outBitsNum))</span>
+<span class="lineNum">     122 </span>                :            :                         {
+<span class="lineNum">     123 </span>                :<span class="lineCov">  277978518 :                 m_outBitsBuffer = (std::uint8_t)(m_outBitsBuffer | (tempBuffer &lt;&lt; (8 - m_outBitsNum - bitsNum)));</span>
+<span class="lineNum">     124 </span>                :<span class="lineCov">  277978518 :                                 m_outBitsNum += bitsNum;</span>
+<span class="lineNum">     125 </span>        [<span class="branchCov" title="Branch 0 was taken 34747292 times"> + </span><span class="branchCov" title="Branch 1 was taken 243231226 times"> + </span>]:<span class="lineCov">  277978518 :                 if(m_outBitsNum==8)</span>
+<span class="lineNum">     126 </span>                :            :                 {
+<span class="lineNum">     127 </span>                :<span class="lineCov">   34747292 :                         m_outBitsNum = 0;</span>
+<span class="lineNum">     128 </span>        [<span class="branchCov" title="Branch 1 was taken 34747292 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">   34747292 :                         writeByte(m_outBitsBuffer);</span>
+<span class="lineNum">     129 </span>                :<span class="lineCov">   34747292 :                         m_outBitsBuffer = 0;</span>
+<span class="lineNum">     130 </span>                :            :                 }
+<span class="lineNum">     131 </span>                :<span class="lineCov">  277978518 :                 return;</span>
+<span class="lineNum">     132 </span>                :            :                         }
+<span class="lineNum">     133 </span>[<span class="branchCov" title="Branch 0 was taken 567147 times"> + </span><span class="branchCov" title="Branch 1 was taken 2710383 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 567147 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">    3277530 :                         if(m_outBitsNum == 0 &amp;&amp; bitsNum &gt;= 8)</span>
+<span class="lineNum">     134 </span>                :            :             {
+<span class="lineNum">     135 </span>                :<span class="lineCov">     567147 :                     bitsNum -= 8;</span>
+<span class="lineNum">     136 </span>        [<span class="branchCov" title="Branch 1 was taken 567147 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">     567147 :                     writeByte(std::uint8_t(tempBuffer &gt;&gt; bitsNum));</span>
+<span class="lineNum">     137 </span>                :            :             }
+<span class="lineNum">     138 </span>                :            :             else
+<span class="lineNum">     139 </span>                :            :             {
+<span class="lineNum">     140 </span>                :<span class="lineCov">    2710383 :                 m_outBitsBuffer |= (std::uint8_t)(tempBuffer &gt;&gt; (bitsNum + m_outBitsNum - 8));</span>
+<span class="lineNum">     141 </span>                :<span class="lineCov">    2710383 :                 bitsNum -= (8-m_outBitsNum);</span>
+<span class="lineNum">     142 </span>        [<span class="branchCov" title="Branch 1 was taken 2710383 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">    2710383 :                 writeByte(m_outBitsBuffer);</span>
+<span class="lineNum">     143 </span>                :<span class="lineCov">    2710383 :                 m_outBitsBuffer = 0;</span>
+<span class="lineNum">     144 </span>                :<span class="lineCov">    2710383 :                 m_outBitsNum = 0;</span>
+<span class="lineNum">     145 </span>                :            :             }
+<span class="lineNum">     146 </span>                :            : 
+<span class="lineNum">     147 </span>                :<span class="lineCov">    3277530 :             tempBuffer &amp;= (((std::uint32_t)1) &lt;&lt; bitsNum) - 1;</span>
+<span class="lineNum">     148 </span>                :            : 
+<span class="lineNum">     149 </span>                :            :         }
+<span class="lineNum">     150 </span>                :            : 
+<span class="lineNum">     151 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :                 IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     152 </span>                :            :         }
+<span class="lineNum">     153 </span>                :            : 
+<span class="lineNum">     154 </span>                :            :         /// \brief Reset the bit pointer used by writeBits().
+<span class="lineNum">     155 </span>                :            :         ///
+<span class="lineNum">     156 </span>                :            :         /// A subsequent call to writeBits() will write data to
+<span class="lineNum">     157 </span>                :            :         ///  a byte-aligned boundary.
+<a name="158"><span class="lineNum">     158 </span>                :            :         ///</a>
+<span class="lineNum">     159 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     160 </span>                :<span class="lineCov">      15246 :         inline void resetOutBitsBuffer()</span>
+<span class="lineNum">     161 </span>                :            :         {
+<span class="lineNum">     162 </span>                :            :         IMEBRA_FUNCTION_START();
+<span class="lineNum">     163 </span>                :            : 
+<span class="lineNum">     164 </span>        [<span class="branchCov" title="Branch 0 was taken 15217 times"> + </span><span class="branchCov" title="Branch 1 was taken 29 times"> + </span>]:<span class="lineCov">      15246 :                 if(m_outBitsNum == 0)</span>
+<span class="lineNum">     165 </span>                :<span class="lineCov">      15217 :                         return;</span>
+<span class="lineNum">     166 </span>                :            : 
+<span class="lineNum">     167 </span>        [<span class="branchCov" title="Branch 1 was taken 29 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         29 :                 writeByte(m_outBitsBuffer);</span>
+<span class="lineNum">     168 </span>        [<span class="branchCov" title="Branch 1 was taken 29 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         29 :                 flushDataBuffer();</span>
+<span class="lineNum">     169 </span>                :<span class="lineCov">         29 :                 m_outBitsBuffer = 0;</span>
+<span class="lineNum">     170 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineCov">      15246 :                 m_outBitsNum = 0;</span>
+<span class="lineNum">     171 </span>                :            : 
+<span class="lineNum">     172 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :                 IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     173 </span>                :            :         }
+<span class="lineNum">     174 </span>                :            : 
+<span class="lineNum">     175 </span>                :            :         /// \brief Write a single byte to the stream, parsing it
+<span class="lineNum">     176 </span>                :            :         ///         if m_pTagByte is not zero.
+<span class="lineNum">     177 </span>                :            :         ///
+<span class="lineNum">     178 </span>                :            :         /// The byte to be written must be stored in the buffer 
+<span class="lineNum">     179 </span>                :            :         ///  pointed by the parameter pBuffer.
+<span class="lineNum">     180 </span>                :            :         ///
+<span class="lineNum">     181 </span>                :            :         /// If m_pTagByte is zero, then the function writes 
+<span class="lineNum">     182 </span>                :            :         ///  the byte and returns.
+<span class="lineNum">     183 </span>                :            :         ///
+<span class="lineNum">     184 </span>                :            :         /// If m_pTagByte is not zero, then the function adds a
+<span class="lineNum">     185 </span>                :            :         ///  byte with value 0x0 after all the bytes with value
+<span class="lineNum">     186 </span>                :            :         ///  0xFF.
+<span class="lineNum">     187 </span>                :            :         /// This mechanism is used to avoid the generation of
+<span class="lineNum">     188 </span>                :            :         ///  the jpeg tags in a stream.
+<span class="lineNum">     189 </span>                :            :         ///
+<span class="lineNum">     190 </span>                :            :         /// @param buffer    byte to be written
+<a name="191"><span class="lineNum">     191 </span>                :            :         ///</a>
+<span class="lineNum">     192 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     193 </span>                :<span class="lineCov">   38024851 :         inline void writeByte(const std::uint8_t buffer)</span>
+<span class="lineNum">     194 </span>                :            :         {
+<span class="lineNum">     195 </span>                :            :         IMEBRA_FUNCTION_START();
+<span class="lineNum">     196 </span>                :            : 
+<span class="lineNum">     197 </span>        [<span class="branchCov" title="Branch 1 was taken 9248 times"> + </span><span class="branchCov" title="Branch 2 was taken 38015603 times"> + </span>]:<span class="lineCov">   38024851 :         if(m_dataBufferCurrent == m_dataBuffer.size())</span>
+<span class="lineNum">     198 </span>                :            :                 {
+<span class="lineNum">     199 </span>        [<span class="branchCov" title="Branch 1 was taken 9248 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       9248 :                         flushDataBuffer();</span>
+<span class="lineNum">     200 </span>                :            :                 }
+<span class="lineNum">     201 </span>        [<span class="branchCov" title="Branch 1 was taken 38024851 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">   38024851 :         m_dataBuffer[m_dataBufferCurrent++] = buffer;</span>
+<span class="lineNum">     202 </span>[<span class="branchCov" title="Branch 0 was taken 38024851 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 5405 times"> + </span><span class="branchCov" title="Branch 3 was taken 38019446 times"> + </span>]:<span class="lineCov">   38024851 :                 if(m_bJpegTags &amp;&amp; buffer == (std::uint8_t)0xff)</span>
+<span class="lineNum">     203 </span>                :            :                 {
+<span class="lineNum">     204 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 5405 times"> + </span>]:<span class="lineCov">       5405 :             if(m_dataBufferCurrent == m_dataBuffer.size())</span>
+<span class="lineNum">     205 </span>                :            :                         {
+<span class="lineNum">     206 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                 flushDataBuffer();</span>
+<span class="lineNum">     207 </span>                :            :                         }
+<span class="lineNum">     208 </span>        [<span class="branchCov" title="Branch 1 was taken 5405 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       5405 :             m_dataBuffer[m_dataBufferCurrent++] = 0;</span>
+<span class="lineNum">     209 </span>                :            :                 }
+<span class="lineNum">     210 </span>                :            : 
+<span class="lineNum">     211 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :         IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     212 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineCov">   38024851 :     }</span>
+<span class="lineNum">     213 </span>                :            : 
+<span class="lineNum">     214 </span>                :            : private:
+<span class="lineNum">     215 </span>                :            :     std::shared_ptr&lt;baseStreamOutput&gt; m_pControlledStream;
+<span class="lineNum">     216 </span>                :            : 
+<span class="lineNum">     217 </span>                :            :         std::uint8_t m_outBitsBuffer;
+<span class="lineNum">     218 </span>                :            :     size_t m_outBitsNum;
+<span class="lineNum">     219 </span>                :            : 
+<span class="lineNum">     220 </span>                :            : };
+<span class="lineNum">     221 </span>                :            : 
+<span class="lineNum">     222 </span>                :            : } // namespace implementation
+<span class="lineNum">     223 </span>                :            : 
+<span class="lineNum">     224 </span>                :            : } // namespace imebra
+<span class="lineNum">     225 </span>                :            : 
+<span class="lineNum">     226 </span>                :            : 
+<span class="lineNum">     227 </span>                :            : #endif // !defined(imebraStreamWriter_2C008538_F046_401C_8C83_2F76E1077DB0__INCLUDED_)
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

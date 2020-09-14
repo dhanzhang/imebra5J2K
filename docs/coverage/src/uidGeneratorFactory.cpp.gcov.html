@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - src/uidGeneratorFactory.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - uidGeneratorFactory.cpp<span style="font-size: 80%;"> (source / <a href="uidGeneratorFactory.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">72</td>
+            <td class="headerCovTableEntry">244</td>
+            <td class="headerCovTableEntryLo">29.5 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file uidGeneratorFactory.h
+<span class="lineNum">      15 </span>                :            :     \brief Declaration of the class used to manage the UID generators.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : 
+<span class="lineNum">      20 </span>                :            : #include &quot;../include/imebra/uidGeneratorFactory.h&quot;
+<span class="lineNum">      21 </span>                :            : #include &quot;../include/imebra/baseUidGenerator.h&quot;
+<span class="lineNum">      22 </span>                :            : #include &quot;../implementation/exceptionImpl.h&quot;
+<span class="lineNum">      23 </span>                :            : #include &quot;../implementation/uidGeneratorFactoryImpl.h&quot;
+<span class="lineNum">      24 </span>                :            : 
+<span class="lineNum">      25 </span>                :            : namespace imebra
+<span class="lineNum">      26 </span>                :            : {
+<a name="27"><span class="lineNum">      27 </span>                :            : </a>
+<span class="lineNum">      28 </span>                :            : 
+<span class="lineNum">      29 </span>                :<span class="lineCov">          2 : void UIDGeneratorFactory::registerUIDGenerator(const std::string&amp; name, const BaseUIDGenerator&amp; uidGenerator)</span>
+<span class="lineNum">      30 </span>                :            : {
+<span class="lineNum">      31 </span>                :<span class="lineCov">          2 :     implementation::uidGenerators::uidGeneratorFactory::getUidGeneratorFactory().registerUIDGenerator(name, getBaseUidGeneratorImplementation(uidGenerator));</span>
+<a name="32"><span class="lineNum">      32 </span>                :<span class="lineCov">          2 : }</span></a>
+<span class="lineNum">      33 </span>                :            : 
+<span class="lineNum">      34 </span>                :<span class="lineCov">          3 : BaseUIDGenerator UIDGeneratorFactory::getUIDGenerator(const std::string&amp; name)</span>
+<span class="lineNum">      35 </span>                :            : {
+<span class="lineNum">      36 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">      37 </span>                :            : 
+<span class="lineNum">      38 </span>[<span class="branchCov" title="Branch 1 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 2 times"> + </span><span class="branchCov" title="Branch 5 was taken 1 time"> + </span>]:<span class="lineCov">          3 :     return BaseUIDGenerator(implementation::uidGenerators::uidGeneratorFactory::getUidGeneratorFactory().getUidGenerator(name));</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 11 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 12 was not taken"> - </span>]
+<span class="lineNum">      39 </span>                :            : 
+<span class="lineNum">      40 </span>[<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">          1 :     IMEBRA_FUNCTION_END_LOG();</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 17 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 34 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span>][<span class="branchCov" title="Branch 37 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 40 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 41 was not taken"> - </span>][<span class="branchCov" title="Branch 43 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 44 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 47 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 48 was not taken"> - </span>][<span class="branchCov" title="Branch 50 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 51 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 54 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 55 was not taken"> - </span>][<span class="branchCov" title="Branch 57 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 58 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 60 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 61 was not taken"> - </span>][<span class="branchCov" title="Branch 63 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 64 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 66 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 67 was not taken"> - </span>][<span class="branchCov" title="Branch 69 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 70 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 72 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 73 was not taken"> - </span>][<span class="branchCov" title="Branch 75 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 76 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 79 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 80 was not taken"> - </span>][<span class="branchCov" title="Branch 82 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 83 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 85 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 86 was not taken"> - </span>][<span class="branchCov" title="Branch 88 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 89 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 92 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 93 was not taken"> - </span>][<span class="branchCov" title="Branch 95 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 96 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 99 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 100 was not taken"> - </span>][<span class="branchCov" title="Branch 102 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 103 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 105 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 106 was not taken"> - </span>][<span class="branchCov" title="Branch 108 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 109 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 119 was not executed"> # </span><span class="branchNoExec" title="Branch 120 was not executed"> # </span><span class="branchNoExec" title="Branch 123 was not executed"> # </span><span class="branchNoExec" title="Branch 124 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 127 was not executed"> # </span><span class="branchNoExec" title="Branch 128 was not executed"> # </span><span class="branchNoExec" title="Branch 131 was not executed"> # </span><span class="branchNoExec" title="Branch 132 was not executed"> # </span><span class="branchNoExec" title="Branch 134 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 135 was not executed"> # </span><span class="branchNoExec" title="Branch 145 was not executed"> # </span><span class="branchNoExec" title="Branch 146 was not executed"> # </span><span class="branchNoExec" title="Branch 148 was not executed"> # </span><span class="branchNoExec" title="Branch 149 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 151 was not executed"> # </span><span class="branchNoExec" title="Branch 152 was not executed"> # </span><span class="branchNoExec" title="Branch 154 was not executed"> # </span><span class="branchNoExec" title="Branch 155 was not executed"> # </span><span class="branchNoExec" title="Branch 157 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 158 was not executed"> # </span><span class="branchNoExec" title="Branch 160 was not executed"> # </span><span class="branchNoExec" title="Branch 161 was not executed"> # </span><span class="branchNoExec" title="Branch 163 was not executed"> # </span><span class="branchNoExec" title="Branch 164 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 166 was not executed"> # </span><span class="branchNoExec" title="Branch 167 was not executed"> # </span><span class="branchNoExec" title="Branch 169 was not executed"> # </span><span class="branchNoExec" title="Branch 170 was not executed"> # </span><span class="branchNoExec" title="Branch 172 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 173 was not executed"> # </span><span class="branchNoExec" title="Branch 175 was not executed"> # </span><span class="branchNoExec" title="Branch 176 was not executed"> # </span><span class="branchNoExec" title="Branch 179 was not executed"> # </span><span class="branchNoExec" title="Branch 180 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 182 was not executed"> # </span><span class="branchNoExec" title="Branch 183 was not executed"> # </span><span class="branchNoExec" title="Branch 185 was not executed"> # </span><span class="branchNoExec" title="Branch 186 was not executed"> # </span><span class="branchNoExec" title="Branch 188 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 189 was not executed"> # </span><span class="branchNoExec" title="Branch 192 was not executed"> # </span><span class="branchNoExec" title="Branch 193 was not executed"> # </span><span class="branchNoExec" title="Branch 195 was not executed"> # </span><span class="branchNoExec" title="Branch 196 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 199 was not executed"> # </span><span class="branchNoExec" title="Branch 200 was not executed"> # </span><span class="branchNoExec" title="Branch 202 was not executed"> # </span><span class="branchNoExec" title="Branch 203 was not executed"> # </span><span class="branchNoExec" title="Branch 205 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 206 was not executed"> # </span><span class="branchNoExec" title="Branch 208 was not executed"> # </span><span class="branchNoExec" title="Branch 209 was not executed"> # </span>]
+<a name="41"><span class="lineNum">      41 </span>                :            : }</a>
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>                :<span class="lineCov">          2 : BaseUIDGenerator UIDGeneratorFactory::getDefaultUIDGenerator()</span>
+<span class="lineNum">      44 </span>                :            : {
+<span class="lineNum">      45 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">      46 </span>                :            : 
+<span class="lineNum">      47 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchCov" title="Branch 5 was taken 1 time"> + </span>]:<span class="lineCov">          2 :     return BaseUIDGenerator(implementation::uidGenerators::uidGeneratorFactory::getUidGeneratorFactory().getDefaultUidGenerator());</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 11 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 12 was not taken"> - </span>]
+<span class="lineNum">      48 </span>                :            : 
+<span class="lineNum">      49 </span>[<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">          1 :     IMEBRA_FUNCTION_END_LOG();</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 17 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 34 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span>][<span class="branchCov" title="Branch 37 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 40 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 41 was not taken"> - </span>][<span class="branchCov" title="Branch 43 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 44 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 47 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 48 was not taken"> - </span>][<span class="branchCov" title="Branch 50 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 51 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 54 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 55 was not taken"> - </span>][<span class="branchCov" title="Branch 57 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 58 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 60 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 61 was not taken"> - </span>][<span class="branchCov" title="Branch 63 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 64 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 66 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 67 was not taken"> - </span>][<span class="branchCov" title="Branch 69 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 70 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 72 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 73 was not taken"> - </span>][<span class="branchCov" title="Branch 75 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 76 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 79 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 80 was not taken"> - </span>][<span class="branchCov" title="Branch 82 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 83 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 85 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 86 was not taken"> - </span>][<span class="branchCov" title="Branch 88 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 89 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 92 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 93 was not taken"> - </span>][<span class="branchCov" title="Branch 95 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 96 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 99 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 100 was not taken"> - </span>][<span class="branchCov" title="Branch 102 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 103 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 105 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 106 was not taken"> - </span>][<span class="branchCov" title="Branch 108 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 109 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 119 was not executed"> # </span><span class="branchNoExec" title="Branch 120 was not executed"> # </span><span class="branchNoExec" title="Branch 123 was not executed"> # </span><span class="branchNoExec" title="Branch 124 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 127 was not executed"> # </span><span class="branchNoExec" title="Branch 128 was not executed"> # </span><span class="branchNoExec" title="Branch 131 was not executed"> # </span><span class="branchNoExec" title="Branch 132 was not executed"> # </span><span class="branchNoExec" title="Branch 134 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 135 was not executed"> # </span><span class="branchNoExec" title="Branch 145 was not executed"> # </span><span class="branchNoExec" title="Branch 146 was not executed"> # </span><span class="branchNoExec" title="Branch 148 was not executed"> # </span><span class="branchNoExec" title="Branch 149 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 151 was not executed"> # </span><span class="branchNoExec" title="Branch 152 was not executed"> # </span><span class="branchNoExec" title="Branch 154 was not executed"> # </span><span class="branchNoExec" title="Branch 155 was not executed"> # </span><span class="branchNoExec" title="Branch 157 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 158 was not executed"> # </span><span class="branchNoExec" title="Branch 160 was not executed"> # </span><span class="branchNoExec" title="Branch 161 was not executed"> # </span><span class="branchNoExec" title="Branch 163 was not executed"> # </span><span class="branchNoExec" title="Branch 164 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 166 was not executed"> # </span><span class="branchNoExec" title="Branch 167 was not executed"> # </span><span class="branchNoExec" title="Branch 169 was not executed"> # </span><span class="branchNoExec" title="Branch 170 was not executed"> # </span><span class="branchNoExec" title="Branch 172 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 173 was not executed"> # </span><span class="branchNoExec" title="Branch 175 was not executed"> # </span><span class="branchNoExec" title="Branch 176 was not executed"> # </span><span class="branchNoExec" title="Branch 179 was not executed"> # </span><span class="branchNoExec" title="Branch 180 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 182 was not executed"> # </span><span class="branchNoExec" title="Branch 183 was not executed"> # </span><span class="branchNoExec" title="Branch 185 was not executed"> # </span><span class="branchNoExec" title="Branch 186 was not executed"> # </span><span class="branchNoExec" title="Branch 188 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 189 was not executed"> # </span><span class="branchNoExec" title="Branch 192 was not executed"> # </span><span class="branchNoExec" title="Branch 193 was not executed"> # </span><span class="branchNoExec" title="Branch 195 was not executed"> # </span><span class="branchNoExec" title="Branch 196 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 199 was not executed"> # </span><span class="branchNoExec" title="Branch 200 was not executed"> # </span><span class="branchNoExec" title="Branch 202 was not executed"> # </span><span class="branchNoExec" title="Branch 203 was not executed"> # </span><span class="branchNoExec" title="Branch 205 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 206 was not executed"> # </span><span class="branchNoExec" title="Branch 208 was not executed"> # </span><span class="branchNoExec" title="Branch 209 was not executed"> # </span>]
+<a name="50"><span class="lineNum">      50 </span>                :            : }</a>
+<span class="lineNum">      51 </span>                :            : 
+<span class="lineNum">      52 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

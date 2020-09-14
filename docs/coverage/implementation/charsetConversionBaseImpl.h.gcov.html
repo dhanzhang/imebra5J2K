@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/charsetConversionBaseImpl.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - charsetConversionBaseImpl.h<span style="font-size: 80%;"> (source / <a href="charsetConversionBaseImpl.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file charsetConversion.h
+<span class="lineNum">      15 </span>                :            :     \brief Declaration of the class used to convert a string between different
+<span class="lineNum">      16 </span>                :            :             charsets.
+<span class="lineNum">      17 </span>                :            : 
+<span class="lineNum">      18 </span>                :            : The class hides the platform specific implementations and supplies a common
+<span class="lineNum">      19 </span>                :            :  interface for the charsets translations.
+<span class="lineNum">      20 </span>                :            : 
+<span class="lineNum">      21 </span>                :            : */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : #if !defined(imebraCharsetConversionBase_3146DA5A_5276_4804_B9AB_A3D54C6B123A__INCLUDED_)
+<span class="lineNum">      24 </span>                :            : #define imebraCharsetConversionBase_3146DA5A_5276_4804_B9AB_A3D54C6B123A__INCLUDED_
+<span class="lineNum">      25 </span>                :            : 
+<span class="lineNum">      26 </span>                :            : #include &quot;configurationImpl.h&quot;
+<span class="lineNum">      27 </span>                :            : #include &lt;memory&gt;
+<span class="lineNum">      28 </span>                :            : #include &lt;string&gt;
+<span class="lineNum">      29 </span>                :            : #include &lt;stdexcept&gt;
+<span class="lineNum">      30 </span>                :            : #include &lt;map&gt;
+<span class="lineNum">      31 </span>                :            : #include &lt;list&gt;
+<span class="lineNum">      32 </span>                :            : 
+<span class="lineNum">      33 </span>                :            : 
+<span class="lineNum">      34 </span>                :            : namespace imebra
+<span class="lineNum">      35 </span>                :            : {
+<span class="lineNum">      36 </span>                :            : 
+<span class="lineNum">      37 </span>                :            : /// \addtogroup group_baseclasses
+<span class="lineNum">      38 </span>                :            : ///
+<span class="lineNum">      39 </span>                :            : /// @{
+<span class="lineNum">      40 </span>                :            : 
+<span class="lineNum">      41 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      42 </span>                :            : /// \internal
+<span class="lineNum">      43 </span>                :            : /// \brief Stores the information related to a single
+<span class="lineNum">      44 </span>                :            : ///         charset.
+<a name="45"><span class="lineNum">      45 </span>                :            : ///</a>
+<span class="lineNum">      46 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      47 </span>                :<span class="lineCov">        204 : struct charsetInformation</span>
+<span class="lineNum">      48 </span>                :            : {
+<span class="lineNum">      49 </span>                :            :     charsetInformation(
+<span class="lineNum">      50 </span>                :            :             const std::string&amp; dicomName,
+<span class="lineNum">      51 </span>                :            :             const std::string&amp; escapeSequence,
+<span class="lineNum">      52 </span>                :            :             const std::string&amp; isoRegistration,
+<span class="lineNum">      53 </span>                :            :             const std::string&amp; javaRegistration,
+<span class="lineNum">      54 </span>                :            :             unsigned long codePage,
+<span class="lineNum">      55 </span>                :            :             bool bZeroFlag);
+<span class="lineNum">      56 </span>                :            : 
+<span class="lineNum">      57 </span>                :            :     charsetInformation(const charsetInformation&amp; right);
+<span class="lineNum">      58 </span>                :            : 
+<span class="lineNum">      59 </span>                :            :     std::string m_dicomName;       ///&lt; DICOM name for the charset
+<span class="lineNum">      60 </span>                :            :     std::string m_escapeSequence;  ///&lt; Escape sequence for ISO 2022
+<span class="lineNum">      61 </span>                :            :     std::string m_isoRegistration; ///&lt; ISO registration string
+<span class="lineNum">      62 </span>                :            :     std::string m_javaRegistration;///&lt; Java registration string
+<span class="lineNum">      63 </span>                :            :     unsigned long m_codePage;      ///&lt; codePage used by Windows
+<span class="lineNum">      64 </span>                :            :     bool m_bZeroFlag;              ///&lt; needs flags=0 in Windows
+<span class="lineNum">      65 </span>                :            : };
+<span class="lineNum">      66 </span>                :            : 
+<span class="lineNum">      67 </span>                :            : 
+<span class="lineNum">      68 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      69 </span>                :            : /// \internal
+<span class="lineNum">      70 </span>                :            : /// \brief Stores all the recognized charsets.
+<a name="71"><span class="lineNum">      71 </span>                :            : ///</a>
+<span class="lineNum">      72 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      73 </span>                :<span class="lineCov">          2 : class charsetDictionary</span>
+<span class="lineNum">      74 </span>                :            : {
+<span class="lineNum">      75 </span>                :            : public:
+<span class="lineNum">      76 </span>                :            :     charsetDictionary();
+<span class="lineNum">      77 </span>                :            : 
+<span class="lineNum">      78 </span>                :            :     const charsetInformation&amp; getCharsetInformation(const std::string&amp; dicomName) const;
+<span class="lineNum">      79 </span>                :            : 
+<span class="lineNum">      80 </span>                :            :     typedef std::map&lt;std::string, std::string&gt; escapeSequences_t;
+<span class="lineNum">      81 </span>                :            :     const escapeSequences_t&amp; getEscapeSequences() const;
+<span class="lineNum">      82 </span>                :            : 
+<span class="lineNum">      83 </span>                :            : private:
+<span class="lineNum">      84 </span>                :            :     void registerCharset(const std::string&amp; dicomName, const std::string&amp; escapeSequence, const std::string&amp; isoName, const std::string&amp; javaName, const unsigned long windowsPage, const bool bZeroFlag);
+<span class="lineNum">      85 </span>                :            : 
+<span class="lineNum">      86 </span>                :            :     typedef std::map&lt;std::string, charsetInformation&gt; dictionary_t;
+<span class="lineNum">      87 </span>                :            :     dictionary_t m_dictionary;
+<span class="lineNum">      88 </span>                :            : 
+<span class="lineNum">      89 </span>                :            :     escapeSequences_t m_escapeSequences;
+<span class="lineNum">      90 </span>                :            : };
+<span class="lineNum">      91 </span>                :            : 
+<span class="lineNum">      92 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      93 </span>                :            : /// \internal
+<span class="lineNum">      94 </span>                :            : /// \brief This class converts a string from multibyte to
+<span class="lineNum">      95 </span>                :            : ///         unicode and viceversa.
+<span class="lineNum">      96 </span>                :            : ///
+<span class="lineNum">      97 </span>                :            : /// The class uses the function iconv on Posix systems and
+<span class="lineNum">      98 </span>                :            : ///  the functions MultiByteToWideChars and
+<span class="lineNum">      99 </span>                :            : ///  WideCharsToMultiByte on Windows systems.
+<a name="100"><span class="lineNum">     100 </span>                :            : ///</a>
+<span class="lineNum">     101 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     102 </span>                :<span class="lineCov">     272778 : class charsetConversionBase</span>
+<span class="lineNum">     103 </span>                :            : {
+<span class="lineNum">     104 </span>                :            : public:
+<span class="lineNum">     105 </span>                :            : 
+<span class="lineNum">     106 </span>                :            :     virtual ~charsetConversionBase();
+<span class="lineNum">     107 </span>                :            : 
+<span class="lineNum">     108 </span>                :            :     static_assert(sizeof(wchar_t) == 2 || sizeof(wchar_t) == 4, &quot;Unsupported UTF char size&quot;);
+<span class="lineNum">     109 </span>                :            : 
+<span class="lineNum">     110 </span>                :            :     /// \brief Retrieve the only instance of the charset
+<span class="lineNum">     111 </span>                :            :     ///         dictionary.
+<span class="lineNum">     112 </span>                :            :     ///
+<span class="lineNum">     113 </span>                :            :     /// @return the only instance of the charset dictionary
+<span class="lineNum">     114 </span>                :            :     ///
+<span class="lineNum">     115 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     116 </span>                :            :     const charsetDictionary&amp; getDictionary() const;
+<span class="lineNum">     117 </span>                :            : 
+<span class="lineNum">     118 </span>                :            :     /// \brief Removes all the non alphanumeric and non digit
+<span class="lineNum">     119 </span>                :            :     ///        chars from the string, convert it to upper-case.
+<span class="lineNum">     120 </span>                :            :     ///
+<span class="lineNum">     121 </span>                :            :     /// @return the normalized DICOM charset name (to be used
+<span class="lineNum">     122 </span>                :            :     ///          with the charset dictionary)
+<span class="lineNum">     123 </span>                :            :     ///
+<span class="lineNum">     124 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     125 </span>                :            :     static std::string normalizeIsoCharset(const std::string&amp; isoCharset);
+<span class="lineNum">     126 </span>                :            : 
+<span class="lineNum">     127 </span>                :            :     /// \brief Transform a multibyte string into an unicode
+<span class="lineNum">     128 </span>                :            :     ///         string using the charset declared with the
+<span class="lineNum">     129 </span>                :            :     ///         method initialize().
+<span class="lineNum">     130 </span>                :            :     ///
+<span class="lineNum">     131 </span>                :            :     /// initialize() must have been called before calling this
+<span class="lineNum">     132 </span>                :            :     ///  method.
+<span class="lineNum">     133 </span>                :            :     ///
+<span class="lineNum">     134 </span>                :            :     /// @param unicodeStr
+<span class="lineNum">     135 </span>                :            :     ///
+<span class="lineNum">     136 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     137 </span>                :            :     virtual std::string fromUnicode(const std::wstring&amp; unicodeString) const = 0;
+<span class="lineNum">     138 </span>                :            : 
+<span class="lineNum">     139 </span>                :            :     /// \brief Transform a multibyte string into an unicode
+<span class="lineNum">     140 </span>                :            :     ///         string using the charset declared with the
+<span class="lineNum">     141 </span>                :            :     ///         method initialize().
+<span class="lineNum">     142 </span>                :            :     ///
+<span class="lineNum">     143 </span>                :            :     /// initialize() must have been called before calling this
+<span class="lineNum">     144 </span>                :            :     ///  method.
+<span class="lineNum">     145 </span>                :            :     ///
+<span class="lineNum">     146 </span>                :            :     /// @param asciiString the multibyte string that will be
+<span class="lineNum">     147 </span>                :            :     ///                     converted to unicode
+<span class="lineNum">     148 </span>                :            :     /// @return            the converted unicode string
+<span class="lineNum">     149 </span>                :            :     ///
+<span class="lineNum">     150 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     151 </span>                :            :     virtual std::wstring toUnicode(const std::string&amp; asciiString) const = 0;
+<span class="lineNum">     152 </span>                :            : };
+<span class="lineNum">     153 </span>                :            : 
+<span class="lineNum">     154 </span>                :            : 
+<span class="lineNum">     155 </span>                :            : 
+<span class="lineNum">     156 </span>                :            : ///@}
+<span class="lineNum">     157 </span>                :            : 
+<span class="lineNum">     158 </span>                :            : } // namespace imebra
+<span class="lineNum">     159 </span>                :            : 
+<span class="lineNum">     160 </span>                :            : 
+<span class="lineNum">     161 </span>                :            : 
+<span class="lineNum">     162 </span>                :            : #endif // !defined(imebraCharsetConversionBase_3146DA5A_5276_4804_B9AB_A3D54C6B123A__INCLUDED_)
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

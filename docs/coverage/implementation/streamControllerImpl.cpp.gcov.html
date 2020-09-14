@@ -1,0 +1,283 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/streamControllerImpl.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - streamControllerImpl.cpp<span style="font-size: 80%;"> (source / <a href="streamControllerImpl.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">64</td>
+            <td class="headerCovTableEntry">76</td>
+            <td class="headerCovTableEntryMed">84.2 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntryMed">85.7 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">22</td>
+            <td class="headerCovTableEntry">30</td>
+            <td class="headerCovTableEntryLo">73.3 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file streamController.cpp
+<span class="lineNum">      15 </span>                :            :     \brief Implementation of the streamController class.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #include &quot;streamControllerImpl.h&quot;
+<span class="lineNum">      20 </span>                :            : #include &lt;memory.h&gt;
+<span class="lineNum">      21 </span>                :            : 
+<span class="lineNum">      22 </span>                :            : namespace imebra
+<span class="lineNum">      23 </span>                :            : {
+<span class="lineNum">      24 </span>                :            : 
+<span class="lineNum">      25 </span>                :            : // Used for the endian check
+<span class="lineNum">      26 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      27 </span>                :            : static const std::uint16_t m_endianCheck(0x00ff);
+<span class="lineNum">      28 </span>                :<span class="lineCov">          1 : static std::uint8_t const * const pBytePointer((std::uint8_t*)&amp;m_endianCheck);</span>
+<span class="lineNum">      29 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 : static const streamController::tByteOrdering m_platformByteOrder((*pBytePointer)==0xff ? streamController::tByteOrdering::lowByteEndian : streamController::tByteOrdering::highByteEndian);</span>
+<span class="lineNum">      30 </span>                :            : 
+<span class="lineNum">      31 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      32 </span>                :            : //
+<span class="lineNum">      33 </span>                :            : // Constructor
+<a name="34"><span class="lineNum">      34 </span>                :            : //</a>
+<span class="lineNum">      35 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      36 </span>                :<span class="lineCov">     900525 : streamController::streamController(size_t virtualStart /* =0 */, size_t virtualLength /* =0 */):</span>
+<span class="lineNum">      37 </span>                :            :     m_bJpegTags(false),
+<span class="lineNum">      38 </span>                :            :         m_dataBuffer(size_t(IMEBRA_STREAM_CONTROLLER_MEMORY_SIZE), 0),
+<span class="lineNum">      39 </span>                :            :         m_virtualStart(virtualStart),
+<span class="lineNum">      40 </span>                :            :         m_virtualLength(virtualLength),
+<span class="lineNum">      41 </span>                :            :         m_dataBufferStreamPosition(0),
+<span class="lineNum">      42 </span>        [<span class="branchCov" title="Branch 2 was taken 900551 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     900525 :         m_dataBufferCurrent(0), m_dataBufferEnd(0)</span>
+<span class="lineNum">      43 </span>                :            : {
+<span class="lineNum">      44 </span>                :<span class="lineCov">     900526 : }</span>
+<a name="45"><span class="lineNum">      45 </span>                :            : </a>
+<span class="lineNum">      46 </span>                :            : 
+<span class="lineNum">      47 </span>                :<span class="lineCov">     129447 : streamController::streamController(size_t virtualStart, size_t virtualLength,</span>
+<span class="lineNum">      48 </span>                :<span class="lineCov">     129447 :                  std::uint8_t* pBuffer, size_t bufferSize):</span>
+<span class="lineNum">      49 </span>                :            :     m_bJpegTags(false),
+<span class="lineNum">      50 </span>                :            :         m_dataBuffer(size_t(IMEBRA_STREAM_CONTROLLER_MEMORY_SIZE), 0),
+<span class="lineNum">      51 </span>                :            :         m_virtualStart(virtualStart),
+<span class="lineNum">      52 </span>                :            :         m_virtualLength(virtualLength),
+<span class="lineNum">      53 </span>                :            :         m_dataBufferStreamPosition(0),
+<span class="lineNum">      54 </span>        [<span class="branchCov" title="Branch 2 was taken 129459 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     129447 :         m_dataBufferCurrent(0), m_dataBufferEnd(bufferSize)</span>
+<span class="lineNum">      55 </span>                :            : {
+<span class="lineNum">      56 </span>        [<span class="branchCov" title="Branch 1 was taken 129454 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">     129453 :     ::memcpy(&amp;(m_dataBuffer[0]), pBuffer, bufferSize);</span>
+<span class="lineNum">      57 </span>                :<span class="lineCov">     129454 : }</span>
+<span class="lineNum">      58 </span>                :            : 
+<span class="lineNum">      59 </span>                :            : 
+<span class="lineNum">      60 </span>                :            : 
+<span class="lineNum">      61 </span>                :            : 
+<span class="lineNum">      62 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      63 </span>                :            : //
+<span class="lineNum">      64 </span>                :            : // Destructor
+<a name="65"><span class="lineNum">      65 </span>                :            : //</a>
+<span class="lineNum">      66 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      67 </span>                :<span class="lineCov">    2059922 : streamController::~streamController()</span>
+<span class="lineNum">      68 </span>                :            : {
+<span class="lineNum">      69 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">      70 </span>                :            : 
+<span class="lineNum">      71 </span>                :            : 
+<span class="lineNum">      72 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      73 </span>                :            : //
+<span class="lineNum">      74 </span>                :            : // Retrieve the current position
+<a name="75"><span class="lineNum">      75 </span>                :            : //</a>
+<span class="lineNum">      76 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      77 </span>                :<span class="lineCov">    3001064 : size_t streamController::position()</span>
+<span class="lineNum">      78 </span>                :            : {
+<span class="lineNum">      79 </span>                :<span class="lineCov">    3001064 :     return m_dataBufferStreamPosition + m_dataBufferCurrent;</span>
+<span class="lineNum">      80 </span>                :            : }
+<span class="lineNum">      81 </span>                :            : 
+<span class="lineNum">      82 </span>                :            : 
+<span class="lineNum">      83 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      84 </span>                :            : //
+<span class="lineNum">      85 </span>                :            : // Retrieve the position without considering the virtual
+<span class="lineNum">      86 </span>                :            : //  start's position
+<a name="87"><span class="lineNum">      87 </span>                :            : //</a>
+<span class="lineNum">      88 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      89 </span>                :<span class="lineCov">     238295 : size_t streamController::getControlledStreamPosition()</span>
+<span class="lineNum">      90 </span>                :            : {
+<span class="lineNum">      91 </span>                :<span class="lineCov">     238295 :     return m_dataBufferStreamPosition + m_dataBufferCurrent + m_virtualStart;</span>
+<span class="lineNum">      92 </span>                :            : }
+<a name="93"><span class="lineNum">      93 </span>                :            : </a>
+<span class="lineNum">      94 </span>                :            : 
+<span class="lineNum">      95 </span>                :<span class="lineCov">     679689 : void streamController::reverseEndian(std::uint8_t* pBuffer, const size_t wordLength, const size_t words)</span>
+<span class="lineNum">      96 </span>                :            : {
+<span class="lineNum">      97 </span>     [<span class="branchCov" title="Branch 0 was taken 490674 times"> + </span><span class="branchCov" title="Branch 1 was taken 182475 times"> + </span><span class="branchCov" title="Branch 2 was taken 6549 times"> + </span>]:<span class="lineCov">     679689 :     switch(wordLength)</span>
+<span class="lineNum">      98 </span>                :            :     {
+<span class="lineNum">      99 </span>                :<span class="lineCov">     490674 :     case 2:</span>
+<span class="lineNum">     100 </span>                :            :         {
+<span class="lineNum">     101 </span>                :<span class="lineCov">     490674 :             std::uint16_t* pWord((std::uint16_t*)pBuffer);</span>
+<span class="lineNum">     102 </span>        [<span class="branchCov" title="Branch 0 was taken 3782619348 times"> + </span><span class="branchCov" title="Branch 1 was taken 490674 times"> + </span>]:<span class="lineCov"> 3783110022 :             for(size_t scanWords = words; scanWords != 0; --scanWords)</span>
+<span class="lineNum">     103 </span>                :            :             {
+<span class="lineNum">     104 </span>                :<span class="lineCov"> 3782619348 :                 *pWord = (std::uint16_t)(((*pWord &amp; 0x00ff) &lt;&lt; 8) | ((*pWord &amp; 0xff00) &gt;&gt; 8));</span>
+<span class="lineNum">     105 </span>                :<span class="lineCov"> 3782619348 :                 ++pWord;</span>
+<span class="lineNum">     106 </span>                :<span class="lineCov">     490674 :             }</span>
+<span class="lineNum">     107 </span>                :            :         }
+<span class="lineNum">     108 </span>                :<span class="lineCov">     490674 :         return;</span>
+<span class="lineNum">     109 </span>                :<span class="lineCov">     182475 :     case 4:</span>
+<span class="lineNum">     110 </span>                :            :         {
+<span class="lineNum">     111 </span>                :<span class="lineCov">     182475 :             std::uint32_t* pDWord((std::uint32_t*)pBuffer);</span>
+<span class="lineNum">     112 </span>        [<span class="branchCov" title="Branch 0 was taken 182473 times"> + </span><span class="branchCov" title="Branch 1 was taken 182475 times"> + </span>]:<span class="lineCov">     364948 :             for(size_t scanWords = words; scanWords != 0; --scanWords)</span>
+<span class="lineNum">     113 </span>                :            :             {
+<span class="lineNum">     114 </span>                :<span class="lineCov">     182473 :                 *pDWord = ((*pDWord &amp; 0xff000000) &gt;&gt; 24) | ((*pDWord &amp; 0x00ff0000) &gt;&gt; 8) | ((*pDWord &amp; 0x0000ff00) &lt;&lt; 8) | ((*pDWord &amp; 0x000000ff) &lt;&lt; 24);</span>
+<span class="lineNum">     115 </span>                :<span class="lineCov">     182473 :                 ++pDWord;</span>
+<span class="lineNum">     116 </span>                :<span class="lineCov">     182475 :             }</span>
+<span class="lineNum">     117 </span>                :            :         }
+<span class="lineNum">     118 </span>                :<span class="lineCov">     182475 :         return;</span>
+<span class="lineNum">     119 </span>                :<span class="lineCov">       6549 :     case 8:</span>
+<span class="lineNum">     120 </span>                :            :         {
+<span class="lineNum">     121 </span>                :<span class="lineCov">       6549 :             std::uint64_t* pQWord((std::uint64_t*)pBuffer);</span>
+<span class="lineNum">     122 </span>        [<span class="branchCov" title="Branch 0 was taken 6549 times"> + </span><span class="branchCov" title="Branch 1 was taken 6549 times"> + </span>]:<span class="lineCov">      13098 :             for(std::uint64_t scanWords = words; scanWords != 0; --scanWords)</span>
+<span class="lineNum">     123 </span>                :            :             {
+<span class="lineNum">     124 </span>                :<span class="lineCov">       6549 :                 *pQWord =</span>
+<span class="lineNum">     125 </span>                :<span class="lineCov">      13098 :                         ((*pQWord &amp; 0xff00000000000000) &gt;&gt; 56) |</span>
+<span class="lineNum">     126 </span>                :<span class="lineCov">      13098 :                         ((*pQWord &amp; 0x00ff000000000000) &gt;&gt; 40) |</span>
+<span class="lineNum">     127 </span>                :<span class="lineCov">      13098 :                         ((*pQWord &amp; 0x0000ff0000000000) &gt;&gt; 24) |</span>
+<span class="lineNum">     128 </span>                :<span class="lineCov">      13098 :                         ((*pQWord &amp; 0x000000ff00000000) &gt;&gt; 8) |</span>
+<span class="lineNum">     129 </span>                :<span class="lineCov">      13098 :                         ((*pQWord &amp; 0x00000000ff000000) &lt;&lt; 8) |</span>
+<span class="lineNum">     130 </span>                :<span class="lineCov">      13098 :                         ((*pQWord &amp; 0x0000000000ff0000) &lt;&lt; 24) |</span>
+<span class="lineNum">     131 </span>                :<span class="lineCov">      13098 :                         ((*pQWord &amp; 0x000000000000ff00) &lt;&lt; 40) |</span>
+<span class="lineNum">     132 </span>                :<span class="lineCov">       6549 :                         ((*pQWord &amp; 0x00000000000000ff) &lt;&lt; 56);</span>
+<span class="lineNum">     133 </span>                :<span class="lineCov">       6549 :                 ++pQWord;</span>
+<span class="lineNum">     134 </span>                :<span class="lineCov">       6549 :             }</span>
+<span class="lineNum">     135 </span>                :            :         }
+<span class="lineNum">     136 </span>                :<span class="lineCov">       6549 :         return;</span>
+<span class="lineNum">     137 </span>                :            :     }
+<span class="lineNum">     138 </span>                :            : 
+<span class="lineNum">     139 </span>                :            : }
+<span class="lineNum">     140 </span>                :            : 
+<span class="lineNum">     141 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     142 </span>                :            : //
+<span class="lineNum">     143 </span>                :            : // Adjust the byte ordering of pBuffer
+<a name="144"><span class="lineNum">     144 </span>                :            : //</a>
+<span class="lineNum">     145 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     146 </span>                :<span class="lineCov">    3274677 : void streamController::adjustEndian(std::uint8_t* pBuffer, const size_t wordLength, const tByteOrdering endianType, const size_t words /* =1 */)</span>
+<span class="lineNum">     147 </span>                :            : {
+<span class="lineNum">     148 </span>   [<span class="branchCov" title="Branch 0 was taken 657491 times"> + </span><span class="branchCov" title="Branch 1 was taken 2617186 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 657496 times"> + </span>]:<span class="lineCov">    3274677 :     if(endianType != m_platformByteOrder &amp;&amp; wordLength &gt;= 2u)</span>
+<span class="lineNum">     149 </span>                :            :     {
+<span class="lineNum">     150 </span>                :<span class="lineCov">     657496 :         reverseEndian(pBuffer, wordLength, words);</span>
+<span class="lineNum">     151 </span>                :            :     }
+<a name="152"><span class="lineNum">     152 </span>                :<span class="lineCov">    3274673 : }</span></a>
+<span class="lineNum">     153 </span>                :            : 
+<span class="lineNum">     154 </span>                :<span class="lineCov">    1451159 : std::uint16_t streamController::adjustEndian(std::uint16_t buffer, const tByteOrdering endianType)</span>
+<span class="lineNum">     155 </span>                :            : {
+<span class="lineNum">     156 </span>        [<span class="branchCov" title="Branch 0 was taken 1317724 times"> + </span><span class="branchCov" title="Branch 1 was taken 133435 times"> + </span>]:<span class="lineCov">    1451159 :     if(endianType == m_platformByteOrder)</span>
+<span class="lineNum">     157 </span>                :            :     {
+<span class="lineNum">     158 </span>                :<span class="lineCov">    1317724 :         return buffer;</span>
+<span class="lineNum">     159 </span>                :            :     }
+<span class="lineNum">     160 </span>                :<span class="lineCov">     133435 :     return (std::uint16_t)(((buffer &amp; 0xff00) &gt;&gt; 8) | ((buffer &amp; 0xff) &lt;&lt; 8));</span>
+<a name="161"><span class="lineNum">     161 </span>                :            : }</a>
+<span class="lineNum">     162 </span>                :            : 
+<span class="lineNum">     163 </span>                :<span class="lineCov">     106400 : std::uint32_t streamController::adjustEndian(std::uint32_t buffer, const tByteOrdering endianType)</span>
+<span class="lineNum">     164 </span>                :            : {
+<span class="lineNum">     165 </span>        [<span class="branchCov" title="Branch 0 was taken 59219 times"> + </span><span class="branchCov" title="Branch 1 was taken 47181 times"> + </span>]:<span class="lineCov">     106400 :     if(endianType == m_platformByteOrder)</span>
+<span class="lineNum">     166 </span>                :            :     {
+<span class="lineNum">     167 </span>                :<span class="lineCov">      59219 :         return buffer;</span>
+<span class="lineNum">     168 </span>                :            :     }
+<span class="lineNum">     169 </span>                :            :     return (std::uint32_t)(
+<span class="lineNum">     170 </span>                :<span class="lineCov">      94362 :             ((buffer &amp; 0xff000000) &gt;&gt; 24) |</span>
+<span class="lineNum">     171 </span>                :<span class="lineCov">      94362 :             ((buffer &amp; 0x00ff0000) &gt;&gt; 8) |</span>
+<span class="lineNum">     172 </span>                :<span class="lineCov">      47181 :             ((buffer &amp; 0x0000ff00) &lt;&lt; 8) |</span>
+<span class="lineNum">     173 </span>                :<span class="lineCov">      47181 :             ((buffer &amp; 0x000000ff) &lt;&lt; 24) );</span>
+<a name="174"><span class="lineNum">     174 </span>                :            : }</a>
+<span class="lineNum">     175 </span>                :            : 
+<span class="lineNum">     176 </span>                :<span class="lineNoCov">          0 : std::uint64_t streamController::adjustEndian(std::uint64_t buffer, const tByteOrdering endianType)</span>
+<span class="lineNum">     177 </span>                :            : {
+<span class="lineNum">     178 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if(endianType == m_platformByteOrder)</span>
+<span class="lineNum">     179 </span>                :            :     {
+<span class="lineNum">     180 </span>                :<span class="lineNoCov">          0 :         return buffer;</span>
+<span class="lineNum">     181 </span>                :            :     }
+<span class="lineNum">     182 </span>                :            :     return (std::uint64_t)(
+<span class="lineNum">     183 </span>                :<span class="lineNoCov">          0 :             ((buffer &amp; 0xff00000000000000) &gt;&gt; 56) |</span>
+<span class="lineNum">     184 </span>                :<span class="lineNoCov">          0 :             ((buffer &amp; 0x00ff000000000000) &gt;&gt; 40) |</span>
+<span class="lineNum">     185 </span>                :<span class="lineNoCov">          0 :             ((buffer &amp; 0x0000ff0000000000) &gt;&gt; 24) |</span>
+<span class="lineNum">     186 </span>                :<span class="lineNoCov">          0 :             ((buffer &amp; 0x000000ff00000000) &gt;&gt; 8) |</span>
+<span class="lineNum">     187 </span>                :<span class="lineNoCov">          0 :             ((buffer &amp; 0x00000000ff000000) &lt;&lt; 8) |</span>
+<span class="lineNum">     188 </span>                :<span class="lineNoCov">          0 :             ((buffer &amp; 0x0000000000ff0000) &lt;&lt; 24) |</span>
+<span class="lineNum">     189 </span>                :<span class="lineNoCov">          0 :             ((buffer &amp; 0x000000000000ff00) &lt;&lt; 40) |</span>
+<span class="lineNum">     190 </span>                :<span class="lineNoCov">          0 :             ((buffer &amp; 0x00000000000000ff) &lt;&lt; 56));</span>
+<a name="191"><span class="lineNum">     191 </span>                :            : }</a>
+<span class="lineNum">     192 </span>                :            : 
+<span class="lineNum">     193 </span>                :<span class="lineCov">     756559 : streamController::tByteOrdering streamController::getPlatformEndian()</span>
+<span class="lineNum">     194 </span>                :            : {
+<span class="lineNum">     195 </span>                :<span class="lineCov">     756559 :     return m_platformByteOrder;</span>
+<a name="196"><span class="lineNum">     196 </span>                :            : }</a>
+<span class="lineNum">     197 </span>                :            : 
+<span class="lineNum">     198 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 : } // namespace imebra</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

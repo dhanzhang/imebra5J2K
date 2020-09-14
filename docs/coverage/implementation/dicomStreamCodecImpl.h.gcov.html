@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/dicomStreamCodecImpl.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - dicomStreamCodecImpl.h<span style="font-size: 80%;"> (source / <a href="dicomStreamCodecImpl.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryLo">66.7 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file dicomStreamCodec.h
+<span class="lineNum">      15 </span>                :            :     \brief Declaration of the class dicomStreamCodec.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #if !defined(imebraDicomStreamCodec_CC44A2C5_2B8C_42c1_9704_3F9C582643B9__INCLUDED_)
+<span class="lineNum">      20 </span>                :            : #define imebraDicomStreamCodec_CC44A2C5_2B8C_42c1_9704_3F9C582643B9__INCLUDED_
+<span class="lineNum">      21 </span>                :            : 
+<span class="lineNum">      22 </span>                :            : #include &quot;streamCodecImpl.h&quot;
+<span class="lineNum">      23 </span>                :            : #include &quot;dataImpl.h&quot;
+<span class="lineNum">      24 </span>                :            : #include &quot;dataSetImpl.h&quot;
+<span class="lineNum">      25 </span>                :            : #include &quot;streamControllerImpl.h&quot;
+<span class="lineNum">      26 </span>                :            : 
+<span class="lineNum">      27 </span>                :            : /// \def IMEBRA_DATASET_MAX_DEPTH
+<span class="lineNum">      28 </span>                :            : /// \brief Max number of datasets embedded into each
+<span class="lineNum">      29 </span>                :            : ///        others.
+<span class="lineNum">      30 </span>                :            : ///
+<span class="lineNum">      31 </span>                :            : /// This value is used to prevent a stack when reading a
+<span class="lineNum">      32 </span>                :            : ///  malformed dataset that has too many datasets embedded
+<span class="lineNum">      33 </span>                :            : ///   into each others.
+<span class="lineNum">      34 </span>                :            : ///
+<span class="lineNum">      35 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      36 </span>                :            : #define IMEBRA_DATASET_MAX_DEPTH 16
+<span class="lineNum">      37 </span>                :            : 
+<span class="lineNum">      38 </span>                :            : 
+<span class="lineNum">      39 </span>                :            : namespace imebra
+<span class="lineNum">      40 </span>                :            : {
+<span class="lineNum">      41 </span>                :            : 
+<span class="lineNum">      42 </span>                :            : namespace implementation
+<span class="lineNum">      43 </span>                :            : {
+<span class="lineNum">      44 </span>                :            : 
+<span class="lineNum">      45 </span>                :            : namespace codecs
+<span class="lineNum">      46 </span>                :            : {
+<span class="lineNum">      47 </span>                :            : 
+<span class="lineNum">      48 </span>                :            : /// \addtogroup group_codecs
+<span class="lineNum">      49 </span>                :            : ///
+<span class="lineNum">      50 </span>                :            : /// @{
+<span class="lineNum">      51 </span>                :            : 
+<span class="lineNum">      52 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      53 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      54 </span>                :            : /// \brief The Dicom codec.
+<span class="lineNum">      55 </span>                :            : ///
+<span class="lineNum">      56 </span>                :            : /// This class is used to decode and encode a DICOM stream.
+<span class="lineNum">      57 </span>                :            : ///
+<a name="58"><span class="lineNum">      58 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      59 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      60 </span>                :<span class="lineCov">         12 : class dicomStreamCodec : public streamCodec</span>
+<span class="lineNum">      61 </span>                :            : {
+<span class="lineNum">      62 </span>                :            : public:
+<span class="lineNum">      63 </span>                :            :     /// \brief Parse the dicom stream and fill the data set
+<span class="lineNum">      64 </span>                :            :     ///        with the read tags.
+<span class="lineNum">      65 </span>                :            :     ///
+<span class="lineNum">      66 </span>                :            :     /// This function doesn't parse the 128 bytes preamble and
+<span class="lineNum">      67 </span>                :            :     ///  the DICM signature, which has to be parsed by the
+<span class="lineNum">      68 </span>                :            :     ///  calling function.
+<span class="lineNum">      69 </span>                :            :     ///
+<span class="lineNum">      70 </span>                :            :     /// @param pStream    The stream do decode
+<span class="lineNum">      71 </span>                :            :     /// @param pDataSet   A pointer to the data set to fill
+<span class="lineNum">      72 </span>                :            :     ///                    with the decoded tags
+<span class="lineNum">      73 </span>                :            :     /// @param bExplicitDataType true if the stream is encoded
+<span class="lineNum">      74 </span>                :            :     ///                    with explicit data type, false
+<span class="lineNum">      75 </span>                :            :     ///                    otherwise.
+<span class="lineNum">      76 </span>                :            :     ///                   Even when this parameter is set,
+<span class="lineNum">      77 </span>                :            :     ///                    the function will automatically
+<span class="lineNum">      78 </span>                :            :     ///                    switch this parameter if a mismatch
+<span class="lineNum">      79 </span>                :            :     ///                    is detected during the decoding
+<span class="lineNum">      80 </span>                :            :     ///                    procedure
+<span class="lineNum">      81 </span>                :            :     /// @param endianType The stream's endian type.
+<span class="lineNum">      82 </span>                :            :     ///                   Even when this parameter is set,
+<span class="lineNum">      83 </span>                :            :     ///                    the function will automatically
+<span class="lineNum">      84 </span>                :            :     ///                    switch this parameter if a mismatch
+<span class="lineNum">      85 </span>                :            :     ///                    is detected during the decoding
+<span class="lineNum">      86 </span>                :            :     ///                    procedure
+<span class="lineNum">      87 </span>                :            :     /// @param subItemLength the number of bytes to parse.
+<span class="lineNum">      88 </span>                :            :     ///                   If this parameter is set to
+<span class="lineNum">      89 </span>                :            :     ///                    0xffffffff then the function will
+<span class="lineNum">      90 </span>                :            :     ///                    stop parsing at the end of the
+<span class="lineNum">      91 </span>                :            :     ///                    sequence or at the end of the file
+<span class="lineNum">      92 </span>                :            :     /// @param maxSizeBufferLoad if a loaded buffer is exceedes
+<span class="lineNum">      93 </span>                :            :     ///                    the size in the parameter then it is
+<span class="lineNum">      94 </span>                :            :     ///                    not loaded immediatly but it will be
+<span class="lineNum">      95 </span>                :            :     ///                    loaded on demand. Some codecs may
+<span class="lineNum">      96 </span>                :            :     ///                    ignore this parameter.
+<span class="lineNum">      97 </span>                :            :     ///                   Set to -1 to load all the buffers
+<span class="lineNum">      98 </span>                :            :     ///                    immediatly
+<span class="lineNum">      99 </span>                :            :     /// @param pReadSubItemLength a pointer to a std::uint32_t
+<span class="lineNum">     100 </span>                :            :     ///                    that the function will fill with
+<span class="lineNum">     101 </span>                :            :     ///                    the number of bytes read
+<span class="lineNum">     102 </span>                :            :     /// @param depth      the current dataSet depth:
+<span class="lineNum">     103 </span>                :            :     ///                    - 0 = root dataset
+<span class="lineNum">     104 </span>                :            :     ///                    - &gt;=1 = dataset embedded into
+<span class="lineNum">     105 </span>                :            :     ///                      another dataset. This value is
+<span class="lineNum">     106 </span>                :            :     ///                      used to prevent a stack overflow
+<span class="lineNum">     107 </span>                :            :     ///
+<span class="lineNum">     108 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     109 </span>                :            :     static void parseStream(
+<span class="lineNum">     110 </span>                :            :         std::shared_ptr&lt;streamReader&gt; pStream,
+<span class="lineNum">     111 </span>                :            :         std::shared_ptr&lt;dataSet&gt; pDataSet,
+<span class="lineNum">     112 </span>                :            :         bool bExplicitDataType,
+<span class="lineNum">     113 </span>                :            :         streamController::tByteOrdering endianType,
+<span class="lineNum">     114 </span>                :            :         std::uint32_t maxSizeBufferLoad = 0xffffffff,
+<span class="lineNum">     115 </span>                :            :         std::uint32_t subItemLength = 0xffffffff,
+<span class="lineNum">     116 </span>                :            :         std::uint32_t* pReadSubItemLength = 0,
+<span class="lineNum">     117 </span>                :            :         std::uint32_t depth = 0);
+<span class="lineNum">     118 </span>                :            : 
+<span class="lineNum">     119 </span>                :            :     /// \brief Indicates the type of DICOM stream to build
+<span class="lineNum">     120 </span>                :            :     ///
+<span class="lineNum">     121 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     122 </span>                :            :     enum class streamType_t
+<span class="lineNum">     123 </span>                :            :     {
+<span class="lineNum">     124 </span>                :            :         normal,      ///&lt; DICOM stream for embedded datasets
+<span class="lineNum">     125 </span>                :            :         mediaStorage ///&lt; DICOM stream form media storage
+<span class="lineNum">     126 </span>                :            :     };
+<span class="lineNum">     127 </span>                :            : 
+<span class="lineNum">     128 </span>                :            :     /// \brief Write the dataSet to the specified stream
+<span class="lineNum">     129 </span>                :            :     ///         in Dicom format, without the file header and
+<span class="lineNum">     130 </span>                :            :     ///         signature.
+<span class="lineNum">     131 </span>                :            :     ///
+<span class="lineNum">     132 </span>                :            :     /// @param pStream   the destination stream
+<span class="lineNum">     133 </span>                :            :     /// @param pDataSet  the dataSet to be written
+<span class="lineNum">     134 </span>                :            :     /// @param bExplicitDataType true if the function must
+<span class="lineNum">     135 </span>                :            :     ///                   write the data type, false if
+<span class="lineNum">     136 </span>                :            :     ///                   the data type is implicit
+<span class="lineNum">     137 </span>                :            :     /// @param endianType the endian type to be generated
+<span class="lineNum">     138 </span>                :            :     /// @param streamType the type of DICOM stream to build
+<span class="lineNum">     139 </span>                :            :     ///
+<span class="lineNum">     140 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     141 </span>                :            :     static void buildStream(std::shared_ptr&lt;streamWriter&gt; pStream, std::shared_ptr&lt;const dataSet&gt; pDataSet, bool bExplicitDataType, streamController::tByteOrdering endianType, streamType_t streamType);
+<span class="lineNum">     142 </span>                :            : 
+<span class="lineNum">     143 </span>                :            : protected:
+<span class="lineNum">     144 </span>                :            :     // Write a dicom stream
+<span class="lineNum">     145 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     146 </span>                :            :     virtual void writeStream(std::shared_ptr&lt;streamWriter&gt; pStream, std::shared_ptr&lt;dataSet&gt; pDataSet) const;
+<span class="lineNum">     147 </span>                :            : 
+<span class="lineNum">     148 </span>                :            :     // Load a dicom stream
+<span class="lineNum">     149 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     150 </span>                :            :     virtual void readStream(std::shared_ptr&lt;streamReader&gt; pStream, std::shared_ptr&lt;dataSet&gt; pDataSet, std::uint32_t maxSizeBufferLoad = 0xffffffff) const;
+<span class="lineNum">     151 </span>                :            : 
+<span class="lineNum">     152 </span>                :            : protected:
+<span class="lineNum">     153 </span>                :            :     // Read a single tag
+<span class="lineNum">     154 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     155 </span>                :            :     static std::uint32_t readTag(std::shared_ptr&lt;streamReader&gt; pStream, std::shared_ptr&lt;dataSet&gt; pDataSet, std::uint32_t tagLengthDWord, std::uint16_t tagId, std::uint16_t order, std::uint16_t tagSubId, tagVR_t tagType, streamController::tByteOrdering endianType, size_t wordSize, std::uint32_t bufferId, std::uint32_t maxSizeBufferLoad = 0xffffffff);
+<span class="lineNum">     156 </span>                :            : 
+<span class="lineNum">     157 </span>                :            :     // Calculate the tag's length
+<span class="lineNum">     158 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     159 </span>                :            :     static std::uint32_t getTagLength(const std::shared_ptr&lt;data&gt;&amp; pData, bool bExplicitDataType, std::uint32_t* pHeaderLength, bool *pbSequence);
+<span class="lineNum">     160 </span>                :            : 
+<span class="lineNum">     161 </span>                :            :     // Calculate the group's length
+<span class="lineNum">     162 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     163 </span>                :            :     static std::uint32_t getGroupLength(const dataSet::tTags&amp; tags, bool bExplicitDataType);
+<span class="lineNum">     164 </span>                :            : 
+<span class="lineNum">     165 </span>                :            :     // Calculate the dataset's length
+<span class="lineNum">     166 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     167 </span>                :            :     static std::uint32_t getDataSetLength(std::shared_ptr&lt;dataSet&gt;, bool bExplicitDataType);
+<span class="lineNum">     168 </span>                :            : 
+<span class="lineNum">     169 </span>                :            :     // Write a single group
+<span class="lineNum">     170 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     171 </span>                :            :     static void writeGroup(std::shared_ptr&lt;streamWriter&gt; pDestStream, const dataSet::tTags&amp; tags, std::uint16_t groupId, bool bExplicitDataType, streamController::tByteOrdering endianType);
+<span class="lineNum">     172 </span>                :            : 
+<span class="lineNum">     173 </span>                :            :     // Write a single tag
+<span class="lineNum">     174 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     175 </span>                :            :     static void writeTag(std::shared_ptr&lt;streamWriter&gt; pDestStream, std::shared_ptr&lt;data&gt; pData, std::uint16_t tagId, bool bExplicitDataType, streamController::tByteOrdering endianType);
+<span class="lineNum">     176 </span>                :            : };
+<span class="lineNum">     177 </span>                :            : 
+<span class="lineNum">     178 </span>                :            : 
+<span class="lineNum">     179 </span>                :            : /// @}
+<span class="lineNum">     180 </span>                :            : 
+<span class="lineNum">     181 </span>                :            : } // namespace codecs
+<span class="lineNum">     182 </span>                :            : 
+<span class="lineNum">     183 </span>                :            : } // namespace implementation
+<span class="lineNum">     184 </span>                :            : 
+<span class="lineNum">     185 </span>                :            : } // namespace imebra
+<span class="lineNum">     186 </span>                :            : 
+<span class="lineNum">     187 </span>                :            : #endif // !defined(imebraDicomStreamCodec_CC44A2C5_2B8C_42c1_9704_3F9C582643B9__INCLUDED_)
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

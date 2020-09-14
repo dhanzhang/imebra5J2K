@@ -1,0 +1,251 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/streamCodecImpl.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - streamCodecImpl.h<span style="font-size: 80%;"> (source / <a href="streamCodecImpl.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file streamCodecImpl.h
+<span class="lineNum">      15 </span>                :            :     \brief Declaration of the base class used by the stream codecs.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #if !defined(imebraStreamCodec_299706D7_4761_44a1_9F2D_8C38A7BD7AD5__INCLUDED_)
+<span class="lineNum">      20 </span>                :            : #define imebraStreamCodec_299706D7_4761_44a1_9F2D_8C38A7BD7AD5__INCLUDED_
+<span class="lineNum">      21 </span>                :            : 
+<span class="lineNum">      22 </span>                :            : #include &lt;stdexcept&gt;
+<span class="lineNum">      23 </span>                :            : #include &lt;memory&gt;
+<span class="lineNum">      24 </span>                :            : #include &lt;limits&gt;
+<span class="lineNum">      25 </span>                :            : #include &quot;memoryImpl.h&quot;
+<span class="lineNum">      26 </span>                :            : #include &quot;../include/imebra/definitions.h&quot;
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :            : 
+<span class="lineNum">      29 </span>                :            : namespace imebra
+<span class="lineNum">      30 </span>                :            : {
+<span class="lineNum">      31 </span>                :            : 
+<span class="lineNum">      32 </span>                :            : namespace implementation
+<span class="lineNum">      33 </span>                :            : {
+<span class="lineNum">      34 </span>                :            : 
+<span class="lineNum">      35 </span>                :            : // Classes used in the declaration
+<span class="lineNum">      36 </span>                :            : class streamReader;
+<span class="lineNum">      37 </span>                :            : class streamWriter;
+<span class="lineNum">      38 </span>                :            : class dataSet;
+<span class="lineNum">      39 </span>                :            : 
+<span class="lineNum">      40 </span>                :            : /// \namespace codecs
+<span class="lineNum">      41 </span>                :            : /// \brief This namespace is used to define the classes
+<span class="lineNum">      42 </span>                :            : ///         that implement a codec and their helper
+<span class="lineNum">      43 </span>                :            : ///         classes
+<span class="lineNum">      44 </span>                :            : ///
+<span class="lineNum">      45 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      46 </span>                :            : namespace codecs
+<span class="lineNum">      47 </span>                :            : {
+<span class="lineNum">      48 </span>                :            : 
+<span class="lineNum">      49 </span>                :            : /// \addtogroup group_codecs Codecs
+<span class="lineNum">      50 </span>                :            : /// \brief The codecs can generate a dataSet structure
+<span class="lineNum">      51 </span>                :            : ///         or an image from a stream or can write the
+<span class="lineNum">      52 </span>                :            : ///         dataSet structure or an image into a stream.
+<span class="lineNum">      53 </span>                :            : ///
+<span class="lineNum">      54 </span>                :            : /// @{
+<span class="lineNum">      55 </span>                :            : 
+<span class="lineNum">      56 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      57 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      58 </span>                :            : /// \brief This is the base class for all the Imebra
+<span class="lineNum">      59 </span>                :            : ///         stream codecs.
+<span class="lineNum">      60 </span>                :            : ///
+<span class="lineNum">      61 </span>                :            : /// When the Imebra codecs read the content of a file, they
+<span class="lineNum">      62 </span>                :            : ///  don't return a decompressed image: instead they build
+<span class="lineNum">      63 </span>                :            : ///  a DICOM structure in memory, with the image(s)
+<span class="lineNum">      64 </span>                :            : ///  embedded in it.
+<span class="lineNum">      65 </span>                :            : ///
+<span class="lineNum">      66 </span>                :            : /// E.G:
+<span class="lineNum">      67 </span>                :            : ///  A call to jpegCodec::read() will build a
+<span class="lineNum">      68 </span>                :            : ///   dataSet object with a jpeg image embedded in
+<span class="lineNum">      69 </span>                :            : ///   it.
+<span class="lineNum">      70 </span>                :            : ///  Your application should call
+<span class="lineNum">      71 </span>                :            : ///   dataSet::getImage()in order to get the
+<span class="lineNum">      72 </span>                :            : ///   decompressed image.
+<span class="lineNum">      73 </span>                :            : ///
+<span class="lineNum">      74 </span>                :            : /// The same concept is used when your application must
+<span class="lineNum">      75 </span>                :            : ///  generate a file with a compressed image in it.
+<span class="lineNum">      76 </span>                :            : /// Your application should:
+<span class="lineNum">      77 </span>                :            : ///  - allocate a dicom structure (see dataSet)
+<span class="lineNum">      78 </span>                :            : ///  - insert an image into the structure by calling
+<span class="lineNum">      79 </span>                :            : ///     dataSet::setImage()
+<span class="lineNum">      80 </span>                :            : ///  - generate the final file using the preferred codec.
+<span class="lineNum">      81 </span>                :            : ///
+<a name="82"><span class="lineNum">      82 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      83 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      84 </span>                :<span class="lineCov">          4 : class streamCodec</span>
+<span class="lineNum">      85 </span>                :            : {
+<span class="lineNum">      86 </span>                :            : public:
+<span class="lineNum">      87 </span>                :            : 
+<span class="lineNum">      88 </span>                :            :     virtual ~streamCodec();
+<span class="lineNum">      89 </span>                :            : 
+<span class="lineNum">      90 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      91 </span>                :            :     /// \name Streams read/write
+<span class="lineNum">      92 </span>                :            :     ///
+<span class="lineNum">      93 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      94 </span>                :            :     //@{
+<span class="lineNum">      95 </span>                :            : 
+<span class="lineNum">      96 </span>                :            :     /// \brief Read a stream and build an in-memory dicom
+<span class="lineNum">      97 </span>                :            :     ///        structure.
+<span class="lineNum">      98 </span>                :            :     ///
+<span class="lineNum">      99 </span>                :            :     /// The specified stream is parsed and its content is
+<span class="lineNum">     100 </span>                :            :     ///  saved into a dataSet object.
+<span class="lineNum">     101 </span>                :            :     ///
+<span class="lineNum">     102 </span>                :            :     /// The type of codec to use depends on the stream's
+<span class="lineNum">     103 </span>                :            :     ///  type (the jpeg codec jpegCodec will parse a
+<span class="lineNum">     104 </span>                :            :     ///  jpeg stream, the DICOM codec dicomCodec will
+<span class="lineNum">     105 </span>                :            :     ///  parse a DICOM stream).
+<span class="lineNum">     106 </span>                :            :     ///
+<span class="lineNum">     107 </span>                :            :     /// If you want to autodetect the file type, just
+<span class="lineNum">     108 </span>                :            :     ///  try to parse the stream with several codecs until
+<span class="lineNum">     109 </span>                :            :     ///  one of them return a valid result.
+<span class="lineNum">     110 </span>                :            :     /// This task is easier if you use the class
+<span class="lineNum">     111 </span>                :            :     ///  codecFactory, which automatically scans all the
+<span class="lineNum">     112 </span>                :            :     ///  Imebra codecs until one can decompress the stream.
+<span class="lineNum">     113 </span>                :            :     ///
+<span class="lineNum">     114 </span>                :            :     /// If the codec parses the stream correctly (no error
+<span class="lineNum">     115 </span>                :            :     ///  occurs) then the resulting dataSet object will
+<span class="lineNum">     116 </span>                :            :     ///  contain a valid dicom structure.
+<span class="lineNum">     117 </span>                :            :     ///
+<span class="lineNum">     118 </span>                :            :     /// @param pSourceStream Stream a pointer to the baseStream
+<span class="lineNum">     119 </span>                :            :     ///                 object to parse.
+<span class="lineNum">     120 </span>                :            :     ///                If the codec cannot parse the stream's
+<span class="lineNum">     121 </span>                :            :     ///                 content, then the stream is rewinded to
+<span class="lineNum">     122 </span>                :            :     ///                 its initial position.
+<span class="lineNum">     123 </span>                :            :     /// @param maxSizeBufferLoad if a loaded buffer exceedes
+<span class="lineNum">     124 </span>                :            :     ///                 the size in the parameter then it is
+<span class="lineNum">     125 </span>                :            :     ///                 not loaded immediatly but it will be
+<span class="lineNum">     126 </span>                :            :     ///                 loaded on demand. Some codecs may
+<span class="lineNum">     127 </span>                :            :     ///                 ignore this parameter.
+<span class="lineNum">     128 </span>                :            :     ///                Set to -1 to load all the buffers
+<span class="lineNum">     129 </span>                :            :     ///                 immediatly
+<span class="lineNum">     130 </span>                :            :     /// @return        a pointer to the loaded dataSet
+<span class="lineNum">     131 </span>                :            :     ///
+<span class="lineNum">     132 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     133 </span>                :            :     std::shared_ptr&lt;dataSet&gt; read(std::shared_ptr&lt;streamReader&gt; pSourceStream, std::uint32_t maxSizeBufferLoad = std::numeric_limits&lt;std::uint32_t&gt;::max()) const;
+<span class="lineNum">     134 </span>                :            : 
+<span class="lineNum">     135 </span>                :            :     /// \brief Write a dicom structure into a stream.
+<span class="lineNum">     136 </span>                :            :     ///
+<span class="lineNum">     137 </span>                :            :     /// The specified dataSet object is transformed into
+<span class="lineNum">     138 </span>                :            :     ///  the desidered kind of stream (the jpeg codec
+<span class="lineNum">     139 </span>                :            :     ///  jpegCodec will produce a jpeg stream, the DICOM
+<span class="lineNum">     140 </span>                :            :     ///  codec dicomCodec will produce a DICOM stream).
+<span class="lineNum">     141 </span>                :            :     ///
+<span class="lineNum">     142 </span>                :            :     /// @param pDestStream a pointer to the stream to use for
+<span class="lineNum">     143 </span>                :            :     ///                     writing.
+<span class="lineNum">     144 </span>                :            :     /// @param pSourceDataSet a pointer to the Dicom structure
+<span class="lineNum">     145 </span>                :            :     ///                     to write into the stream
+<span class="lineNum">     146 </span>                :            :     ///
+<span class="lineNum">     147 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     148 </span>                :            :     void write(std::shared_ptr&lt;streamWriter&gt; pDestStream, std::shared_ptr&lt;dataSet&gt; pSourceDataSet) const;
+<span class="lineNum">     149 </span>                :            : 
+<span class="lineNum">     150 </span>                :            :     //@}
+<span class="lineNum">     151 </span>                :            : 
+<span class="lineNum">     152 </span>                :            : protected:
+<span class="lineNum">     153 </span>                :            :     virtual void readStream(std::shared_ptr&lt;streamReader&gt; pInputStream, std::shared_ptr&lt;dataSet&gt; pDestDataSet, std::uint32_t maxSizeBufferLoad = std::numeric_limits&lt;std::uint32_t&gt;::max()) const = 0;
+<span class="lineNum">     154 </span>                :            :     virtual void writeStream(std::shared_ptr&lt;streamWriter&gt; pDestStream, std::shared_ptr&lt;dataSet&gt; pSourceDataSet) const = 0;
+<span class="lineNum">     155 </span>                :            : };
+<span class="lineNum">     156 </span>                :            : 
+<span class="lineNum">     157 </span>                :            : /// @}
+<span class="lineNum">     158 </span>                :            : 
+<span class="lineNum">     159 </span>                :            : } // namespace codecs
+<span class="lineNum">     160 </span>                :            : 
+<span class="lineNum">     161 </span>                :            : } // namespace implementation
+<span class="lineNum">     162 </span>                :            : 
+<span class="lineNum">     163 </span>                :            : } // namespace imebra
+<span class="lineNum">     164 </span>                :            : 
+<span class="lineNum">     165 </span>                :            : 
+<span class="lineNum">     166 </span>                :            : #endif // !defined(imebraStreamCodec_299706D7_4761_44a1_9F2D_8C38A7BD7AD5__INCLUDED_)
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

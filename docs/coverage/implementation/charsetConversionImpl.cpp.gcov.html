@@ -1,0 +1,384 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/charsetConversionImpl.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - charsetConversionImpl.cpp<span style="font-size: 80%;"> (source / <a href="charsetConversionImpl.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">70</td>
+            <td class="headerCovTableEntry">82</td>
+            <td class="headerCovTableEntryMed">85.4 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">98</td>
+            <td class="headerCovTableEntry">330</td>
+            <td class="headerCovTableEntryLo">29.7 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : #include &quot;charsetConversionImpl.h&quot;
+<span class="lineNum">      15 </span>                :            : #include &quot;exceptionImpl.h&quot;
+<span class="lineNum">      16 </span>                :            : #include &quot;../include/imebra/exceptions.h&quot;
+<span class="lineNum">      17 </span>                :            : #include &lt;sstream&gt;
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : namespace imebra
+<span class="lineNum">      20 </span>                :            : {
+<span class="lineNum">      21 </span>                :            : 
+<span class="lineNum">      22 </span>                :            : namespace implementation
+<a name="23"><span class="lineNum">      23 </span>                :            : {</a>
+<span class="lineNum">      24 </span>                :            : 
+<span class="lineNum">      25 </span>                :<span class="lineCov">     193750 : std::string dicomConversion::convertFromUnicode(const std::wstring&amp; unicodeString, const charsetsList_t&amp; charsets)</span>
+<span class="lineNum">      26 </span>                :            : {
+<span class="lineNum">      27 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">      28 </span>                :            : 
+<span class="lineNum">      29 </span>        [<span class="branchCov" title="Branch 1 was taken 52758 times"> + </span><span class="branchCov" title="Branch 2 was taken 140992 times"> + </span>]:<span class="lineCov">     193750 :     if(unicodeString.empty())</span>
+<span class="lineNum">      30 </span>                :            :     {
+<span class="lineNum">      31 </span>        [<span class="branchCov" title="Branch 2 was taken 52758 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">      52758 :         return &quot;&quot;;</span>
+<span class="lineNum">      32 </span>                :            :     }
+<span class="lineNum">      33 </span>                :            : 
+<span class="lineNum">      34 </span>                :            :     // Check for the dicom charset's name
+<span class="lineNum">      35 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      36 </span>        [<span class="branchCov" title="Branch 1 was taken 69747 times"> + </span><span class="branchCov" title="Branch 2 was taken 71245 times"> + </span>]:<span class="lineCov">     140992 :     if(charsets.empty())</span>
+<span class="lineNum">      37 </span>                :            :     {
+<span class="lineNum">      38 </span>[<span class="branchCov" title="Branch 2 was taken 69747 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 69747 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">     139494 :         std::unique_ptr&lt;defaultCharsetConversion&gt; localCharsetConversion(new defaultCharsetConversion(&quot;ISO_IR 6&quot;));</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 69747 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>]
+<span class="lineNum">      39 </span>        [<span class="branchCov" title="Branch 2 was taken 69747 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     139494 :         std::string returnString =  localCharsetConversion-&gt;fromUnicode(unicodeString);</span>
+<span class="lineNum">      40 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 69747 times"> + </span>]:<span class="lineCov">      69747 :         if(returnString.empty())</span>
+<span class="lineNum">      41 </span>                :            :         {
+<span class="lineNum">      42 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             IMEBRA_THROW(CharsetConversionCannotConvert, &quot;Cannot convert from unicode using only the charset 'ISO_IR 6'&quot;);</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>][<span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 22 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 25 was not executed"> # </span><span class="branchNoExec" title="Branch 26 was not executed"> # </span>][<span class="branchNoExec" title="Branch 29 was not executed"> # </span><span class="branchNoExec" title="Branch 30 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 33 was not executed"> # </span>][<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 46 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span>][<span class="branchNoExec" title="Branch 49 was not executed"> # </span><span class="branchNoExec" title="Branch 50 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 53 was not executed"> # </span><span class="branchNoExec" title="Branch 54 was not executed"> # </span>]
+<span class="lineNum">      43 </span>                :            :         }
+<span class="lineNum">      44 </span>                :<span class="lineCov">      69747 :         return returnString;</span>
+<span class="lineNum">      45 </span>                :            :     }
+<span class="lineNum">      46 </span>                :            : 
+<span class="lineNum">      47 </span>                :            :     // Setup the conversion objects
+<span class="lineNum">      48 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      49 </span>[<span class="branchCov" title="Branch 2 was taken 71245 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 71244 times"> + </span><span class="branchCov" title="Branch 6 was taken 1 time"> + </span>]:<span class="lineCov">     264994 :     std::unique_ptr&lt;defaultCharsetConversion&gt; localCharsetConversion(new defaultCharsetConversion(charsets.front()));</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 12 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 13 was not taken"> - </span>]
+<span class="lineNum">      50 </span>                :            : 
+<span class="lineNum">      51 </span>                :            :     // Returned string
+<span class="lineNum">      52 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      53 </span>                :<span class="lineCov">     142488 :     std::string rawString;</span>
+<span class="lineNum">      54 </span>        [<span class="branchCov" title="Branch 2 was taken 71244 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">      71244 :     rawString.reserve(unicodeString.size());</span>
+<span class="lineNum">      55 </span>                :            : 
+<span class="lineNum">      56 </span>                :            :     // Convert all the chars. Each char is tested with the
+<span class="lineNum">      57 </span>                :            :     //  active charset first, then with other charsets if
+<span class="lineNum">      58 </span>                :            :     //  the active one doesn't work
+<span class="lineNum">      59 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      60 </span>        [<span class="branchCov" title="Branch 1 was taken 755169 times"> + </span><span class="branchCov" title="Branch 2 was taken 71244 times"> + </span>]:<span class="lineCov">     826413 :     for(size_t scanString = 0; scanString != unicodeString.size(); ++scanString)</span>
+<span class="lineNum">      61 </span>                :            :     {
+<span class="lineNum">      62 </span>                :            :         // Get the UNICODE char. On windows &amp; Android the code may
+<span class="lineNum">      63 </span>                :            :         //  be spread across 2 16 bit wide codes.
+<span class="lineNum">      64 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">      65 </span>        [<span class="branchCov" title="Branch 3 was taken 755169 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">    1510338 :         std::wstring code(1u, unicodeString[scanString]);</span>
+<span class="lineNum">      66 </span>                :            : 
+<span class="lineNum">      67 </span>                :            :         // Check UTF-16 extension (Windows &amp; Android)
+<span class="lineNum">      68 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">      69 </span>                :            :         if(sizeof(wchar_t) == 2u)
+<span class="lineNum">      70 </span>                :            :         {
+<span class="lineNum">      71 </span>                :            :             if(code[0] &gt;= 0xd800 &amp;&amp; code[0] &lt;=0xdfff &amp;&amp; scanString &lt; (unicodeString.size() - 1))
+<span class="lineNum">      72 </span>                :            :             {
+<span class="lineNum">      73 </span>                :            :                 code += unicodeString[++scanString];
+<span class="lineNum">      74 </span>                :            :             }
+<span class="lineNum">      75 </span>                :            :         }
+<span class="lineNum">      76 </span>                :            : 
+<span class="lineNum">      77 </span>                :            :         // Check composed chars extension (diacritical marks)
+<span class="lineNum">      78 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">      79 </span>[<span class="branchCov" title="Branch 1 was taken 683925 times"> + </span><span class="branchCov" title="Branch 2 was taken 71244 times"> + </span>][<span class="branchCov" title="Branch 4 was taken 99 times"> + </span><span class="branchCov" title="Branch 5 was taken 683826 times"> + </span>]:<span class="lineCov">     755169 :         while(scanString &lt; (unicodeString.size() - 1) &amp;&amp; unicodeString[scanString + 1] &gt;= 0x0300 &amp;&amp; unicodeString[scanString + 1] &lt;= 0x036f)</span>
+<span class="lineNum">         </span>[<span class="branchNoCov" title="Branch 7 was not taken"> - </span><span class="branchCov" title="Branch 8 was taken 99 times"> + </span>][<span class="branchNoCov" title="Branch 9 was not taken"> - </span><span class="branchCov" title="Branch 10 was taken 755169 times"> + </span>]
+<span class="lineNum">      80 </span>                :            :         {
+<span class="lineNum">      81 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             code += unicodeString[++scanString];</span>
+<span class="lineNum">      82 </span>                :            :         }
+<span class="lineNum">      83 </span>                :            : 
+<span class="lineNum">      84 </span>                :            :         // Remember the return string size so we can check if we
+<span class="lineNum">      85 </span>                :            :         //  added something to it
+<span class="lineNum">      86 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">      87 </span>                :<span class="lineCov">     755169 :         size_t currentRawSize(rawString.size());</span>
+<span class="lineNum">      88 </span>[<span class="branchCov" title="Branch 2 was taken 755169 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 755169 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">     755169 :         rawString += localCharsetConversion-&gt;fromUnicode(code);</span>
+<span class="lineNum">      89 </span>        [<span class="branchCov" title="Branch 1 was taken 755130 times"> + </span><span class="branchCov" title="Branch 2 was taken 39 times"> + </span>]:<span class="lineCov">     755169 :         if(rawString.size() != currentRawSize)</span>
+<span class="lineNum">      90 </span>                :            :         {
+<span class="lineNum">      91 </span>                :            :             // The conversion succeeded: continue with the next char
+<span class="lineNum">      92 </span>                :            :             ///////////////////////////////////////////////////////////
+<span class="lineNum">      93 </span>                :<span class="lineCov">     755130 :             continue;</span>
+<span class="lineNum">      94 </span>                :            :         }
+<span class="lineNum">      95 </span>                :            : 
+<span class="lineNum">      96 </span>        [<span class="branchCov" title="Branch 3 was taken 39 times"> + </span><span class="branchCov" title="Branch 4 was taken 755130 times"> + </span>]:<span class="lineCov">     755208 :         std::string convertedSequence;</span>
+<span class="lineNum">      97 </span>        [<span class="branchCov" title="Branch 3 was taken 103 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">        103 :         for(const std::string&amp; dicomCharset: charsets)</span>
+<span class="lineNum">      98 </span>                :            :         {
+<span class="lineNum">      99 </span>                :            :             try
+<span class="lineNum">     100 </span>                :            :             {
+<span class="lineNum">     101 </span>[<span class="branchCov" title="Branch 1 was taken 103 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 103 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        206 :                 std::unique_ptr&lt;defaultCharsetConversion&gt; testEscapeSequence(new defaultCharsetConversion(dicomCharset));</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>]
+<span class="lineNum">     102 </span>[<span class="branchCov" title="Branch 2 was taken 103 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 64 times"> + </span><span class="branchCov" title="Branch 6 was taken 39 times"> + </span>]:<span class="lineCov">        206 :                 std::string convertedChar(testEscapeSequence-&gt;fromUnicode(code));</span>
+<span class="lineNum">     103 </span>        [<span class="branchCov" title="Branch 1 was taken 39 times"> + </span><span class="branchCov" title="Branch 2 was taken 64 times"> + </span>]:<span class="lineCov">        103 :                 if(!convertedChar.empty())</span>
+<span class="lineNum">     104 </span>                :            :                 {
+<span class="lineNum">     105 </span>[<span class="branchCov" title="Branch 2 was taken 39 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 39 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">         39 :                     convertedSequence = testEscapeSequence-&gt;getDictionary().getCharsetInformation(dicomCharset).m_escapeSequence;</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 39 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>]
+<span class="lineNum">     106 </span>        [<span class="branchCov" title="Branch 1 was taken 39 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         39 :                     convertedSequence += convertedChar;</span>
+<span class="lineNum">     107 </span>                :<span class="lineCov">         39 :                     localCharsetConversion.reset(testEscapeSequence.release());</span>
+<span class="lineNum">     108 </span>        [<span class="branchCov" title="Branch 1 was taken 64 times"> + </span><span class="branchCov" title="Branch 2 was taken 39 times"> + </span>]:<span class="lineCov">        103 :                     break;</span>
+<span class="lineNum">     109 </span>                :            :                 }
+<span class="lineNum">     110 </span>                :            :             }
+<span class="lineNum">     111 </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             catch(CharsetConversionNoSupportedTableError)</span>
+<span class="lineNum">     112 </span>                :            :             {
+<span class="lineNum">     113 </span>                :<span class="lineNoCov">          0 :                 continue;</span>
+<span class="lineNum">     114 </span>                :            :             }
+<span class="lineNum">     115 </span>                :            :         }
+<span class="lineNum">     116 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 39 times"> + </span>]:<span class="lineCov">         39 :         if(convertedSequence.empty())</span>
+<span class="lineNum">     117 </span>                :            :         {
+<span class="lineNum">     118 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             std::ostringstream charsetsList;</span>
+<span class="lineNum">     119 </span>        [<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for(const std::string&amp; charset: charsets)</span>
+<span class="lineNum">     120 </span>                :            :             {
+<span class="lineNum">     121 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 charsetsList &lt;&lt; &quot; '&quot; &lt;&lt; charset &lt;&lt; &quot;'&quot;;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">     122 </span>                :            :             }
+<span class="lineNum">     123 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             IMEBRA_THROW(CharsetConversionCannotConvert, &quot;Cannot convert from unicode using the following charsets:&quot; &lt;&lt; charsetsList.str());</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>][<span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 23 was not executed"> # </span><span class="branchNoExec" title="Branch 24 was not executed"> # </span>][<span class="branchNoExec" title="Branch 28 was not executed"> # </span><span class="branchNoExec" title="Branch 29 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 33 was not executed"> # </span>][<span class="branchNoExec" title="Branch 36 was not executed"> # </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 39 was not executed"> # </span><span class="branchNoExec" title="Branch 40 was not executed"> # </span>][<span class="branchNoExec" title="Branch 50 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 53 was not executed"> # </span><span class="branchNoExec" title="Branch 54 was not executed"> # </span>][<span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 57 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 60 was not executed"> # </span><span class="branchNoExec" title="Branch 61 was not executed"> # </span>]
+<span class="lineNum">     124 </span>                :            :         }
+<span class="lineNum">     125 </span>        [<span class="branchCov" title="Branch 1 was taken 39 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         39 :         rawString += convertedSequence;</span>
+<span class="lineNum">     126 </span>                :            :     }
+<span class="lineNum">     127 </span>                :            : 
+<span class="lineNum">     128 </span>                :<span class="lineCov">      71244 :     return rawString;</span>
+<span class="lineNum">     129 </span>                :            : 
+<span class="lineNum">     130 </span>[<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">          1 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 17 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 34 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span>][<span class="branchCov" title="Branch 37 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span><span class="branchNoExec" title="Branch 73 was not executed"> # </span> 
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     131 </span>                :            : 
+<a name="132"><span class="lineNum">     132 </span>                :            : }</a>
+<span class="lineNum">     133 </span>                :            : 
+<span class="lineNum">     134 </span>                :<span class="lineCov">     139445 : std::wstring dicomConversion::convertToUnicode(const std::string&amp; value, const charsetsList_t&amp; charsets)</span>
+<span class="lineNum">     135 </span>                :            : {
+<span class="lineNum">     136 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     137 </span>                :            : 
+<span class="lineNum">     138 </span>        [<span class="branchCov" title="Branch 1 was taken 7799 times"> + </span><span class="branchCov" title="Branch 2 was taken 131646 times"> + </span>]:<span class="lineCov">     139445 :     if(value.empty())</span>
+<span class="lineNum">     139 </span>                :            :     {
+<span class="lineNum">     140 </span>        [<span class="branchCov" title="Branch 2 was taken 7799 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">       7799 :         return L&quot;&quot;;</span>
+<span class="lineNum">     141 </span>                :            :     }
+<span class="lineNum">     142 </span>                :            : 
+<span class="lineNum">     143 </span>                :            :     // Should we take care of the escape sequences...?
+<span class="lineNum">     144 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     145 </span>        [<span class="branchCov" title="Branch 1 was taken 85267 times"> + </span><span class="branchCov" title="Branch 2 was taken 46379 times"> + </span>]:<span class="lineCov">     131646 :     if(charsets.empty())</span>
+<span class="lineNum">     146 </span>                :            :     {
+<span class="lineNum">     147 </span>[<span class="branchCov" title="Branch 2 was taken 85267 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 85267 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">     170534 :         std::unique_ptr&lt;defaultCharsetConversion&gt; localCharsetConversion(new defaultCharsetConversion(&quot;ISO_IR 6&quot;));</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 85267 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>]
+<span class="lineNum">     148 </span>        [<span class="branchCov" title="Branch 2 was taken 85267 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">      85267 :         return localCharsetConversion-&gt;toUnicode(value);</span>
+<span class="lineNum">     149 </span>                :            :     }
+<span class="lineNum">     150 </span>                :            : 
+<span class="lineNum">     151 </span>                :            :     // Initialize the conversion engine with the default
+<span class="lineNum">     152 </span>                :            :     //  charset
+<span class="lineNum">     153 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     154 </span>[<span class="branchCov" title="Branch 2 was taken 46379 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 46379 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">     185824 :     std::unique_ptr&lt;defaultCharsetConversion&gt; localCharsetConversion(new defaultCharsetConversion(charsets.front()));</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span>]
+<span class="lineNum">     155 </span>                :            : 
+<span class="lineNum">     156 </span>                :            :     // Only one charset is present: we don't need to check
+<span class="lineNum">     157 </span>                :            :     //  the escape sequences
+<span class="lineNum">     158 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     159 </span>        [<span class="branchCov" title="Branch 1 was taken 46369 times"> + </span><span class="branchCov" title="Branch 2 was taken 10 times"> + </span>]:<span class="lineCov">      46379 :     if(charsets.size() == 1)</span>
+<span class="lineNum">     160 </span>                :            :     {
+<span class="lineNum">     161 </span>        [<span class="branchCov" title="Branch 2 was taken 46369 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">      46369 :         return localCharsetConversion-&gt;toUnicode(value);</span>
+<span class="lineNum">     162 </span>                :            :     }
+<span class="lineNum">     163 </span>                :            : 
+<span class="lineNum">     164 </span>                :            :     // Here we store the value to be returned
+<span class="lineNum">     165 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     166 </span>                :<span class="lineCov">         20 :     std::wstring returnString;</span>
+<span class="lineNum">     167 </span>        [<span class="branchCov" title="Branch 2 was taken 10 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         10 :     returnString.reserve(value.size());</span>
+<span class="lineNum">     168 </span>                :            : 
+<span class="lineNum">     169 </span>                :            :     // Get the escape sequences from the unicode conversion
+<span class="lineNum">     170 </span>                :            :     //  engine
+<span class="lineNum">     171 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     172 </span>[<span class="branchCov" title="Branch 2 was taken 10 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 10 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">         10 :     const charsetDictionary::escapeSequences_t&amp; escapeSequences(localCharsetConversion-&gt;getDictionary().getEscapeSequences());</span>
+<span class="lineNum">     173 </span>                :            : 
+<span class="lineNum">     174 </span>                :            :     // Position and properties of the next escape sequence
+<span class="lineNum">     175 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     176 </span>                :<span class="lineCov">         10 :     size_t escapePosition = std::string::npos;</span>
+<span class="lineNum">     177 </span>                :<span class="lineCov">         20 :     std::string escapeString;</span>
+<span class="lineNum">     178 </span>                :<span class="lineCov">         20 :     std::string isoTable;</span>
+<span class="lineNum">     179 </span>                :            : 
+<span class="lineNum">     180 </span>                :            :     // Scan all the string and look for valid escape sequences.
+<span class="lineNum">     181 </span>                :            :     // The partial strings are converted using the dicom
+<span class="lineNum">     182 </span>                :            :     //  charset specified by the escape sequences.
+<span class="lineNum">     183 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     184 </span>        [<span class="branchCov" title="Branch 1 was taken 84 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         84 :     for(size_t scanString = 0; scanString &lt; value.size(); /* empty */)</span>
+<span class="lineNum">     185 </span>                :            :     {
+<span class="lineNum">     186 </span>                :            :         // Find the position of the next escape sequence
+<span class="lineNum">     187 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     188 </span>        [<span class="branchCov" title="Branch 0 was taken 47 times"> + </span><span class="branchCov" title="Branch 1 was taken 37 times"> + </span>]:<span class="lineCov">         84 :         if(escapePosition == std::string::npos)</span>
+<span class="lineNum">     189 </span>                :            :         {
+<span class="lineNum">     190 </span>                :<span class="lineCov">         47 :             escapePosition = value.size();</span>
+<span class="lineNum">     191 </span>                :<span class="lineCov">        846 :             for(charsetDictionary::escapeSequences_t::const_iterator scanEscapes(escapeSequences.begin()), endEscapes(escapeSequences.end());</span>
+<span class="lineNum">     192 </span>        [<span class="branchCov" title="Branch 1 was taken 752 times"> + </span><span class="branchCov" title="Branch 2 was taken 47 times"> + </span>]:<span class="lineCov">        799 :                 scanEscapes != endEscapes;</span>
+<span class="lineNum">     193 </span>                :            :                 ++scanEscapes)
+<span class="lineNum">     194 </span>                :            :             {
+<span class="lineNum">     195 </span>                :<span class="lineCov">        752 :                 size_t findEscape = value.find(scanEscapes-&gt;first, scanString);</span>
+<span class="lineNum">     196 </span>[<span class="branchCov" title="Branch 0 was taken 109 times"> + </span><span class="branchCov" title="Branch 1 was taken 643 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 52 times"> + </span><span class="branchCov" title="Branch 3 was taken 57 times"> + </span>]:<span class="lineCov">        752 :                 if(findEscape != std::string::npos &amp;&amp; findEscape &lt; escapePosition)</span>
+<span class="lineNum">     197 </span>                :            :                 {
+<span class="lineNum">     198 </span>                :<span class="lineCov">         52 :                     escapePosition = findEscape;</span>
+<span class="lineNum">     199 </span>        [<span class="branchCov" title="Branch 2 was taken 52 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         52 :                     escapeString = scanEscapes-&gt;first;</span>
+<span class="lineNum">     200 </span>        [<span class="branchCov" title="Branch 2 was taken 52 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         52 :                     isoTable = scanEscapes-&gt;second;</span>
+<span class="lineNum">     201 </span>                :            :                 }
+<span class="lineNum">     202 </span>                :            :             }
+<span class="lineNum">     203 </span>                :            :         }
+<span class="lineNum">     204 </span>                :            : 
+<span class="lineNum">     205 </span>                :            :         // No more escape sequences. Just convert everything
+<span class="lineNum">     206 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     207 </span>        [<span class="branchCov" title="Branch 1 was taken 10 times"> + </span><span class="branchCov" title="Branch 2 was taken 74 times"> + </span>]:<span class="lineCov">         84 :         if(escapePosition == value.size())</span>
+<span class="lineNum">     208 </span>                :            :         {
+<span class="lineNum">     209 </span>[<span class="branchCov" title="Branch 2 was taken 10 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 10 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">         20 :             std::wstring conversion = localCharsetConversion-&gt;toUnicode(value.substr(scanString));</span>
+<span class="lineNum">     210 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 10 times"> + </span>]:<span class="lineCov">         10 :             if(conversion.empty())</span>
+<span class="lineNum">     211 </span>                :            :             {
+<span class="lineNum">     212 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 IMEBRA_THROW(CharsetConversionCannotConvert, &quot;Cannot convert to unicode&quot;);</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>][<span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 22 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 25 was not executed"> # </span><span class="branchNoExec" title="Branch 26 was not executed"> # </span>][<span class="branchNoExec" title="Branch 29 was not executed"> # </span><span class="branchNoExec" title="Branch 30 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 33 was not executed"> # </span>][<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 46 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span>][<span class="branchNoExec" title="Branch 49 was not executed"> # </span><span class="branchNoExec" title="Branch 50 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 53 was not executed"> # </span><span class="branchNoExec" title="Branch 54 was not executed"> # </span>]
+<span class="lineNum">     213 </span>                :            :             }
+<span class="lineNum">     214 </span>        [<span class="branchCov" title="Branch 1 was taken 10 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         10 :             return returnString + conversion;</span>
+<span class="lineNum">     215 </span>                :            :         }
+<span class="lineNum">     216 </span>                :            : 
+<span class="lineNum">     217 </span>                :            :         // The escape sequence can wait, now we are still in the
+<span class="lineNum">     218 </span>                :            :         //  already activated charset
+<span class="lineNum">     219 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     220 </span>        [<span class="branchCov" title="Branch 0 was taken 37 times"> + </span><span class="branchCov" title="Branch 1 was taken 37 times"> + </span>]:<span class="lineCov">         74 :         if(escapePosition &gt; scanString)</span>
+<span class="lineNum">     221 </span>                :            :         {
+<span class="lineNum">     222 </span>[<span class="branchCov" title="Branch 2 was taken 37 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 37 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">         74 :             std::wstring conversion = localCharsetConversion-&gt;toUnicode(value.substr(scanString, escapePosition - scanString));</span>
+<span class="lineNum">     223 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 37 times"> + </span>]:<span class="lineCov">         37 :             if(conversion.empty())</span>
+<span class="lineNum">     224 </span>                :            :             {
+<span class="lineNum">     225 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 IMEBRA_THROW(CharsetConversionCannotConvert, &quot;Cannot convert to unicode&quot;);</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>][<span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 22 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 25 was not executed"> # </span><span class="branchNoExec" title="Branch 26 was not executed"> # </span>][<span class="branchNoExec" title="Branch 29 was not executed"> # </span><span class="branchNoExec" title="Branch 30 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 33 was not executed"> # </span>][<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 46 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span>][<span class="branchNoExec" title="Branch 49 was not executed"> # </span><span class="branchNoExec" title="Branch 50 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 53 was not executed"> # </span><span class="branchNoExec" title="Branch 54 was not executed"> # </span>]
+<span class="lineNum">     226 </span>                :            :             }
+<span class="lineNum">     227 </span>        [<span class="branchCov" title="Branch 1 was taken 37 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         37 :             returnString += conversion;</span>
+<span class="lineNum">     228 </span>                :<span class="lineCov">         37 :             scanString = escapePosition;</span>
+<span class="lineNum">     229 </span>                :<span class="lineCov">         37 :             continue;</span>
+<span class="lineNum">     230 </span>                :            :         }
+<span class="lineNum">     231 </span>                :            : 
+<span class="lineNum">     232 </span>                :            :         // Move the char pointer to the next char that has to be
+<span class="lineNum">     233 </span>                :            :         //  analyzed
+<span class="lineNum">     234 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     235 </span>                :<span class="lineCov">         37 :         scanString = escapePosition + escapeString.length();</span>
+<span class="lineNum">     236 </span>                :<span class="lineCov">         37 :         escapePosition = std::string::npos;</span>
+<span class="lineNum">     237 </span>                :            : 
+<span class="lineNum">     238 </span>                :            :         // An iso table is coupled to the found escape sequence.
+<span class="lineNum">     239 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     240 </span>[<span class="branchCov" title="Branch 1 was taken 37 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 37 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         37 :         localCharsetConversion.reset(new defaultCharsetConversion(isoTable));</span>
+<span class="lineNum">     241 </span>                :            :     }
+<span class="lineNum">     242 </span>                :            : 
+<span class="lineNum">     243 </span>                :<span class="lineNoCov">          0 :     return returnString;</span>
+<span class="lineNum">     244 </span>                :            : 
+<span class="lineNum">     245 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     246 </span>                :            : 
+<span class="lineNum">     247 </span>                :            : }
+<span class="lineNum">     248 </span>                :            : 
+<a name="249"><span class="lineNum">     249 </span>                :            : }</a>
+<span class="lineNum">     250 </span>                :            : 
+<span class="lineNum">     251 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 : }</span>
+<span class="lineNum">     252 </span>                :            : 
+<span class="lineNum">     253 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

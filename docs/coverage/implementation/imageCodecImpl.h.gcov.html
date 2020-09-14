@@ -1,0 +1,411 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/imageCodecImpl.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - imageCodecImpl.h<span style="font-size: 80%;"> (source / <a href="imageCodecImpl.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file imageCodecImpl.h
+<span class="lineNum">      15 </span>                :            :     \brief Declaration of the base class used by the image codecs.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #if !defined(imebraImageCodec_299706D7_4761_44a1_9F2D_8C38A7BD7AD5__INCLUDED_)
+<span class="lineNum">      20 </span>                :            : #define imebraImageCodec_299706D7_4761_44a1_9F2D_8C38A7BD7AD5__INCLUDED_
+<span class="lineNum">      21 </span>                :            : 
+<span class="lineNum">      22 </span>                :            : #include &lt;stdexcept&gt;
+<span class="lineNum">      23 </span>                :            : #include &lt;memory&gt;
+<span class="lineNum">      24 </span>                :            : #include &quot;memoryImpl.h&quot;
+<span class="lineNum">      25 </span>                :            : #include &quot;../include/imebra/definitions.h&quot;
+<span class="lineNum">      26 </span>                :            : 
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :            : namespace imebra
+<span class="lineNum">      29 </span>                :            : {
+<span class="lineNum">      30 </span>                :            : 
+<span class="lineNum">      31 </span>                :            : namespace implementation
+<span class="lineNum">      32 </span>                :            : {
+<span class="lineNum">      33 </span>                :            : 
+<span class="lineNum">      34 </span>                :            : // Classes used in the declaration
+<span class="lineNum">      35 </span>                :            : class streamReader;
+<span class="lineNum">      36 </span>                :            : class streamWriter;
+<span class="lineNum">      37 </span>                :            : class dataSet;
+<span class="lineNum">      38 </span>                :            : class image;
+<span class="lineNum">      39 </span>                :            : 
+<span class="lineNum">      40 </span>                :            : /// \namespace codecs
+<span class="lineNum">      41 </span>                :            : /// \brief This namespace is used to define the classes
+<span class="lineNum">      42 </span>                :            : ///         that implement a codec and their helper
+<span class="lineNum">      43 </span>                :            : ///         classes
+<span class="lineNum">      44 </span>                :            : ///
+<span class="lineNum">      45 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      46 </span>                :            : namespace codecs
+<span class="lineNum">      47 </span>                :            : {
+<span class="lineNum">      48 </span>                :            : 
+<span class="lineNum">      49 </span>                :            : class channel;
+<span class="lineNum">      50 </span>                :            : 
+<span class="lineNum">      51 </span>                :            : /// \addtogroup group_codecs Codecs
+<span class="lineNum">      52 </span>                :            : /// \brief The codecs can generate a dataSet structure
+<span class="lineNum">      53 </span>                :            : ///         or an image from a stream or can write the
+<span class="lineNum">      54 </span>                :            : ///         dataSet structure or an image into a stream.
+<span class="lineNum">      55 </span>                :            : ///
+<span class="lineNum">      56 </span>                :            : /// @{
+<span class="lineNum">      57 </span>                :            : 
+<span class="lineNum">      58 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      59 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      60 </span>                :            : /// \brief This is the base class for all the Imebra
+<span class="lineNum">      61 </span>                :            : ///         image codecs.
+<span class="lineNum">      62 </span>                :            : ///
+<span class="lineNum">      63 </span>                :            : /// An image codec is used to decompress an image stored
+<span class="lineNum">      64 </span>                :            : ///  in a DICOM dataset.
+<span class="lineNum">      65 </span>                :            : ///
+<span class="lineNum">      66 </span>                :            : /// A call to the dataSet::getImage() method will
+<span class="lineNum">      67 </span>                :            : ///  return the decompressed image embedded into the dicom
+<span class="lineNum">      68 </span>                :            : ///  structure.
+<span class="lineNum">      69 </span>                :            : ///
+<a name="70"><span class="lineNum">      70 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      71 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      72 </span>                :<span class="lineCov">          6 : class imageCodec</span>
+<span class="lineNum">      73 </span>                :            : {
+<span class="lineNum">      74 </span>                :            : public:
+<span class="lineNum">      75 </span>                :            : 
+<span class="lineNum">      76 </span>                :            :     virtual ~imageCodec();
+<span class="lineNum">      77 </span>                :            : 
+<span class="lineNum">      78 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      79 </span>                :            :     /// \name Set/get the image in the dicom structure
+<span class="lineNum">      80 </span>                :            :     ///
+<span class="lineNum">      81 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      82 </span>                :            :     //@{
+<span class="lineNum">      83 </span>                :            : 
+<span class="lineNum">      84 </span>                :            :     /// \brief Get a decompressed image from a dicom structure.
+<span class="lineNum">      85 </span>                :            :     ///
+<span class="lineNum">      86 </span>                :            :     /// This function is usually called by
+<span class="lineNum">      87 </span>                :            :     ///  dataSet::getImage(), which also manages the
+<span class="lineNum">      88 </span>                :            :     ///  codec and the frame selection.
+<span class="lineNum">      89 </span>                :            :     ///
+<span class="lineNum">      90 </span>                :            :     /// The decompressed image will be stored in a image
+<span class="lineNum">      91 </span>                :            :     ///  object.
+<span class="lineNum">      92 </span>                :            :     /// Your application can choose the frame to decompress if
+<span class="lineNum">      93 </span>                :            :     ///  a multiframe Dicom structure is available.
+<span class="lineNum">      94 </span>                :            :     ///
+<span class="lineNum">      95 </span>                :            :     /// We suggest to use the dataSet::getImage()
+<span class="lineNum">      96 </span>                :            :     ///  function instead of calling this function directly.
+<span class="lineNum">      97 </span>                :            :     /// dataSet::getImage() takes care of selecting
+<span class="lineNum">      98 </span>                :            :     ///  the right tag's group and buffer's id. Infact,
+<span class="lineNum">      99 </span>                :            :     ///  some dicom file formats span images in several groups,
+<span class="lineNum">     100 </span>                :            :     ///  while others use sequence when saving multiple frames.
+<span class="lineNum">     101 </span>                :            :     ///
+<span class="lineNum">     102 </span>                :            :     /// @param transferSyntax the dataset transfer syntax
+<span class="lineNum">     103 </span>                :            :     /// @param colorSpace     the color space
+<span class="lineNum">     104 </span>                :            :     /// @param channelsNumber the number of channels
+<span class="lineNum">     105 </span>                :            :     /// @param imageWidth     the image width in pixels
+<span class="lineNum">     106 </span>                :            :     /// @param imageHeight    the image height in pixels
+<span class="lineNum">     107 </span>                :            :     /// @param bSubsampledX   true if the image is subsampled
+<span class="lineNum">     108 </span>                :            :     ///                        horizontally
+<span class="lineNum">     109 </span>                :            :     /// @param bSubsampledY   true if the image is subsampled
+<span class="lineNum">     110 </span>                :            :     ///                        vertically
+<span class="lineNum">     111 </span>                :            :     /// @param bInterleaved   true if the color channels are
+<span class="lineNum">     112 </span>                :            :     ///                        interleaved
+<span class="lineNum">     113 </span>                :            :     /// @param b2Complement   true if the values can be
+<span class="lineNum">     114 </span>                :            :     ///                        negative
+<span class="lineNum">     115 </span>                :            :     /// @param allocatedBits  the number of allocated bits
+<span class="lineNum">     116 </span>                :            :     /// @param storedBits     the number of stored bits
+<span class="lineNum">     117 </span>                :            :     /// @param highBit        the high bit
+<span class="lineNum">     118 </span>                :            :     /// @param pSourceStream  a pointer to a stream containing
+<span class="lineNum">     119 </span>                :            :     ///              the data to be parsed
+<span class="lineNum">     120 </span>                :            :     /// @return a pointer to the loaded image
+<span class="lineNum">     121 </span>                :            :     ///
+<span class="lineNum">     122 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     123 </span>                :            :     virtual std::shared_ptr&lt;image&gt; getImage(const std::string&amp; transferSyntax,
+<span class="lineNum">     124 </span>                :            :                                             const std::string&amp; colorSpace,
+<span class="lineNum">     125 </span>                :            :                                             std::uint32_t channelsNumber,
+<span class="lineNum">     126 </span>                :            :                                             std::uint32_t imageWidth,
+<span class="lineNum">     127 </span>                :            :                                             std::uint32_t imageHeight,
+<span class="lineNum">     128 </span>                :            :                                             bool bSubsampledX,
+<span class="lineNum">     129 </span>                :            :                                             bool bSubsampledY,
+<span class="lineNum">     130 </span>                :            :                                             bool bInterleaved,
+<span class="lineNum">     131 </span>                :            :                                             bool b2Complement,
+<span class="lineNum">     132 </span>                :            :                                             std::uint8_t allocatedBits,
+<span class="lineNum">     133 </span>                :            :                                             std::uint8_t storedBits,
+<span class="lineNum">     134 </span>                :            :                                             std::uint8_t highBit,
+<span class="lineNum">     135 </span>                :            :                                             std::shared_ptr&lt;streamReader&gt; pSourceStream) const = 0;
+<span class="lineNum">     136 </span>                :            : 
+<span class="lineNum">     137 </span>                :            :     ///
+<span class="lineNum">     138 </span>                :            :     /// \brief Return the default planar configuration.
+<span class="lineNum">     139 </span>                :            :     ///
+<span class="lineNum">     140 </span>                :            :     /// \return true if the channels are interleaved by
+<span class="lineNum">     141 </span>                :            :     ///         default, false otherwise
+<span class="lineNum">     142 </span>                :            :     ///
+<span class="lineNum">     143 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     144 </span>                :            :     virtual bool defaultInterleaved() const = 0;
+<span class="lineNum">     145 </span>                :            : 
+<span class="lineNum">     146 </span>                :            :     /// \brief Stores an image into stream.
+<span class="lineNum">     147 </span>                :            :     ///
+<span class="lineNum">     148 </span>                :            :     /// The image is compressed using the specified transfer
+<span class="lineNum">     149 </span>                :            :     ///  syntax and quality.
+<span class="lineNum">     150 </span>                :            :     ///
+<span class="lineNum">     151 </span>                :            :     /// The application should call dataSet::setImage()
+<span class="lineNum">     152 </span>                :            :     ///  instead of calling this function directly.
+<span class="lineNum">     153 </span>                :            :     ///
+<span class="lineNum">     154 </span>                :            :     /// @param pDestStream the stream where the compressed
+<span class="lineNum">     155 </span>                :            :     ///                     image must be saved
+<span class="lineNum">     156 </span>                :            :     /// @param pSourceImage the image to be saved into the
+<span class="lineNum">     157 </span>                :            :     ///                     stream
+<span class="lineNum">     158 </span>                :            :     /// @param transferSyntax the transfer syntax to use for
+<span class="lineNum">     159 </span>                :            :     ///                     the compression
+<span class="lineNum">     160 </span>                :            :     /// @param imageQuality the quality to use for the
+<span class="lineNum">     161 </span>                :            :     ///                     compression. Please note that the
+<span class="lineNum">     162 </span>                :            :     ///                     parameters bSubSampledX and
+<span class="lineNum">     163 </span>                :            :     ///                     bSubSampledY override the settings
+<span class="lineNum">     164 </span>                :            :     ///                     specified by this parameter
+<span class="lineNum">     165 </span>                :            :     /// @param allocatedBits the number of bits per color
+<span class="lineNum">     166 </span>                :            :     ///                     channel
+<span class="lineNum">     167 </span>                :            :     /// @param bSubSampledX true if the chrominance channels
+<span class="lineNum">     168 </span>                :            :     ///                     must be subsampled horizontally,
+<span class="lineNum">     169 </span>                :            :     ///                     false otherwise
+<span class="lineNum">     170 </span>                :            :     /// @param bSubSampledY true if the chrominance channels
+<span class="lineNum">     171 </span>                :            :     ///                     must be subsampled vertically,
+<span class="lineNum">     172 </span>                :            :     ///                     false otherwise
+<span class="lineNum">     173 </span>                :            :     /// @param bInterleaved true if the channels' information
+<span class="lineNum">     174 </span>                :            :     ///                      must be interleaved, false if the
+<span class="lineNum">     175 </span>                :            :     ///                      channels' information must be
+<span class="lineNum">     176 </span>                :            :     ///                      flat (not interleaved)
+<span class="lineNum">     177 </span>                :            :     /// @param b2Complement true if the image contains
+<span class="lineNum">     178 </span>                :            :     ///                     2-complement data, false otherwise
+<span class="lineNum">     179 </span>                :            :     ///
+<span class="lineNum">     180 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     181 </span>                :            :     virtual void setImage(
+<span class="lineNum">     182 </span>                :            :         std::shared_ptr&lt;streamWriter&gt; pDestStream,
+<span class="lineNum">     183 </span>                :            :         std::shared_ptr&lt;const image&gt; pSourceImage,
+<span class="lineNum">     184 </span>                :            :         const std::string&amp; transferSyntax,
+<span class="lineNum">     185 </span>                :            :         imageQuality_t imageQuality,
+<span class="lineNum">     186 </span>                :            :         std::uint32_t allocatedBits,
+<span class="lineNum">     187 </span>                :            :         bool bSubSampledX,
+<span class="lineNum">     188 </span>                :            :         bool bSubSampledY,
+<span class="lineNum">     189 </span>                :            :         bool bInterleaved,
+<span class="lineNum">     190 </span>                :            :         bool b2Complement) const = 0;
+<span class="lineNum">     191 </span>                :            : 
+<span class="lineNum">     192 </span>                :            :     //@}
+<span class="lineNum">     193 </span>                :            : 
+<span class="lineNum">     194 </span>                :            : 
+<span class="lineNum">     195 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     196 </span>                :            :     /// \name Selection of the codec from a transfer syntax
+<span class="lineNum">     197 </span>                :            :     ///
+<span class="lineNum">     198 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     199 </span>                :            :     //@{
+<span class="lineNum">     200 </span>                :            : 
+<span class="lineNum">     201 </span>                :            :     /// \brief This function returns true if the codec can
+<span class="lineNum">     202 </span>                :            :     ///        handle the requested DICOM transfer syntax.
+<span class="lineNum">     203 </span>                :            :     ///
+<span class="lineNum">     204 </span>                :            :     /// @param transferSyntax the transfer syntax to check
+<span class="lineNum">     205 </span>                :            :     ///                         for
+<span class="lineNum">     206 </span>                :            :     /// @return true if the transfer syntax specified in
+<span class="lineNum">     207 </span>                :            :     ///         transferSyntax can be handled by the
+<span class="lineNum">     208 </span>                :            :     ///         codec, false otherwise.
+<span class="lineNum">     209 </span>                :            :     ///
+<span class="lineNum">     210 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     211 </span>                :            :     virtual bool canHandleTransferSyntax(const std::string&amp; transferSyntax) const = 0;
+<span class="lineNum">     212 </span>                :            : 
+<span class="lineNum">     213 </span>                :            :     /// \brief This function returns true if the codec
+<span class="lineNum">     214 </span>                :            :     ///         transfer syntax handled by the code has to be
+<span class="lineNum">     215 </span>                :            :     ///         encapsulated
+<span class="lineNum">     216 </span>                :            :     ///
+<span class="lineNum">     217 </span>                :            :     /// @param transferSyntax the transfer syntax to check
+<span class="lineNum">     218 </span>                :            :     ///                         for
+<span class="lineNum">     219 </span>                :            :     /// @return true if the transfer syntax specified in
+<span class="lineNum">     220 </span>                :            :     ///         transferSyntax has to be encapsulated
+<span class="lineNum">     221 </span>                :            :     ///
+<span class="lineNum">     222 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     223 </span>                :            :     virtual bool encapsulated(const std::string&amp; transferSyntax) const = 0;
+<span class="lineNum">     224 </span>                :            : 
+<span class="lineNum">     225 </span>                :            :     //@}
+<span class="lineNum">     226 </span>                :            : 
+<span class="lineNum">     227 </span>                :            : 
+<span class="lineNum">     228 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     229 </span>                :            :     /// \name Image's attributes from the transfer syntax.
+<span class="lineNum">     230 </span>                :            :     ///
+<span class="lineNum">     231 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     232 </span>                :            :     //@{
+<span class="lineNum">     233 </span>                :            : 
+<span class="lineNum">     234 </span>                :            :     /// \brief Suggest an optimal number of allocated bits for
+<span class="lineNum">     235 </span>                :            :     ///        the specified transfer syntax and high bit.
+<span class="lineNum">     236 </span>                :            :     ///
+<span class="lineNum">     237 </span>                :            :     /// @param transferSyntax the transfer syntax to use
+<span class="lineNum">     238 </span>                :            :     /// @param highBit        the high bit to use for the
+<span class="lineNum">     239 </span>                :            :     ///                        suggestion
+<span class="lineNum">     240 </span>                :            :     /// @return the suggested number of allocated bits for the
+<span class="lineNum">     241 </span>                :            :     ///          specified transfer syntax and high bit.
+<span class="lineNum">     242 </span>                :            :     ///
+<span class="lineNum">     243 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     244 </span>                :            :     virtual std::uint32_t suggestAllocatedBits(const std::string&amp; transferSyntax, std::uint32_t highBit) const = 0;
+<span class="lineNum">     245 </span>                :            : 
+<span class="lineNum">     246 </span>                :            :     //@}
+<span class="lineNum">     247 </span>                :            : 
+<span class="lineNum">     248 </span>                :            :     static std::vector&lt;std::shared_ptr&lt;channel&gt;&gt; splitImageIntoChannels(const std::shared_ptr&lt;const image&gt;&amp; image, bool bSubSampledX, bool bSubSampledY);
+<span class="lineNum">     249 </span>                :            : 
+<a name="250"><span class="lineNum">     250 </span>                :            :     static std::vector&lt;std::shared_ptr&lt;channel&gt;&gt; allocChannels(std::uint32_t channelsNumber, std::uint32_t width, std::uint32_t height, bool bSubSampledX, bool bSubSampledY);</a>
+<span class="lineNum">     251 </span>                :            : 
+<span class="lineNum">     252 </span>                :<span class="lineCov">      51877 :     template&lt;typename samplesType_t&gt; static void adjustB2Complement(</span>
+<span class="lineNum">     253 </span>                :            :             samplesType_t* pImageSamples,
+<span class="lineNum">     254 </span>                :            :             std::uint32_t highBit,
+<span class="lineNum">     255 </span>                :            :             size_t numSamples)
+<span class="lineNum">     256 </span>                :            :     {
+<span class="lineNum">     257 </span>                :<span class="lineCov">      51877 :         const samplesType_t checkSign = static_cast&lt;samplesType_t&gt;(samplesType_t(1) &lt;&lt; highBit);</span>
+<span class="lineNum">     258 </span>                :<span class="lineCov">      51877 :         const samplesType_t orMask = samplesType_t(-1 * (1 &lt;&lt; highBit));</span>
+<span class="lineNum">     259 </span>                :            : 
+<span class="lineNum">     260 </span>[<span class="branchCov" title="Branch 0 was taken 1335125565 times"> + </span><span class="branchCov" title="Branch 1 was taken 41508 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 369257616 times"> + </span><span class="branchCov" title="Branch 3 was taken 5184 times"> + </span>]:<span class="lineCov"> 2073692680 :         while(numSamples-- != 0)</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 369257622 times"> + </span><span class="branchCov" title="Branch 5 was taken 5185 times"> + </span>]
+<span class="lineNum">     261 </span>                :            :         {
+<span class="lineNum">     262 </span>[<span class="branchCov" title="Branch 0 was taken 767313126 times"> + </span><span class="branchCov" title="Branch 1 was taken 567812439 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 184929696 times"> + </span><span class="branchCov" title="Branch 3 was taken 184327920 times"> + </span>]:<span class="lineCov"> 2073640803 :             if(*pImageSamples &amp; checkSign)</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 184929699 times"> + </span><span class="branchCov" title="Branch 5 was taken 184327923 times"> + </span>]
+<span class="lineNum">     263 </span>                :            :             {
+<span class="lineNum">     264 </span>                :<span class="lineCov"> 1137172521 :                 *pImageSamples |= orMask;</span>
+<span class="lineNum">     265 </span>                :            :             }
+<span class="lineNum">     266 </span>                :<span class="lineCov"> 2073640803 :             ++pImageSamples;</span>
+<span class="lineNum">     267 </span>                :            :         }
+<span class="lineNum">     268 </span>                :<span class="lineCov">      51877 :     }</span>
+<span class="lineNum">     269 </span>                :            : 
+<span class="lineNum">     270 </span>                :            :     static void adjustB2Complement(
+<span class="lineNum">     271 </span>                :            :             std::uint8_t* pImageSamples,
+<span class="lineNum">     272 </span>                :            :             std::uint32_t highBit,
+<span class="lineNum">     273 </span>                :            :             bitDepth_t samplesDepth,
+<span class="lineNum">     274 </span>                :            :             size_t numSamples);
+<span class="lineNum">     275 </span>                :            : 
+<a name="276"><span class="lineNum">     276 </span>                :            : };</a>
+<span class="lineNum">     277 </span>                :            : 
+<span class="lineNum">     278 </span>                :<span class="lineCov">     169942 : class channel</span>
+<span class="lineNum">     279 </span>                :            : {
+<span class="lineNum">     280 </span>                :            : public:
+<a name="281"><span class="lineNum">     281 </span>                :            :     // Constructor</a>
+<span class="lineNum">     282 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     283 </span>                :<span class="lineCov">      84971 :     channel():</span>
+<span class="lineNum">     284 </span>                :            :         m_samplingFactorX(1),
+<span class="lineNum">     285 </span>                :            :         m_samplingFactorY(1),
+<span class="lineNum">     286 </span>                :            :         m_width(0),
+<span class="lineNum">     287 </span>                :            :         m_height(0),
+<span class="lineNum">     288 </span>                :            :         m_pBuffer(nullptr),
+<span class="lineNum">     289 </span>                :<span class="lineCov">      84971 :         m_bufferSize(0){}</span>
+<span class="lineNum">     290 </span>                :            : 
+<span class="lineNum">     291 </span>                :            :     // Allocate the channel
+<span class="lineNum">     292 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     293 </span>                :            :     void allocate(std::uint32_t width, std::uint32_t height);
+<span class="lineNum">     294 </span>                :            : 
+<span class="lineNum">     295 </span>                :            :     // Sampling factor
+<span class="lineNum">     296 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     297 </span>                :            :     std::uint32_t m_samplingFactorX;
+<span class="lineNum">     298 </span>                :            :     std::uint32_t m_samplingFactorY;
+<span class="lineNum">     299 </span>                :            : 
+<span class="lineNum">     300 </span>                :            :     // Channel's size in pixels
+<span class="lineNum">     301 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     302 </span>                :            :     std::uint32_t m_width;
+<span class="lineNum">     303 </span>                :            :     std::uint32_t m_height;
+<span class="lineNum">     304 </span>                :            : 
+<span class="lineNum">     305 </span>                :            :     // Channel's buffer &amp; size
+<span class="lineNum">     306 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     307 </span>                :            :     std::int32_t* m_pBuffer;
+<span class="lineNum">     308 </span>                :            :     std::uint32_t m_bufferSize;
+<span class="lineNum">     309 </span>                :            : 
+<span class="lineNum">     310 </span>                :            :     std::shared_ptr&lt;memory&gt; m_memory;
+<span class="lineNum">     311 </span>                :            : };
+<span class="lineNum">     312 </span>                :            : 
+<span class="lineNum">     313 </span>                :            : 
+<span class="lineNum">     314 </span>                :            : 
+<span class="lineNum">     315 </span>                :            : /// @}
+<span class="lineNum">     316 </span>                :            : 
+<span class="lineNum">     317 </span>                :            : } // namespace codecs
+<span class="lineNum">     318 </span>                :            : 
+<span class="lineNum">     319 </span>                :            : } // namespace implementation
+<span class="lineNum">     320 </span>                :            : 
+<span class="lineNum">     321 </span>                :            : } // namespace imebra
+<span class="lineNum">     322 </span>                :            : 
+<span class="lineNum">     323 </span>                :            : 
+<span class="lineNum">     324 </span>                :            : #endif // !defined(imebraCodec_299706D7_4761_44a1_9F2D_8C38A7BD7AD5__INCLUDED_)
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

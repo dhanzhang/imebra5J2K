@@ -1,0 +1,381 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/LUTImpl.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - LUTImpl.cpp<span style="font-size: 80%;"> (source / <a href="LUTImpl.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">60</td>
+            <td class="headerCovTableEntry">66</td>
+            <td class="headerCovTableEntryHi">90.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntryMed">87.5 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">96</td>
+            <td class="headerCovTableEntry">218</td>
+            <td class="headerCovTableEntryLo">44.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file LUT.cpp
+<span class="lineNum">      15 </span>                :            :     \brief Implementation of the class lut.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #include &quot;exceptionImpl.h&quot;
+<span class="lineNum">      20 </span>                :            : #include &quot;LUTImpl.h&quot;
+<span class="lineNum">      21 </span>                :            : #include &quot;dataHandlerNumericImpl.h&quot;
+<span class="lineNum">      22 </span>                :            : #include &quot;bufferImpl.h&quot;
+<span class="lineNum">      23 </span>                :            : #include &quot;../include/imebra/exceptions.h&quot;
+<span class="lineNum">      24 </span>                :            : 
+<span class="lineNum">      25 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">      26 </span>                :            : 
+<span class="lineNum">      27 </span>                :            : namespace imebra
+<span class="lineNum">      28 </span>                :            : {
+<span class="lineNum">      29 </span>                :            : 
+<span class="lineNum">      30 </span>                :            : namespace implementation
+<span class="lineNum">      31 </span>                :            : {
+<span class="lineNum">      32 </span>                :            : 
+<span class="lineNum">      33 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      34 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      35 </span>                :            : //
+<span class="lineNum">      36 </span>                :            : //
+<span class="lineNum">      37 </span>                :            : // Create a LUT from a data handler
+<span class="lineNum">      38 </span>                :            : //
+<span class="lineNum">      39 </span>                :            : //
+<a name="40"><span class="lineNum">      40 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      41 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      42 </span>                :<span class="lineCov">         25 : lut::lut(std::shared_ptr&lt;handlers::readingDataHandlerNumericBase&gt; pDescriptor, std::shared_ptr&lt;handlers::readingDataHandlerNumericBase&gt; pData, const std::wstring&amp; description, bool signedData):</span>
+<span class="lineNum">      43 </span>                :            :     m_size(0),
+<span class="lineNum">      44 </span>                :            :       m_firstMapped(0),
+<span class="lineNum">      45 </span>                :<span class="lineCov">         29 :       m_bits(0)</span>
+<span class="lineNum">      46 </span>                :            : 
+<span class="lineNum">      47 </span>                :            : {
+<span class="lineNum">      48 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">      49 </span>                :            : 
+<span class="lineNum">      50 </span>[<span class="branchCov" title="Branch 2 was taken 25 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 2 times"> + </span><span class="branchCov" title="Branch 5 was taken 23 times"> + </span>]:<span class="lineCov">         25 :     if(pDescriptor-&gt;getSize() != 3)</span>
+<span class="lineNum">      51 </span>                :            :     {
+<span class="lineNum">      52 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          2 :         IMEBRA_THROW(LutCorruptedError, &quot;The LUT is corrupted&quot;);</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 16 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 17 was not taken"> - </span>][<span class="branchCov" title="Branch 21 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 22 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 25 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 26 was not taken"> - </span>][<span class="branchCov" title="Branch 29 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 30 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 32 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 33 was not taken"> - </span>][<span class="branchCov" title="Branch 43 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 44 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 46 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 47 was not taken"> - </span>][<span class="branchCov" title="Branch 49 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 50 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 53 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 54 was not taken"> - </span>]
+<span class="lineNum">      53 </span>                :            :     }
+<span class="lineNum">      54 </span>                :            : 
+<span class="lineNum">      55 </span>        [<span class="branchCov" title="Branch 2 was taken 23 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         23 :     m_size = descriptorSignedToUnsigned(pDescriptor-&gt;getInt32(0));</span>
+<span class="lineNum">      56 </span>                :            : 
+<span class="lineNum">      57 </span>        [<span class="branchCov" title="Branch 2 was taken 23 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         23 :     m_firstMapped = pDescriptor-&gt;getInt32(1);</span>
+<span class="lineNum">      58 </span>        [<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchCov" title="Branch 1 was taken 19 times"> + </span>]:<span class="lineCov">         23 :     if(signedData)</span>
+<span class="lineNum">      59 </span>                :            :     {
+<span class="lineNum">      60 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          4 :         if(m_firstMapped &gt;= 32768)</span>
+<span class="lineNum">      61 </span>                :            :         {
+<span class="lineNum">      62 </span>                :<span class="lineCov">          3 :             m_firstMapped -= 65536;</span>
+<span class="lineNum">      63 </span>                :            :         }
+<span class="lineNum">      64 </span>                :            :     }
+<span class="lineNum">      65 </span>                :            : 
+<span class="lineNum">      66 </span>        [<span class="branchCov" title="Branch 2 was taken 23 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         23 :     m_bits = (std::uint8_t)pDescriptor-&gt;getUint32(2);</span>
+<span class="lineNum">      67 </span>                :            : 
+<span class="lineNum">      68 </span>                :            :     // If the LUT descriptor says 8 bit but it is actually 16 bits
+<span class="lineNum">      69 </span>                :            :     // then correct the descriptor's information
+<span class="lineNum">      70 </span>                :            :     //////////////////////////////////////////////////////////////
+<span class="lineNum">      71 </span>[<span class="branchCov" title="Branch 0 was taken 6 times"> + </span><span class="branchCov" title="Branch 1 was taken 17 times"> + </span>][<span class="branchCov" title="Branch 4 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         23 :     if(m_bits &lt;= 8 &amp;&amp; pData-&gt;getUnitSize() * pData-&gt;getSize() == m_size * 2)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>][<span class="branchNoCov" title="Branch 10 was not taken"> - </span><span class="branchCov" title="Branch 11 was taken 6 times"> + </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 12 was not taken"> - </span><span class="branchCov" title="Branch 13 was taken 23 times"> + </span>]
+<span class="lineNum">      72 </span>                :            :     {
+<span class="lineNum">      73 </span>                :<span class="lineNoCov">          0 :         m_bits = 16;</span>
+<span class="lineNum">      74 </span>                :            :     }
+<span class="lineNum">      75 </span>                :            : 
+<span class="lineNum">      76 </span>                :            :     // More than 16 bits per element are not allowed
+<span class="lineNum">      77 </span>                :            :     ////////////////////////////////////////////////
+<span class="lineNum">      78 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 22 times"> + </span>]:<span class="lineCov">         23 :     if(m_bits &gt; 16)</span>
+<span class="lineNum">      79 </span>                :            :     {
+<span class="lineNum">      80 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          1 :         IMEBRA_THROW(LutCorruptedError, &quot;The LUT items cannot be more than 16 bit wide&quot;);</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 16 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 17 was not taken"> - </span>][<span class="branchCov" title="Branch 21 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 22 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 25 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 26 was not taken"> - </span>][<span class="branchCov" title="Branch 29 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 30 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 32 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 33 was not taken"> - </span>][<span class="branchCov" title="Branch 43 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 44 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 46 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 47 was not taken"> - </span>][<span class="branchCov" title="Branch 49 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 50 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 53 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 54 was not taken"> - </span>]
+<span class="lineNum">      81 </span>                :            :     }
+<span class="lineNum">      82 </span>                :            : 
+<span class="lineNum">      83 </span>                :            :     // If 8 bits are stored in 16 bit elements, then extract them
+<span class="lineNum">      84 </span>                :            :     /////////////////////////////////////////////////////////////
+<span class="lineNum">      85 </span>[<span class="branchCov" title="Branch 0 was taken 6 times"> + </span><span class="branchCov" title="Branch 1 was taken 16 times"> + </span>][<span class="branchCov" title="Branch 4 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         22 :     if(m_bits &lt;= 8 &amp;&amp; pData-&gt;getUnitSize() == 2)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 8 was taken 6 times"> + </span><span class="branchCov" title="Branch 9 was taken 16 times"> + </span>]
+<span class="lineNum">      86 </span>                :            :     {
+<span class="lineNum">      87 </span>        [<span class="branchCov" title="Branch 1 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         12 :         std::shared_ptr&lt;const charsetsList_t&gt; pCharsets(std::make_shared&lt;const charsetsList_t&gt;());</span>
+<span class="lineNum">      88 </span>        [<span class="branchCov" title="Branch 1 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         12 :         std::shared_ptr&lt;buffer&gt; temporaryBuffer(std::make_shared&lt;buffer&gt;(pCharsets));</span>
+<span class="lineNum">      89 </span>        [<span class="branchCov" title="Branch 2 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         12 :         std::shared_ptr&lt;handlers::writingDataHandlerNumericBase&gt; writingHandler(temporaryBuffer-&gt;getWritingDataHandlerNumeric(tagVR_t::OB, m_size));</span>
+<span class="lineNum">      90 </span>[<span class="branchCov" title="Branch 2 was taken 774 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 768 times"> + </span><span class="branchCov" title="Branch 5 was taken 6 times"> + </span>]:<span class="lineCov">        774 :         for(size_t scanData(0); scanData != pData-&gt;getSize(); ++scanData)</span>
+<span class="lineNum">      91 </span>                :            :         {
+<span class="lineNum">      92 </span>        [<span class="branchCov" title="Branch 2 was taken 768 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">        768 :             std::uint32_t data = pData-&gt;getUint32(scanData);</span>
+<span class="lineNum">      93 </span>        [<span class="branchCov" title="Branch 2 was taken 768 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">        768 :             writingHandler-&gt;setUint32(scanData * 2, data &amp; 0xff);</span>
+<span class="lineNum">      94 </span>        [<span class="branchCov" title="Branch 2 was taken 768 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">        768 :             writingHandler-&gt;setUint32(scanData * 2 + 1, data &gt;&gt; 8);</span>
+<span class="lineNum">      95 </span>                :            :         }
+<span class="lineNum">      96 </span>                :<span class="lineCov">          6 :         writingHandler.reset();</span>
+<span class="lineNum">      97 </span>        [<span class="branchCov" title="Branch 2 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          6 :         pData = temporaryBuffer-&gt;getReadingDataHandlerNumeric(tagVR_t::OB);</span>
+<span class="lineNum">      98 </span>                :            :     }
+<span class="lineNum">      99 </span>                :            : 
+<span class="lineNum">     100 </span>[<span class="branchCov" title="Branch 2 was taken 22 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchCov" title="Branch 5 was taken 21 times"> + </span>]:<span class="lineCov">         22 :     if(m_size != pData-&gt;getSize())</span>
+<span class="lineNum">     101 </span>                :            :     {
+<span class="lineNum">     102 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          4 :         IMEBRA_THROW(LutCorruptedError, &quot;The LUT is corrupted&quot;);</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 16 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 17 was not taken"> - </span>][<span class="branchCov" title="Branch 21 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 22 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 25 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 26 was not taken"> - </span>][<span class="branchCov" title="Branch 29 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 30 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 32 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 33 was not taken"> - </span>][<span class="branchCov" title="Branch 43 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 44 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 46 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 47 was not taken"> - </span>][<span class="branchCov" title="Branch 49 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 50 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 53 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 54 was not taken"> - </span>][<span class="branchCov" title="Branch 68 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 69 was not taken"> - </span>]
+<span class="lineNum">     103 </span>                :            :     }
+<span class="lineNum">     104 </span>                :            : 
+<span class="lineNum">     105 </span>                :<span class="lineCov">         21 :     m_pDataHandler = pData;</span>
+<span class="lineNum">     106 </span>                :            : 
+<span class="lineNum">     107 </span>        [<span class="branchCov" title="Branch 1 was taken 21 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         21 :     m_description = description;</span>
+<span class="lineNum">     108 </span>                :            : 
+<span class="lineNum">     109 </span>[<span class="branchCov" title="Branch 4 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">          4 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 17 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 34 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span>][<span class="branchCov" title="Branch 37 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span><span class="branchNoExec" title="Branch 73 was not executed"> # </span> 
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     110 </span>                :<span class="lineCov">         21 : }</span>
+<a name="111"><span class="lineNum">     111 </span>                :            : </a>
+<span class="lineNum">     112 </span>                :            : 
+<span class="lineNum">     113 </span>                :<span class="lineNoCov">          0 : std::shared_ptr&lt;handlers::readingDataHandlerNumericBase&gt; lut::getReadingDataHandler() const</span>
+<span class="lineNum">     114 </span>                :            : {
+<span class="lineNum">     115 </span>                :<span class="lineNoCov">          0 :     return m_pDataHandler;</span>
+<span class="lineNum">     116 </span>                :            : }
+<span class="lineNum">     117 </span>                :            : 
+<span class="lineNum">     118 </span>                :            : 
+<span class="lineNum">     119 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     120 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     121 </span>                :            : //
+<span class="lineNum">     122 </span>                :            : //
+<span class="lineNum">     123 </span>                :            : // Destructor
+<span class="lineNum">     124 </span>                :            : //
+<span class="lineNum">     125 </span>                :            : //
+<a name="126"><span class="lineNum">     126 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     127 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     128 </span>                :<span class="lineCov">         42 : lut::~lut()</span>
+<span class="lineNum">     129 </span>                :            : {
+<span class="lineNum">     130 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     131 </span>                :            : 
+<span class="lineNum">     132 </span>                :            : 
+<span class="lineNum">     133 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     134 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     135 </span>                :            : //
+<span class="lineNum">     136 </span>                :            : //
+<span class="lineNum">     137 </span>                :            : // Convert a signed value in the lut descriptor into an
+<span class="lineNum">     138 </span>                :            : //  unsigned value
+<span class="lineNum">     139 </span>                :            : //
+<span class="lineNum">     140 </span>                :            : //
+<a name="141"><span class="lineNum">     141 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     142 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     143 </span>                :<span class="lineCov">         23 : std::uint32_t lut::descriptorSignedToUnsigned(std::int32_t signedValue)</span>
+<span class="lineNum">     144 </span>                :            : {
+<span class="lineNum">     145 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 22 times"> + </span>]:<span class="lineCov">         23 :     if(signedValue == 0)</span>
+<span class="lineNum">     146 </span>                :            :     {
+<span class="lineNum">     147 </span>                :<span class="lineCov">          1 :         return 0x010000;</span>
+<span class="lineNum">     148 </span>                :            :     }
+<span class="lineNum">     149 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 22 times"> + </span>]:<span class="lineCov">         22 :     else if(signedValue &lt; 0)</span>
+<span class="lineNum">     150 </span>                :            :     {
+<span class="lineNum">     151 </span>                :<span class="lineNoCov">          0 :         return (signedValue &amp; 0x0FFFF);</span>
+<span class="lineNum">     152 </span>                :            :     }
+<span class="lineNum">     153 </span>                :            :     else
+<span class="lineNum">     154 </span>                :            :     {
+<span class="lineNum">     155 </span>                :<span class="lineCov">         22 :         return (std::uint32_t)signedValue;</span>
+<span class="lineNum">     156 </span>                :            :     }
+<span class="lineNum">     157 </span>                :            : }
+<span class="lineNum">     158 </span>                :            : 
+<span class="lineNum">     159 </span>                :            : 
+<span class="lineNum">     160 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     161 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     162 </span>                :            : //
+<span class="lineNum">     163 </span>                :            : //
+<span class="lineNum">     164 </span>                :            : // Retrieve the number of values stored into the LUT
+<span class="lineNum">     165 </span>                :            : //
+<span class="lineNum">     166 </span>                :            : //
+<a name="167"><span class="lineNum">     167 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     168 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     169 </span>                :<span class="lineCov">         17 : std::uint32_t lut::getSize() const</span>
+<span class="lineNum">     170 </span>                :            : {
+<span class="lineNum">     171 </span>                :<span class="lineCov">         17 :     return m_size;</span>
+<span class="lineNum">     172 </span>                :            : }
+<span class="lineNum">     173 </span>                :            : 
+<span class="lineNum">     174 </span>                :            : 
+<span class="lineNum">     175 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     176 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     177 </span>                :            : //
+<span class="lineNum">     178 </span>                :            : //
+<span class="lineNum">     179 </span>                :            : // Retrieve the first mapped index
+<span class="lineNum">     180 </span>                :            : //
+<span class="lineNum">     181 </span>                :            : //
+<a name="182"><span class="lineNum">     182 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     183 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     184 </span>                :<span class="lineCov">          4 : std::int32_t lut::getFirstMapped() const</span>
+<span class="lineNum">     185 </span>                :            : {
+<span class="lineNum">     186 </span>                :<span class="lineCov">          4 :     return m_firstMapped;</span>
+<span class="lineNum">     187 </span>                :            : }
+<a name="188"><span class="lineNum">     188 </span>                :            : </a>
+<span class="lineNum">     189 </span>                :            : 
+<span class="lineNum">     190 </span>                :<span class="lineCov">    1145578 : std::uint32_t lut::getMappedValue(std::int32_t index) const</span>
+<span class="lineNum">     191 </span>                :            : {
+<span class="lineNum">     192 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     193 </span>                :            : 
+<span class="lineNum">     194 </span>        [<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchCov" title="Branch 1 was taken 1145565 times"> + </span>]:<span class="lineCov">    1145578 :     if(index &lt; m_firstMapped)</span>
+<span class="lineNum">     195 </span>                :            :     {
+<span class="lineNum">     196 </span>                :<span class="lineCov">         13 :         index = m_firstMapped;</span>
+<span class="lineNum">     197 </span>                :            :     }
+<span class="lineNum">     198 </span>                :            : 
+<span class="lineNum">     199 </span>                :<span class="lineCov">    1145578 :     std::uint32_t correctedIndex = (std::uint32_t)(index - m_firstMapped);</span>
+<span class="lineNum">     200 </span>        [<span class="branchCov" title="Branch 0 was taken 11 times"> + </span><span class="branchCov" title="Branch 1 was taken 1145567 times"> + </span>]:<span class="lineCov">    1145578 :     if(correctedIndex &gt;= m_size)</span>
+<span class="lineNum">     201 </span>                :            :     {
+<span class="lineNum">     202 </span>                :<span class="lineCov">         11 :         correctedIndex = m_size - 1;</span>
+<span class="lineNum">     203 </span>                :            :     }
+<span class="lineNum">     204 </span>[<span class="branchCov" title="Branch 2 was taken 1145578 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineCov">    1145578 :     return m_pDataHandler-&gt;getUint32(correctedIndex);</span>
+<span class="lineNum">     205 </span>                :            : 
+<span class="lineNum">     206 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     207 </span>                :            : }
+<span class="lineNum">     208 </span>                :            : 
+<span class="lineNum">     209 </span>                :            : 
+<span class="lineNum">     210 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     211 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     212 </span>                :            : //
+<span class="lineNum">     213 </span>                :            : //
+<span class="lineNum">     214 </span>                :            : // Retrieve the lut's description.
+<span class="lineNum">     215 </span>                :            : // The returned value must be removed by the client
+<span class="lineNum">     216 </span>                :            : //
+<span class="lineNum">     217 </span>                :            : //
+<a name="218"><span class="lineNum">     218 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     219 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     220 </span>                :<span class="lineCov">          4 : std::wstring lut::getDescription() const</span>
+<span class="lineNum">     221 </span>                :            : {
+<span class="lineNum">     222 </span>                :<span class="lineCov">          4 :     return m_description;</span>
+<span class="lineNum">     223 </span>                :            : }
+<span class="lineNum">     224 </span>                :            : 
+<span class="lineNum">     225 </span>                :            : 
+<span class="lineNum">     226 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     227 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     228 </span>                :            : //
+<span class="lineNum">     229 </span>                :            : //
+<span class="lineNum">     230 </span>                :            : // Return the lut's bits
+<span class="lineNum">     231 </span>                :            : //
+<span class="lineNum">     232 </span>                :            : //
+<a name="233"><span class="lineNum">     233 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     234 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     235 </span>                :<span class="lineCov">         18 : std::uint8_t lut::getBits() const</span>
+<span class="lineNum">     236 </span>                :            : {
+<span class="lineNum">     237 </span>                :<span class="lineCov">         18 :     return m_bits;</span>
+<span class="lineNum">     238 </span>                :            : }
+<a name="239"><span class="lineNum">     239 </span>                :            : </a>
+<span class="lineNum">     240 </span>                :            : 
+<span class="lineNum">     241 </span>                :<span class="lineCov">          4 : palette::palette(std::shared_ptr&lt;lut&gt; red, std::shared_ptr&lt;lut&gt; green, std::shared_ptr&lt;lut&gt; blue):</span>
+<span class="lineNum">     242 </span>                :<span class="lineCov">          4 : m_redLut(red), m_greenLut(green), m_blueLut(blue)</span>
+<a name="243"><span class="lineNum">     243 </span>                :<span class="lineCov">          4 : {}</span></a>
+<span class="lineNum">     244 </span>                :            : 
+<span class="lineNum">     245 </span>                :<span class="lineCov">         15 : std::shared_ptr&lt;lut&gt; palette::getRed() const</span>
+<span class="lineNum">     246 </span>                :            : {
+<span class="lineNum">     247 </span>                :<span class="lineCov">         15 :     return m_redLut;</span>
+<a name="248"><span class="lineNum">     248 </span>                :            : }</a>
+<span class="lineNum">     249 </span>                :            : 
+<span class="lineNum">     250 </span>                :<span class="lineCov">          5 : std::shared_ptr&lt;lut&gt; palette::getGreen() const</span>
+<span class="lineNum">     251 </span>                :            : {
+<span class="lineNum">     252 </span>                :<span class="lineCov">          5 :     return m_greenLut;</span>
+<a name="253"><span class="lineNum">     253 </span>                :            : }</a>
+<span class="lineNum">     254 </span>                :            : 
+<span class="lineNum">     255 </span>                :<span class="lineCov">          5 : std::shared_ptr&lt;lut&gt; palette::getBlue() const</span>
+<span class="lineNum">     256 </span>                :            : {
+<span class="lineNum">     257 </span>                :<span class="lineCov">          5 :     return m_blueLut;</span>
+<span class="lineNum">     258 </span>                :            : }
+<span class="lineNum">     259 </span>                :            : 
+<a name="260"><span class="lineNum">     260 </span>                :            : } // namespace implementation</a>
+<span class="lineNum">     261 </span>                :            : 
+<span class="lineNum">     262 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 : } // namespace imebra</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

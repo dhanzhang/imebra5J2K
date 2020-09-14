@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/dataHandlerStringPNImpl.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - dataHandlerStringPNImpl.h<span style="font-size: 80%;"> (source / <a href="dataHandlerStringPNImpl.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">21</td>
+            <td class="headerCovTableEntry">22</td>
+            <td class="headerCovTableEntryHi">95.5 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntryMed">75.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">62</td>
+            <td class="headerCovTableEntry">160</td>
+            <td class="headerCovTableEntryLo">38.8 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file dataHandlerStringPN.h
+<span class="lineNum">      15 </span>                :            :     \brief Declaration of the class dataHandlerStringPN.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #if !defined(imebraDataHandlerStringPN_367AAE47_6FD7_4107_AB5B_25A355C5CB6E__INCLUDED_)
+<span class="lineNum">      20 </span>                :            : #define imebraDataHandlerStringPN_367AAE47_6FD7_4107_AB5B_25A355C5CB6E__INCLUDED_
+<span class="lineNum">      21 </span>                :            : 
+<span class="lineNum">      22 </span>                :            : #include &quot;dataHandlerStringUnicodeImpl.h&quot;
+<span class="lineNum">      23 </span>                :            : #include &quot;patientNameImpl.h&quot;
+<span class="lineNum">      24 </span>                :            : 
+<span class="lineNum">      25 </span>                :            : namespace imebra
+<span class="lineNum">      26 </span>                :            : {
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :            : namespace implementation
+<span class="lineNum">      29 </span>                :            : {
+<span class="lineNum">      30 </span>                :            : 
+<span class="lineNum">      31 </span>                :            : namespace handlers
+<span class="lineNum">      32 </span>                :            : {
+<span class="lineNum">      33 </span>                :            : 
+<span class="lineNum">      34 </span>                :            : /*!
+<span class="lineNum">      35 </span>                :            : \brief Handles the Dicom type &quot;PN&quot; (person name).
+<span class="lineNum">      36 </span>                :            : 
+<span class="lineNum">      37 </span>                :            : This class separates the component groups of the name.
+<span class="lineNum">      38 </span>                :            : 
+<span class="lineNum">      39 </span>                :            : The person name can be formed by three groups:
+<span class="lineNum">      40 </span>                :            :  one or more groups can be absent.
+<span class="lineNum">      41 </span>                :            : - the first components group contains a character
+<span class="lineNum">      42 </span>                :            :   representation of the person name
+<span class="lineNum">      43 </span>                :            : - the second components group contains an ideographic
+<span class="lineNum">      44 </span>                :            :   representation of the person name
+<span class="lineNum">      45 </span>                :            : - the third components group contains a phonetic
+<span class="lineNum">      46 </span>                :            :   representation of the patient name
+<span class="lineNum">      47 </span>                :            : 
+<span class="lineNum">      48 </span>                :            : Inside a components group, the name components
+<span class="lineNum">      49 </span>                :            :  (first name, middle name, surname, etc) must be
+<span class="lineNum">      50 </span>                :            :  separated by a ^.
+<span class="lineNum">      51 </span>                :            : 
+<span class="lineNum">      52 </span>                :            : This class doesn't insert or parse the ^ separator
+<span class="lineNum">      53 </span>                :            :  which must be inserted and handled by the calling
+<span class="lineNum">      54 </span>                :            :  application, but handles the = separator which
+<span class="lineNum">      55 </span>                :            :  separates the components groups.\n
+<span class="lineNum">      56 </span>                :            : This means that to read or set all the patient name
+<span class="lineNum">      57 </span>                :            :  you have to move the pointer to the internal element
+<span class="lineNum">      58 </span>                :            :  by using setPointer(), incPointer() or skip().
+<span class="lineNum">      59 </span>                :            : 
+<span class="lineNum">      60 </span>                :            : For instance, to set the name &quot;Left^Arrow&quot; both
+<span class="lineNum">      61 </span>                :            :  with a character and an ideographic representation you
+<span class="lineNum">      62 </span>                :            :  have to use the following code:
+<span class="lineNum">      63 </span>                :            : 
+<span class="lineNum">      64 </span>                :            : \code
+<span class="lineNum">      65 </span>                :            : myDataSet-&gt;getDataHandler(group, 0, tag, 0, true, &quot;PN&quot;);
+<span class="lineNum">      66 </span>                :            : myDataSet-&gt;setSize(2);
+<span class="lineNum">      67 </span>                :            : myDataSet-&gt;setUnicodeString(L&quot;Left^Arrow&quot;);
+<span class="lineNum">      68 </span>                :            : myDataSet-&gt;incPointer();
+<span class="lineNum">      69 </span>                :            : myDataSet-&gt;setUnicodeString(L&quot;&lt;-&quot;); // :-)
+<span class="lineNum">      70 </span>                :            : \endcode
+<a name="71"><span class="lineNum">      71 </span>                :            : </a>
+<span class="lineNum">      72 </span>                :            : */
+<span class="lineNum">      73 </span>                :<span class="lineCov">     141928 : class readingDataHandlerStringPN : public readingDataHandlerStringUnicode</span>
+<span class="lineNum">      74 </span>                :            : {
+<span class="lineNum">      75 </span>                :            : public:
+<span class="lineNum">      76 </span>                :            :     readingDataHandlerStringPN(const memory&amp; parseMemory, const std::shared_ptr&lt;const charsetsList_t&gt;&amp; pCharsets);
+<span class="lineNum">      77 </span>                :            : 
+<span class="lineNum">      78 </span>                :            :     virtual std::shared_ptr&lt;patientName&gt; getPatientName(const size_t index) const;
+<span class="lineNum">      79 </span>                :            : 
+<span class="lineNum">      80 </span>                :            :     virtual std::shared_ptr&lt;unicodePatientName&gt; getUnicodePatientName(const size_t index) const;
+<span class="lineNum">      81 </span>                :            : 
+<span class="lineNum">      82 </span>                :            : 
+<a name="83"><span class="lineNum">      83 </span>                :            : private:</a>
+<span class="lineNum">      84 </span>                :            : 
+<span class="lineNum">      85 </span>                :<span class="lineCov">         27 :     template&lt;class stringType_t, class patientNameType_t, typename separatorType_t&gt; std::shared_ptr&lt;patientNameType_t&gt; returnPatientName(const stringType_t&amp; string, separatorType_t separator) const</span>
+<span class="lineNum">      86 </span>                :            :     {
+<span class="lineNum">      87 </span>                :<span class="lineCov">         54 :         std::vector&lt;stringType_t&gt; groups;</span>
+<span class="lineNum">      88 </span>                :            : 
+<span class="lineNum">      89 </span>                :<span class="lineCov">         54 :         stringType_t group;</span>
+<span class="lineNum">      90 </span>                :            : 
+<span class="lineNum">      91 </span>[<span class="branchCov" title="Branch 1 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 15 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]:<span class="lineCov">         54 :         std::basic_istringstream&lt;separatorType_t&gt; stream(string);</span>
+<span class="lineNum">      92 </span>[<span class="branchCov" title="Branch 1 was taken 41 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 41 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         91 :         while (std::getline(stream, group, separator))</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 29 times"> + </span><span class="branchCov" title="Branch 7 was taken 12 times"> + </span>][<span class="branchCov" title="Branch 9 was taken 50 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 50 times"> + </span><span class="branchNoCov" title="Branch 13 was not taken"> - </span>][<span class="branchCov" title="Branch 14 was taken 35 times"> + </span><span class="branchCov" title="Branch 15 was taken 15 times"> + </span>]
+<span class="lineNum">      93 </span>                :            :         {
+<span class="lineNum">      94 </span>[<span class="branchCov" title="Branch 1 was taken 29 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 35 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         64 :             groups.push_back(group);</span>
+<span class="lineNum">      95 </span>                :            :         }
+<span class="lineNum">      96 </span>                :            : 
+<span class="lineNum">      97 </span>[<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 12 times"> + </span>][<span class="branchNoCov" title="Branch 4 was not taken"> - </span><span class="branchCov" title="Branch 5 was taken 15 times"> + </span>]:<span class="lineCov">         27 :         if(groups.size() &gt; 3) // Maximum 3 groups (alphabetic, ideographic, phonetic)</span>
+<span class="lineNum">      98 </span>                :            :         {
+<span class="lineNum">      99 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             IMEBRA_THROW(DataHandlerCorruptedBufferError, &quot;The Patient Name contains more than 3 groups&quot;)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>][<span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 22 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 25 was not executed"> # </span><span class="branchNoExec" title="Branch 26 was not executed"> # </span>][<span class="branchNoExec" title="Branch 29 was not executed"> # </span><span class="branchNoExec" title="Branch 30 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 33 was not executed"> # </span>][<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 46 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span>][<span class="branchNoExec" title="Branch 49 was not executed"> # </span><span class="branchNoExec" title="Branch 50 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 53 was not executed"> # </span><span class="branchNoExec" title="Branch 54 was not executed"> # </span>][<span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 72 was not executed"> # </span><span class="branchNoExec" title="Branch 73 was not executed"> # </span>][<span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 78 was not executed"> # </span><span class="branchNoExec" title="Branch 79 was not executed"> # </span>][<span class="branchNoExec" title="Branch 84 was not executed"> # </span><span class="branchNoExec" title="Branch 85 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 89 was not executed"> # </span><span class="branchNoExec" title="Branch 90 was not executed"> # </span>][<span class="branchNoExec" title="Branch 93 was not executed"> # </span><span class="branchNoExec" title="Branch 94 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 97 was not executed"> # </span><span class="branchNoExec" title="Branch 98 was not executed"> # </span>][<span class="branchNoExec" title="Branch 100 was not executed"> # </span><span class="branchNoExec" title="Branch 101 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 111 was not executed"> # </span><span class="branchNoExec" title="Branch 112 was not executed"> # </span>][<span class="branchNoExec" title="Branch 114 was not executed"> # </span><span class="branchNoExec" title="Branch 115 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 117 was not executed"> # </span><span class="branchNoExec" title="Branch 118 was not executed"> # </span>][<span class="branchNoExec" title="Branch 121 was not executed"> # </span><span class="branchNoExec" title="Branch 122 was not executed"> # </span>]
+<span class="lineNum">     100 </span>                :            :         }
+<span class="lineNum">     101 </span>                :            : 
+<span class="lineNum">     102 </span>[<span class="branchCov" title="Branch 1 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 15 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         27 :         groups.resize(3);</span>
+<span class="lineNum">     103 </span>                :            : 
+<span class="lineNum">     104 </span>[<span class="branchCov" title="Branch 4 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 11 was taken 15 times"> + </span><span class="branchNoCov" title="Branch 12 was not taken"> - </span>]:<span class="lineCov">         54 :         return std::make_shared&lt;patientNameType_t&gt;(groups[0], groups[1], groups[2]);</span>
+<span class="lineNum">     105 </span>                :            :     }
+<span class="lineNum">     106 </span>                :            : 
+<a name="107"><span class="lineNum">     107 </span>                :            : };</a>
+<span class="lineNum">     108 </span>                :            : 
+<span class="lineNum">     109 </span>                :<span class="lineCov">      46896 : class writingDataHandlerStringPN: public writingDataHandlerStringUnicode</span>
+<span class="lineNum">     110 </span>                :            : {
+<span class="lineNum">     111 </span>                :            : public:
+<span class="lineNum">     112 </span>                :            :     writingDataHandlerStringPN(const std::shared_ptr&lt;buffer&gt;&amp; pBuffer, const std::shared_ptr&lt;const charsetsList_t&gt;&amp; pCharsets);
+<span class="lineNum">     113 </span>                :            : 
+<span class="lineNum">     114 </span>                :            :     virtual void setPatientName(const size_t index, const std::shared_ptr&lt;const patientName&gt;&amp; pPatientName) override;
+<span class="lineNum">     115 </span>                :            : 
+<span class="lineNum">     116 </span>                :            :     virtual void setUnicodePatientName(const size_t index, const std::shared_ptr&lt;const unicodePatientName&gt;&amp; pPatientName) override;
+<span class="lineNum">     117 </span>                :            : 
+<a name="118"><span class="lineNum">     118 </span>                :            : private:</a>
+<span class="lineNum">     119 </span>                :            : 
+<span class="lineNum">     120 </span>                :<span class="lineCov">         16 :     template&lt;class stringType_t, class patientNameType_t, typename separatorType_t&gt; stringType_t returnPatientName(const std::shared_ptr&lt;const patientNameType_t&gt;&amp; patient, separatorType_t separator)</span>
+<span class="lineNum">     121 </span>                :            :     {
+<span class="lineNum">     122 </span>                :<span class="lineCov">         16 :         stringType_t patientString;</span>
+<span class="lineNum">     123 </span>[<span class="branchCov" title="Branch 2 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">         16 :         patientString.append(patient-&gt;getAlphabeticRepresentation());</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 11 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 12 was not taken"> - </span>][<span class="branchCov" title="Branch 14 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 15 was not taken"> - </span>]
+<span class="lineNum">     124 </span>[<span class="branchCov" title="Branch 2 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 6 times"> + </span><span class="branchCov" title="Branch 6 was taken 2 times"> + </span>]:<span class="lineCov">         16 :         if(!patient-&gt;getIdeographicRepresentation().empty() || !patient-&gt;getPhoneticRepresentation().empty())</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 9 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>][<span class="branchCov" title="Branch 12 was taken 4 times"> + </span><span class="branchCov" title="Branch 13 was taken 2 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 14 was taken 6 times"> + </span><span class="branchCov" title="Branch 15 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 17 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 20 was taken 6 times"> + </span><span class="branchCov" title="Branch 21 was taken 2 times"> + </span><span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span> 
+<span class="lineNum">         </span>   <span class="branchNoExec" title="Branch 25 was not executed"> # </span><span class="branchNoExec" title="Branch 26 was not executed"> # </span><span class="branchCov" title="Branch 30 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 31 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 33 was taken 6 times"> + </span><span class="branchCov" title="Branch 34 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 37 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 40 was taken 4 times"> + </span><span class="branchCov" title="Branch 41 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 42 was taken 6 times"> + </span><span class="branchCov" title="Branch 43 was taken 2 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 45 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 46 was not taken"> - </span>][<span class="branchCov" title="Branch 48 was taken 6 times"> + </span><span class="branchCov" title="Branch 49 was taken 2 times"> + </span> 
+<span class="lineNum">         </span>   <span class="branchNoExec" title="Branch 50 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 53 was not executed"> # </span><span class="branchNoExec" title="Branch 54 was not executed"> # </span>]
+<span class="lineNum">     125 </span>                :            :         {
+<span class="lineNum">     126 </span>[<span class="branchCov" title="Branch 1 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         12 :             patientString.push_back(separator);</span>
+<span class="lineNum">     127 </span>[<span class="branchCov" title="Branch 2 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">         12 :             patientString.append(patient-&gt;getIdeographicRepresentation());</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 11 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 12 was not taken"> - </span>][<span class="branchCov" title="Branch 14 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 15 was not taken"> - </span>]
+<span class="lineNum">     128 </span>                :            :         }
+<span class="lineNum">     129 </span>[<span class="branchCov" title="Branch 2 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 6 times"> + </span><span class="branchCov" title="Branch 7 was taken 2 times"> + </span>]:<span class="lineCov">         16 :         if(!patient-&gt;getPhoneticRepresentation().empty())</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 10 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>][<span class="branchCov" title="Branch 14 was taken 6 times"> + </span><span class="branchCov" title="Branch 15 was taken 2 times"> + </span>]
+<span class="lineNum">     130 </span>                :            :         {
+<span class="lineNum">     131 </span>[<span class="branchCov" title="Branch 1 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         12 :             patientString.push_back(separator);</span>
+<span class="lineNum">     132 </span>[<span class="branchCov" title="Branch 2 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">         12 :             patientString.append(patient-&gt;getPhoneticRepresentation());</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 13 was not taken"> - </span>][<span class="branchCov" title="Branch 15 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 16 was not taken"> - </span>]
+<span class="lineNum">     133 </span>                :            :         }
+<span class="lineNum">     134 </span>                :<span class="lineCov">         16 :         return patientString;</span>
+<span class="lineNum">     135 </span>                :            :     }
+<span class="lineNum">     136 </span>                :            : 
+<span class="lineNum">     137 </span>                :            : };
+<span class="lineNum">     138 </span>                :            : 
+<span class="lineNum">     139 </span>                :            : } // namespace handlers
+<span class="lineNum">     140 </span>                :            : 
+<span class="lineNum">     141 </span>                :            : } // namespace implementation
+<span class="lineNum">     142 </span>                :            : 
+<span class="lineNum">     143 </span>                :            : } // namespace imebra
+<span class="lineNum">     144 </span>                :            : 
+<span class="lineNum">     145 </span>                :            : #endif // !defined(imebraDataHandlerStringPN_367AAE47_6FD7_4107_AB5B_25A355C5CB6E__INCLUDED_)
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

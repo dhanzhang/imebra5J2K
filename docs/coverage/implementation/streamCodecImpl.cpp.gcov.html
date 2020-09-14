@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/streamCodecImpl.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - streamCodecImpl.cpp<span style="font-size: 80%;"> (source / <a href="streamCodecImpl.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntryHi">92.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryMed">83.3 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntry">82</td>
+            <td class="headerCovTableEntryLo">32.9 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file streamCodecImpl.cpp
+<span class="lineNum">      15 </span>                :            :     \brief Implementation of the base class for the stream codecs.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #include &quot;exceptionImpl.h&quot;
+<span class="lineNum">      20 </span>                :            : #include &quot;streamReaderImpl.h&quot;
+<span class="lineNum">      21 </span>                :            : #include &quot;streamWriterImpl.h&quot;
+<span class="lineNum">      22 </span>                :            : #include &quot;streamCodecImpl.h&quot;
+<span class="lineNum">      23 </span>                :            : #include &quot;dataSetImpl.h&quot;
+<span class="lineNum">      24 </span>                :            : #include &quot;codecFactoryImpl.h&quot;
+<span class="lineNum">      25 </span>                :            : #include &quot;../include/imebra/exceptions.h&quot;
+<span class="lineNum">      26 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :            : 
+<span class="lineNum">      29 </span>                :            : namespace imebra
+<span class="lineNum">      30 </span>                :            : {
+<span class="lineNum">      31 </span>                :            : 
+<span class="lineNum">      32 </span>                :            : namespace implementation
+<span class="lineNum">      33 </span>                :            : {
+<span class="lineNum">      34 </span>                :            : 
+<span class="lineNum">      35 </span>                :            : namespace codecs
+<a name="36"><span class="lineNum">      36 </span>                :            : {</a>
+<span class="lineNum">      37 </span>                :            : 
+<span class="lineNum">      38 </span>                :<span class="lineCov">          4 : streamCodec::~streamCodec()</span>
+<span class="lineNum">      39 </span>                :            : {
+<span class="lineNum">      40 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">      41 </span>                :            : 
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      44 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      45 </span>                :            : //
+<span class="lineNum">      46 </span>                :            : //
+<span class="lineNum">      47 </span>                :            : // Read a stream and write it into a dataset.
+<span class="lineNum">      48 </span>                :            : //
+<span class="lineNum">      49 </span>                :            : //
+<a name="50"><span class="lineNum">      50 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      51 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      52 </span>                :<span class="lineCov">      14307 : std::shared_ptr&lt;dataSet&gt; streamCodec::read(std::shared_ptr&lt;streamReader&gt; pSourceStream, std::uint32_t maxSizeBufferLoad /* = 0xffffffff */) const</span>
+<span class="lineNum">      53 </span>                :            : {
+<span class="lineNum">      54 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">      55 </span>                :            : 
+<span class="lineNum">      56 </span>                :            :     // Create a new dataset
+<span class="lineNum">      57 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      58 </span>[<span class="branchCov" title="Branch 2 was taken 14307 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 7 was taken 19 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>]:<span class="lineCov">      28614 :     std::shared_ptr&lt;dataSet&gt; pDestDataSet(std::make_shared&lt;dataSet&gt;(&quot;&quot;, charsetsList_t()));</span>
+<span class="lineNum">      59 </span>                :            : 
+<span class="lineNum">      60 </span>                :            :     // Read the stream
+<span class="lineNum">      61 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      62 </span>        [<span class="branchCov" title="Branch 3 was taken 14288 times"> + </span><span class="branchCov" title="Branch 4 was taken 19 times"> + </span>]:<span class="lineCov">      14307 :     readStream(pSourceStream, pDestDataSet, maxSizeBufferLoad);</span>
+<span class="lineNum">      63 </span>                :            : 
+<span class="lineNum">      64 </span>                :<span class="lineCov">      28576 :     return pDestDataSet;</span>
+<span class="lineNum">      65 </span>                :            : 
+<span class="lineNum">      66 </span>[<span class="branchCov" title="Branch 4 was taken 19 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 19 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">         19 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 19 times"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 17 was taken 19 times"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 19 times"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 19 times"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 34 was taken 19 times"> + </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span>][<span class="branchCov" title="Branch 37 was taken 19 times"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span><span class="branchNoExec" title="Branch 73 was not executed"> # </span> 
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">      67 </span>                :            : }
+<span class="lineNum">      68 </span>                :            : 
+<span class="lineNum">      69 </span>                :            : 
+<span class="lineNum">      70 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      71 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      72 </span>                :            : //
+<span class="lineNum">      73 </span>                :            : //
+<span class="lineNum">      74 </span>                :            : // Write a dataset into a stream.
+<span class="lineNum">      75 </span>                :            : //
+<span class="lineNum">      76 </span>                :            : //
+<a name="77"><span class="lineNum">      77 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      78 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      79 </span>                :<span class="lineCov">      15049 : void streamCodec::write(std::shared_ptr&lt;streamWriter&gt; pDestStream, std::shared_ptr&lt;dataSet&gt; pSourceDataSet) const</span>
+<span class="lineNum">      80 </span>                :            : {
+<span class="lineNum">      81 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">      82 </span>                :            : 
+<span class="lineNum">      83 </span>        [<span class="branchCov" title="Branch 2 was taken 15049 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">      15049 :     pDestStream-&gt;resetOutBitsBuffer();</span>
+<span class="lineNum">      84 </span>[<span class="branchCov" title="Branch 3 was taken 15049 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">      15052 :     writeStream(pDestStream, pSourceDataSet);</span>
+<span class="lineNum">      85 </span>        [<span class="branchCov" title="Branch 2 was taken 15046 times"> + </span><span class="branchCov" title="Branch 3 was taken 3 times"> + </span>]:<span class="lineCov">      15049 :     pDestStream-&gt;flushDataBuffer();</span>
+<span class="lineNum">      86 </span>                :            : 
+<span class="lineNum">      87 </span>[<span class="branchCov" title="Branch 4 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">          3 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 17 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 34 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span>][<span class="branchCov" title="Branch 37 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span><span class="branchNoExec" title="Branch 73 was not executed"> # </span> 
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">      88 </span>                :<span class="lineCov">      15046 : }</span>
+<span class="lineNum">      89 </span>                :            : 
+<span class="lineNum">      90 </span>                :            : } // namespace codecs
+<span class="lineNum">      91 </span>                :            : 
+<a name="92"><span class="lineNum">      92 </span>                :            : } // namespace implementation</a>
+<span class="lineNum">      93 </span>                :            : 
+<span class="lineNum">      94 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 : } // namespace imebra</span>
+<span class="lineNum">      95 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

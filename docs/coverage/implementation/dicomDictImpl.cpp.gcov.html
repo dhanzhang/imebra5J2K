@@ -1,0 +1,646 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/dicomDictImpl.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - dicomDictImpl.cpp<span style="font-size: 80%;"> (source / <a href="dicomDictImpl.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">120</td>
+            <td class="headerCovTableEntry">141</td>
+            <td class="headerCovTableEntryMed">85.1 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">17</td>
+            <td class="headerCovTableEntryHi">94.1 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">133</td>
+            <td class="headerCovTableEntry">810</td>
+            <td class="headerCovTableEntryLo">16.4 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file dicomDict.cpp
+<span class="lineNum">      15 </span>                :            :     \brief Implementation of the class dicomDict.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : 
+<span class="lineNum">      20 </span>                :            : #include &quot;exceptionImpl.h&quot;
+<span class="lineNum">      21 </span>                :            : #include &quot;dicomDictImpl.h&quot;
+<span class="lineNum">      22 </span>                :            : #include &quot;dicomDescriptions.h&quot;
+<span class="lineNum">      23 </span>                :            : #include &quot;../include/imebra/exceptions.h&quot;
+<span class="lineNum">      24 </span>                :            : 
+<span class="lineNum">      25 </span>                :            : namespace imebra
+<span class="lineNum">      26 </span>                :            : {
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :            : namespace implementation
+<span class="lineNum">      29 </span>                :            : {
+<span class="lineNum">      30 </span>                :            : 
+<span class="lineNum">      31 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      32 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      33 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      34 </span>                :            : //
+<span class="lineNum">      35 </span>                :            : //
+<span class="lineNum">      36 </span>                :            : //
+<span class="lineNum">      37 </span>                :            : // dicomDictionary
+<span class="lineNum">      38 </span>                :            : //
+<span class="lineNum">      39 </span>                :            : //
+<span class="lineNum">      40 </span>                :            : //
+<span class="lineNum">      41 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      42 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      43 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      44 </span>                :            : 
+<span class="lineNum">      45 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      46 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      47 </span>                :            : //
+<span class="lineNum">      48 </span>                :            : //
+<span class="lineNum">      49 </span>                :            : // Constructor. Register all the known tags and VRs
+<span class="lineNum">      50 </span>                :            : //
+<span class="lineNum">      51 </span>                :            : //
+<a name="52"><span class="lineNum">      52 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      53 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      54 </span>                :<span class="lineCov">          2 : dicomDictionary::dicomDictionary()</span>
+<span class="lineNum">      55 </span>                :            : {
+<span class="lineNum">      56 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">      57 </span>                :            : 
+<span class="lineNum">      58 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::AE, false, 0, 16);</span>
+<span class="lineNum">      59 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::AS, false, 0, 0);</span>
+<span class="lineNum">      60 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::AT, false, 2, 0); // AT is 4 bytes long but byte swapping happens only on a word</span>
+<span class="lineNum">      61 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::CS, false, 0, 16);</span>
+<span class="lineNum">      62 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::DA, false, 0, 0);</span>
+<span class="lineNum">      63 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::DS, false, 0, 16);</span>
+<span class="lineNum">      64 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::DT, false, 0, 26);</span>
+<span class="lineNum">      65 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::FL, false, 4, 0);</span>
+<span class="lineNum">      66 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::FD, false, 8, 0);</span>
+<span class="lineNum">      67 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::IS, false, 0, 12);</span>
+<span class="lineNum">      68 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::LO, false, 0, 64);</span>
+<span class="lineNum">      69 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::LT, false, 0, 10240);</span>
+<span class="lineNum">      70 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::OB, true,  0, 0);</span>
+<span class="lineNum">      71 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::SB, true,  0, 0); // Non standard. Used internally for signed bytes</span>
+<span class="lineNum">      72 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::OD, true,  8, 0);</span>
+<span class="lineNum">      73 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::OF, true,  4, 0);</span>
+<span class="lineNum">      74 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::OL, true,  4, 0);</span>
+<span class="lineNum">      75 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::OW, true,  2, 0);</span>
+<span class="lineNum">      76 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::PN, false, 0, 64);</span>
+<span class="lineNum">      77 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::SH, false, 0, 16);</span>
+<span class="lineNum">      78 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::SL, false, 4, 0);</span>
+<span class="lineNum">      79 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::SQ, true,  0, 0);</span>
+<span class="lineNum">      80 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::SS, false, 2, 0);</span>
+<span class="lineNum">      81 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::ST, false, 0, 1024);</span>
+<span class="lineNum">      82 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::TM, false, 0, 16);</span>
+<span class="lineNum">      83 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::UC, true, 0, 0);</span>
+<span class="lineNum">      84 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::UI, false, 0, 64);</span>
+<span class="lineNum">      85 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::UL, false, 4, 0);</span>
+<span class="lineNum">      86 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::UN, true,  0, 0);</span>
+<span class="lineNum">      87 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::UR, true, 0, 0);</span>
+<span class="lineNum">      88 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::US, false, 2, 0);</span>
+<span class="lineNum">      89 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     registerVR(tagVR_t::UT, true, 0, 0);</span>
+<span class="lineNum">      90 </span>                :            : 
+<span class="lineNum">      91 </span>        [<span class="branchCov" title="Branch 0 was taken 4509 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       4510 :     for(size_t scanDescriptions(0); m_tagsDescription[scanDescriptions].m_tagId != (std::uint32_t)0xffffffff; ++scanDescriptions)</span>
+<span class="lineNum">      92 </span>                :            :     {
+<span class="lineNum">      93 </span>        [<span class="branchCov" title="Branch 1 was taken 4509 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       4509 :         registerTag(m_tagsDescription[scanDescriptions].m_tagId,</span>
+<span class="lineNum">      94 </span>                :<span class="lineCov">       4509 :                     m_tagsDescription[scanDescriptions].m_tagMask,</span>
+<span class="lineNum">      95 </span>                :<span class="lineCov">       4509 :                     m_tagsDescription[scanDescriptions].m_tagDescription,</span>
+<span class="lineNum">      96 </span>                :<span class="lineCov">       4509 :                     m_tagsDescription[scanDescriptions].m_tagKeyword,</span>
+<span class="lineNum">      97 </span>                :<span class="lineCov">       4509 :                     m_tagsDescription[scanDescriptions].m_vr0, m_tagsDescription[scanDescriptions].m_vr1,</span>
+<span class="lineNum">      98 </span>                :<span class="lineCov">       4509 :                     m_tagsDescription[scanDescriptions].m_multiplicityMin,</span>
+<span class="lineNum">      99 </span>                :<span class="lineCov">       4509 :                     m_tagsDescription[scanDescriptions].m_multiplicityMax,</span>
+<span class="lineNum">     100 </span>                :<span class="lineCov">       4509 :                     m_tagsDescription[scanDescriptions].m_multiplicityStep);</span>
+<span class="lineNum">     101 </span>                :            : 
+<span class="lineNum">     102 </span>                :            :     }
+<span class="lineNum">     103 </span>                :            : 
+<span class="lineNum">     104 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     105 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineCov">          1 : }</span>
+<span class="lineNum">     106 </span>                :            : 
+<span class="lineNum">     107 </span>                :            : 
+<span class="lineNum">     108 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     109 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     110 </span>                :            : //
+<span class="lineNum">     111 </span>                :            : //
+<span class="lineNum">     112 </span>                :            : // Register a tag
+<span class="lineNum">     113 </span>                :            : //
+<span class="lineNum">     114 </span>                :            : //
+<a name="115"><span class="lineNum">     115 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     116 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     117 </span>                :<span class="lineCov">       4509 : void dicomDictionary::registerTag(std::uint32_t tagId,</span>
+<span class="lineNum">     118 </span>                :            :                                   std::uint32_t tagMask,
+<span class="lineNum">     119 </span>                :            :                                   const wchar_t* tagName,
+<span class="lineNum">     120 </span>                :            :                                   const char* tagKeyword,
+<span class="lineNum">     121 </span>                :            :                                   tagVR_t vr0, tagVR_t vr1,
+<span class="lineNum">     122 </span>                :            :                                   std::uint32_t multiplicityMin, std::uint32_t multiplicityMax, std::uint32_t multiplicityStep)
+<span class="lineNum">     123 </span>                :            : {
+<span class="lineNum">     124 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     125 </span>                :            : 
+<span class="lineNum">     126 </span>                :<span class="lineCov">       4509 :     std::uint32_t increaseValue = 1u;</span>
+<span class="lineNum">     127 </span>[<span class="branchCov" title="Branch 0 was taken 1284 times"> + </span><span class="branchCov" title="Branch 1 was taken 4421 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 1196 times"> + </span><span class="branchCov" title="Branch 3 was taken 88 times"> + </span>]:<span class="lineCov">       5705 :     while(tagMask != 0xffffffff &amp;&amp; (increaseValue &amp; tagMask) != 0)</span>
+<span class="lineNum">     128 </span>                :            :     {
+<span class="lineNum">     129 </span>                :<span class="lineCov">       1196 :         increaseValue &lt;&lt;= 1;</span>
+<span class="lineNum">     130 </span>                :            :     }
+<span class="lineNum">     131 </span>                :            : 
+<span class="lineNum">     132 </span>        [<span class="branchCov" title="Branch 0 was taken 113109 times"> + </span><span class="branchCov" title="Branch 1 was taken 4509 times"> + </span>]:<span class="lineCov">     117618 :     for(std::uint32_t registerTagId(tagId); (registerTagId &amp; tagMask) == tagId; registerTagId += increaseValue)</span>
+<span class="lineNum">     133 </span>                :            :     {
+<span class="lineNum">     134 </span>        [<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">     226218 :         imageDataDictionaryElement newElement;</span>
+<span class="lineNum">     135 </span>        [<span class="branchCov" title="Branch 1 was taken 113109 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">     113109 :         newElement.m_tagDescription = tagName;</span>
+<span class="lineNum">     136 </span>        [<span class="branchCov" title="Branch 1 was taken 113109 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">     113109 :         newElement.m_tagKeyword = tagKeyword;</span>
+<span class="lineNum">     137 </span>                :<span class="lineCov">     113109 :         newElement.m_vr0 = vr0;</span>
+<span class="lineNum">     138 </span>                :<span class="lineCov">     113109 :         newElement.m_vr1 = vr1;</span>
+<span class="lineNum">     139 </span>                :<span class="lineCov">     113109 :         newElement.m_multiplicityMin = multiplicityMin;</span>
+<span class="lineNum">     140 </span>                :<span class="lineCov">     113109 :         newElement.m_multiplicityMax = multiplicityMax;</span>
+<span class="lineNum">     141 </span>                :<span class="lineCov">     113109 :         newElement.m_multiplicityStep = multiplicityStep;</span>
+<span class="lineNum">     142 </span>[<span class="branchCov" title="Branch 1 was taken 113109 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 113109 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">     113109 :         m_dicomDict[registerTagId] = newElement;</span>
+<span class="lineNum">     143 </span>                :            :     }
+<span class="lineNum">     144 </span>                :            : 
+<span class="lineNum">     145 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     146 </span>                :<span class="lineCov">       4509 : }</span>
+<span class="lineNum">     147 </span>                :            : 
+<span class="lineNum">     148 </span>                :            : 
+<span class="lineNum">     149 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     150 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     151 </span>                :            : //
+<span class="lineNum">     152 </span>                :            : //
+<span class="lineNum">     153 </span>                :            : // Register a VR
+<span class="lineNum">     154 </span>                :            : //
+<span class="lineNum">     155 </span>                :            : //
+<a name="156"><span class="lineNum">     156 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     157 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     158 </span>                :<span class="lineCov">         32 : void dicomDictionary::registerVR(tagVR_t vr, bool bLongLength, std::uint32_t wordSize, std::uint32_t maxLength)</span>
+<span class="lineNum">     159 </span>                :            : {
+<span class="lineNum">     160 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     161 </span>                :            : 
+<span class="lineNum">     162 </span>[<span class="branchCov" title="Branch 2 was taken 32 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchNoCov" title="Branch 5 was not taken"> - </span><span class="branchCov" title="Branch 6 was taken 32 times"> + </span>]:<span class="lineCov">         32 :     if(m_vrDict.find(vr) != m_vrDict.end())</span>
+<span class="lineNum">     163 </span>                :            :     {
+<span class="lineNum">     164 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :         IMEBRA_THROW(std::logic_error, &quot;VR registered twice&quot;);</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>][<span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 22 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 25 was not executed"> # </span><span class="branchNoExec" title="Branch 26 was not executed"> # </span>][<span class="branchNoExec" title="Branch 29 was not executed"> # </span><span class="branchNoExec" title="Branch 30 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 33 was not executed"> # </span>][<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 46 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span>][<span class="branchNoExec" title="Branch 49 was not executed"> # </span><span class="branchNoExec" title="Branch 50 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 65 was not executed"> # </span><span class="branchNoExec" title="Branch 66 was not executed"> # </span>]
+<span class="lineNum">     165 </span>                :            :     }
+<span class="lineNum">     166 </span>                :            :     validDataTypesStruct newElement;
+<span class="lineNum">     167 </span>                :<span class="lineCov">         32 :     newElement.m_longLength = bLongLength;</span>
+<span class="lineNum">     168 </span>                :<span class="lineCov">         32 :     newElement.m_wordLength = wordSize;</span>
+<span class="lineNum">     169 </span>                :<span class="lineCov">         32 :     newElement.m_maxLength = maxLength;</span>
+<span class="lineNum">     170 </span>                :            : 
+<span class="lineNum">     171 </span>        [<span class="branchCov" title="Branch 1 was taken 32 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         32 :     m_vrDict[vr] = newElement;</span>
+<span class="lineNum">     172 </span>                :            : 
+<span class="lineNum">     173 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     174 </span>                :<span class="lineCov">         32 : }</span>
+<span class="lineNum">     175 </span>                :            : 
+<span class="lineNum">     176 </span>                :            : 
+<span class="lineNum">     177 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     178 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     179 </span>                :            : //
+<span class="lineNum">     180 </span>                :            : //
+<span class="lineNum">     181 </span>                :            : // Return an human readable description for the tag
+<span class="lineNum">     182 </span>                :            : //
+<span class="lineNum">     183 </span>                :            : //
+<a name="184"><span class="lineNum">     184 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     185 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     186 </span>                :<span class="lineCov">        259 : std::wstring dicomDictionary::getTagDescription(std::uint16_t groupId, std::uint16_t tagId) const</span>
+<span class="lineNum">     187 </span>                :            : {
+<span class="lineNum">     188 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     189 </span>                :            : 
+<span class="lineNum">     190 </span>                :<span class="lineCov">        259 :     std::uint32_t tagDWordId=(((std::uint32_t)groupId)&lt;&lt;16) | (std::uint32_t)tagId;</span>
+<span class="lineNum">     191 </span>                :            : 
+<span class="lineNum">     192 </span>        [<span class="branchCov" title="Branch 1 was taken 259 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        259 :     tDicomDictionary::const_iterator findIterator = m_dicomDict.find(tagDWordId);</span>
+<span class="lineNum">     193 </span>        [<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchCov" title="Branch 3 was taken 258 times"> + </span>]:<span class="lineCov">        259 :     if(findIterator == m_dicomDict.end())</span>
+<span class="lineNum">     194 </span>                :            :     {
+<span class="lineNum">     195 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          1 :         IMEBRA_THROW(DictionaryUnknownTagError, &quot;Unknown tag &quot; &lt;&lt; std::hex &lt;&lt; groupId &lt;&lt; &quot;, &quot; &lt;&lt; std::hex &lt;&lt; tagId);</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 16 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 17 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 19 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 20 was not taken"> - </span>][<span class="branchCov" title="Branch 22 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 23 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 25 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 26 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 36 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 37 was not taken"> - </span>][<span class="branchCov" title="Branch 40 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 41 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 44 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 45 was not taken"> - </span>][<span class="branchCov" title="Branch 47 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 48 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 58 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 59 was not taken"> - </span>][<span class="branchCov" title="Branch 61 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 62 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 64 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 65 was not taken"> - </span>][<span class="branchCov" title="Branch 68 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 69 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 83 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 84 was not taken"> - </span>]
+<span class="lineNum">     196 </span>                :            :     }
+<span class="lineNum">     197 </span>                :            : 
+<span class="lineNum">     198 </span>        [<span class="branchCov" title="Branch 2 was taken 258 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">        258 :     return findIterator-&gt;second.m_tagDescription;</span>
+<span class="lineNum">     199 </span>                :            : 
+<span class="lineNum">     200 </span>[<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">          1 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 17 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 34 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span>][<span class="branchCov" title="Branch 37 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span><span class="branchNoExec" title="Branch 73 was not executed"> # </span> 
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     201 </span>                :            : }
+<a name="202"><span class="lineNum">     202 </span>                :            : </a>
+<span class="lineNum">     203 </span>                :            : 
+<span class="lineNum">     204 </span>                :<span class="lineCov">          2 : std::uint32_t dicomDictionary::getTagMultiplicityMin(std::uint16_t groupId, std::uint16_t tagId) const</span>
+<span class="lineNum">     205 </span>                :            : {
+<span class="lineNum">     206 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     207 </span>                :            : 
+<span class="lineNum">     208 </span>                :<span class="lineCov">          2 :     std::uint32_t tagDWordId=(((std::uint32_t)groupId)&lt;&lt;16) | (std::uint32_t)tagId;</span>
+<span class="lineNum">     209 </span>                :            : 
+<span class="lineNum">     210 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :     tDicomDictionary::const_iterator findIterator = m_dicomDict.find(tagDWordId);</span>
+<span class="lineNum">     211 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 2 times"> + </span>]:<span class="lineCov">          2 :     if(findIterator == m_dicomDict.end())</span>
+<span class="lineNum">     212 </span>                :            :     {
+<span class="lineNum">     213 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :         IMEBRA_THROW(DictionaryUnknownTagError, &quot;Unknown tag &quot; &lt;&lt; std::hex &lt;&lt; groupId &lt;&lt; &quot;, &quot; &lt;&lt; std::hex &lt;&lt; tagId);</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>][<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 19 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span>][<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 25 was not executed"> # </span><span class="branchNoExec" title="Branch 26 was not executed"> # </span>][<span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 36 was not executed"> # </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span>][<span class="branchNoExec" title="Branch 40 was not executed"> # </span><span class="branchNoExec" title="Branch 41 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 45 was not executed"> # </span>][<span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span>][<span class="branchNoExec" title="Branch 61 was not executed"> # </span><span class="branchNoExec" title="Branch 62 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 64 was not executed"> # </span><span class="branchNoExec" title="Branch 65 was not executed"> # </span>][<span class="branchNoExec" title="Branch 68 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 83 was not executed"> # </span><span class="branchNoExec" title="Branch 84 was not executed"> # </span>]
+<span class="lineNum">     214 </span>                :            :     }
+<span class="lineNum">     215 </span>                :            : 
+<span class="lineNum">     216 </span>                :<span class="lineCov">          2 :     return findIterator-&gt;second.m_multiplicityMin;</span>
+<span class="lineNum">     217 </span>                :            : 
+<span class="lineNum">     218 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     219 </span>                :            : }
+<a name="220"><span class="lineNum">     220 </span>                :            : </a>
+<span class="lineNum">     221 </span>                :            : 
+<span class="lineNum">     222 </span>                :<span class="lineCov">          2 : std::uint32_t dicomDictionary::getTagMultiplicityMax(std::uint16_t groupId, std::uint16_t tagId) const</span>
+<span class="lineNum">     223 </span>                :            : {
+<span class="lineNum">     224 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     225 </span>                :            : 
+<span class="lineNum">     226 </span>                :<span class="lineCov">          2 :     std::uint32_t tagDWordId=(((std::uint32_t)groupId)&lt;&lt;16) | (std::uint32_t)tagId;</span>
+<span class="lineNum">     227 </span>                :            : 
+<span class="lineNum">     228 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :     tDicomDictionary::const_iterator findIterator = m_dicomDict.find(tagDWordId);</span>
+<span class="lineNum">     229 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 2 times"> + </span>]:<span class="lineCov">          2 :     if(findIterator == m_dicomDict.end())</span>
+<span class="lineNum">     230 </span>                :            :     {
+<span class="lineNum">     231 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :         IMEBRA_THROW(DictionaryUnknownTagError, &quot;Unknown tag &quot; &lt;&lt; std::hex &lt;&lt; groupId &lt;&lt; &quot;, &quot; &lt;&lt; std::hex &lt;&lt; tagId);</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>][<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 19 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span>][<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 25 was not executed"> # </span><span class="branchNoExec" title="Branch 26 was not executed"> # </span>][<span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 36 was not executed"> # </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span>][<span class="branchNoExec" title="Branch 40 was not executed"> # </span><span class="branchNoExec" title="Branch 41 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 45 was not executed"> # </span>][<span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span>][<span class="branchNoExec" title="Branch 61 was not executed"> # </span><span class="branchNoExec" title="Branch 62 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 64 was not executed"> # </span><span class="branchNoExec" title="Branch 65 was not executed"> # </span>][<span class="branchNoExec" title="Branch 68 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 83 was not executed"> # </span><span class="branchNoExec" title="Branch 84 was not executed"> # </span>]
+<span class="lineNum">     232 </span>                :            :     }
+<span class="lineNum">     233 </span>                :            : 
+<span class="lineNum">     234 </span>                :<span class="lineCov">          2 :     return findIterator-&gt;second.m_multiplicityMax;</span>
+<span class="lineNum">     235 </span>                :            : 
+<span class="lineNum">     236 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     237 </span>                :            : }
+<a name="238"><span class="lineNum">     238 </span>                :            : </a>
+<span class="lineNum">     239 </span>                :            : 
+<span class="lineNum">     240 </span>                :<span class="lineCov">          2 : std::uint32_t dicomDictionary::getTagMultiplicityStep(std::uint16_t groupId, std::uint16_t tagId) const</span>
+<span class="lineNum">     241 </span>                :            : {
+<span class="lineNum">     242 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     243 </span>                :            : 
+<span class="lineNum">     244 </span>                :<span class="lineCov">          2 :     std::uint32_t tagDWordId=(((std::uint32_t)groupId)&lt;&lt;16) | (std::uint32_t)tagId;</span>
+<span class="lineNum">     245 </span>                :            : 
+<span class="lineNum">     246 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :     tDicomDictionary::const_iterator findIterator = m_dicomDict.find(tagDWordId);</span>
+<span class="lineNum">     247 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 2 times"> + </span>]:<span class="lineCov">          2 :     if(findIterator == m_dicomDict.end())</span>
+<span class="lineNum">     248 </span>                :            :     {
+<span class="lineNum">     249 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :         IMEBRA_THROW(DictionaryUnknownTagError, &quot;Unknown tag &quot; &lt;&lt; std::hex &lt;&lt; groupId &lt;&lt; &quot;, &quot; &lt;&lt; std::hex &lt;&lt; tagId);</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>][<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 19 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span>][<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 25 was not executed"> # </span><span class="branchNoExec" title="Branch 26 was not executed"> # </span>][<span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 36 was not executed"> # </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span>][<span class="branchNoExec" title="Branch 40 was not executed"> # </span><span class="branchNoExec" title="Branch 41 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 45 was not executed"> # </span>][<span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span>][<span class="branchNoExec" title="Branch 61 was not executed"> # </span><span class="branchNoExec" title="Branch 62 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 64 was not executed"> # </span><span class="branchNoExec" title="Branch 65 was not executed"> # </span>][<span class="branchNoExec" title="Branch 68 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 83 was not executed"> # </span><span class="branchNoExec" title="Branch 84 was not executed"> # </span>]
+<span class="lineNum">     250 </span>                :            :     }
+<span class="lineNum">     251 </span>                :            : 
+<span class="lineNum">     252 </span>                :<span class="lineCov">          2 :     return findIterator-&gt;second.m_multiplicityStep;</span>
+<span class="lineNum">     253 </span>                :            : 
+<span class="lineNum">     254 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     255 </span>                :            : }
+<span class="lineNum">     256 </span>                :            : 
+<span class="lineNum">     257 </span>                :            : 
+<span class="lineNum">     258 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     259 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     260 </span>                :            : //
+<span class="lineNum">     261 </span>                :            : //
+<span class="lineNum">     262 </span>                :            : // Return the default type for the specified tag
+<span class="lineNum">     263 </span>                :            : //
+<span class="lineNum">     264 </span>                :            : //
+<a name="265"><span class="lineNum">     265 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     266 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     267 </span>                :<span class="lineCov">     455034 : tagVR_t dicomDictionary::getTagType(std::uint16_t groupId, std::uint16_t tagId) const</span>
+<span class="lineNum">     268 </span>                :            : {
+<span class="lineNum">     269 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     270 </span>                :            : 
+<span class="lineNum">     271 </span>                :<span class="lineCov">     455034 :     std::uint32_t tagDWordId=(((std::uint32_t)groupId)&lt;&lt;16) | (std::uint32_t)tagId;</span>
+<span class="lineNum">     272 </span>                :            : 
+<span class="lineNum">     273 </span>        [<span class="branchCov" title="Branch 1 was taken 455186 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">     455034 :     tDicomDictionary::const_iterator findIterator = m_dicomDict.find(tagDWordId);</span>
+<span class="lineNum">     274 </span>        [<span class="branchCov" title="Branch 2 was taken 2 times"> + </span><span class="branchCov" title="Branch 3 was taken 455163 times"> + </span>]:<span class="lineCov">     455186 :     if(findIterator == m_dicomDict.end())</span>
+<span class="lineNum">     275 </span>                :            :     {
+<span class="lineNum">     276 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          2 :         IMEBRA_THROW(DictionaryUnknownTagError, &quot;Unknown tag &quot; &lt;&lt; std::hex &lt;&lt; groupId &lt;&lt; &quot;, &quot; &lt;&lt; std::hex &lt;&lt; tagId);</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 16 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 17 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 19 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 20 was not taken"> - </span>][<span class="branchCov" title="Branch 22 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 23 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 25 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 26 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 36 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 37 was not taken"> - </span>][<span class="branchCov" title="Branch 40 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 41 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 44 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 45 was not taken"> - </span>][<span class="branchCov" title="Branch 47 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 48 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 58 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 59 was not taken"> - </span>][<span class="branchCov" title="Branch 61 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 62 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 64 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 65 was not taken"> - </span>][<span class="branchCov" title="Branch 68 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 69 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 83 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 84 was not taken"> - </span>]
+<span class="lineNum">     277 </span>                :            :     }
+<span class="lineNum">     278 </span>                :            : 
+<span class="lineNum">     279 </span>                :<span class="lineCov">     455163 :     return findIterator-&gt;second.m_vr0;</span>
+<span class="lineNum">     280 </span>                :            : 
+<span class="lineNum">     281 </span>[<span class="branchCov" title="Branch 4 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">          2 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 17 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 34 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span>][<span class="branchCov" title="Branch 37 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span><span class="branchNoExec" title="Branch 73 was not executed"> # </span> 
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     282 </span>                :            : }
+<a name="283"><span class="lineNum">     283 </span>                :            : </a>
+<span class="lineNum">     284 </span>                :            : 
+<span class="lineNum">     285 </span>                :<span class="lineNoCov">          0 : bool dicomDictionary::isDataTypeValid(const std::string&amp; dataType) const</span>
+<span class="lineNum">     286 </span>                :            : {
+<span class="lineNum">     287 </span>                :            :     try
+<span class="lineNum">     288 </span>                :            :     {
+<span class="lineNum">     289 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         stringDataTypeToEnum(dataType);</span>
+<span class="lineNum">     290 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return true;</span>
+<span class="lineNum">     291 </span>                :            :     }
+<span class="lineNum">     292 </span>                :<span class="lineNoCov">          0 :     catch(const DictionaryUnknownDataTypeError&amp;)</span>
+<span class="lineNum">     293 </span>                :            :     {
+<span class="lineNum">     294 </span>                :<span class="lineNoCov">          0 :         return false;</span>
+<span class="lineNum">     295 </span>                :            :     }
+<span class="lineNum">     296 </span>                :            : }
+<a name="297"><span class="lineNum">     297 </span>                :            : </a>
+<span class="lineNum">     298 </span>                :            : 
+<span class="lineNum">     299 </span>                :<span class="lineCov">     260577 : tagVR_t dicomDictionary::stringDataTypeToEnum(const std::string&amp; dataType) const</span>
+<span class="lineNum">     300 </span>                :            : {
+<span class="lineNum">     301 </span>                :<span class="lineCov">     260577 :     std::uint16_t enumVR = MAKE_VR_ENUM(dataType);</span>
+<span class="lineNum">     302 </span>                :            : 
+<span class="lineNum">     303 </span>[<span class="branchCov" title="Branch 2 was taken 260601 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchNoCov" title="Branch 5 was not taken"> - </span><span class="branchCov" title="Branch 6 was taken 260594 times"> + </span>]:<span class="lineCov">     260601 :     if(m_vrDict.find((tagVR_t)enumVR) == m_vrDict.end())</span>
+<span class="lineNum">     304 </span>                :            :     {
+<span class="lineNum">     305 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :         IMEBRA_THROW(DictionaryUnknownDataTypeError, &quot;Unknown data type &quot; &lt;&lt; dataType);</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>][<span class="branchNoExec" title="Branch 19 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 24 was not executed"> # </span><span class="branchNoExec" title="Branch 25 was not executed"> # </span>][<span class="branchNoExec" title="Branch 28 was not executed"> # </span><span class="branchNoExec" title="Branch 29 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 33 was not executed"> # </span>][<span class="branchNoExec" title="Branch 35 was not executed"> # </span><span class="branchNoExec" title="Branch 36 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 46 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span>][<span class="branchNoExec" title="Branch 49 was not executed"> # </span><span class="branchNoExec" title="Branch 50 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 53 was not executed"> # </span>][<span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 57 was not executed"> # </span>]
+<span class="lineNum">     306 </span>                :            :     }
+<span class="lineNum">     307 </span>                :            : 
+<span class="lineNum">     308 </span>                :<span class="lineCov">     260594 :     return (tagVR_t)enumVR;</span>
+<span class="lineNum">     309 </span>                :            : }
+<a name="310"><span class="lineNum">     310 </span>                :            : </a>
+<span class="lineNum">     311 </span>                :            : 
+<span class="lineNum">     312 </span>                :<span class="lineCov">     247296 : std::string dicomDictionary::enumDataTypeToString(tagVR_t dataType) const</span>
+<span class="lineNum">     313 </span>                :            : {
+<span class="lineNum">     314 </span>        [<span class="branchCov" title="Branch 2 was taken 247314 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     247296 :     std::string returnType((size_t)2, ' ');</span>
+<span class="lineNum">     315 </span>        [<span class="branchCov" title="Branch 1 was taken 247312 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">     247316 :     returnType[0] = (char)(((std::uint16_t)dataType &gt;&gt; 8) &amp; 0xff);</span>
+<span class="lineNum">     316 </span>        [<span class="branchCov" title="Branch 1 was taken 247303 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">     247312 :     returnType[1] = (char)((std::uint16_t)dataType &amp; 0xff);</span>
+<span class="lineNum">     317 </span>                :            : 
+<span class="lineNum">     318 </span>                :<span class="lineCov">     247303 :     return returnType;</span>
+<span class="lineNum">     319 </span>                :            : }
+<span class="lineNum">     320 </span>                :            : 
+<span class="lineNum">     321 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     322 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     323 </span>                :            : //
+<span class="lineNum">     324 </span>                :            : //
+<span class="lineNum">     325 </span>                :            : // Return true if the specified data type must use a
+<span class="lineNum">     326 </span>                :            : //  long length descriptor
+<span class="lineNum">     327 </span>                :            : //
+<span class="lineNum">     328 </span>                :            : //
+<a name="329"><span class="lineNum">     329 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     330 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     331 </span>                :<span class="lineCov">    1048742 : bool dicomDictionary::getLongLength(tagVR_t dataType) const</span>
+<span class="lineNum">     332 </span>                :            : {
+<span class="lineNum">     333 </span>        [<span class="branchCov" title="Branch 1 was taken 1048786 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">    1048742 :     tVRDictionary::const_iterator findIterator = m_vrDict.find(dataType);</span>
+<span class="lineNum">     334 </span>                :            : 
+<span class="lineNum">     335 </span>        [<span class="branchCov" title="Branch 2 was taken 5 times"> + </span><span class="branchCov" title="Branch 3 was taken 1048837 times"> + </span>]:<span class="lineCov">    1048786 :     if(findIterator == m_vrDict.end())</span>
+<span class="lineNum">     336 </span>                :            :     {
+<span class="lineNum">     337 </span>                :<span class="lineCov">          5 :         return false;</span>
+<span class="lineNum">     338 </span>                :            :     }
+<span class="lineNum">     339 </span>                :            : 
+<span class="lineNum">     340 </span>                :<span class="lineCov">    1048842 :     return findIterator-&gt;second.m_longLength;</span>
+<span class="lineNum">     341 </span>                :            : }
+<span class="lineNum">     342 </span>                :            : 
+<span class="lineNum">     343 </span>                :            : 
+<span class="lineNum">     344 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     345 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     346 </span>                :            : //
+<span class="lineNum">     347 </span>                :            : //
+<span class="lineNum">     348 </span>                :            : // Return the word size for the specified data type
+<span class="lineNum">     349 </span>                :            : //
+<span class="lineNum">     350 </span>                :            : //
+<a name="351"><span class="lineNum">     351 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     352 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     353 </span>                :<span class="lineCov">     794529 : std::uint32_t dicomDictionary::getWordSize(tagVR_t dataType) const</span>
+<span class="lineNum">     354 </span>                :            : {
+<span class="lineNum">     355 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     356 </span>                :            : 
+<span class="lineNum">     357 </span>        [<span class="branchCov" title="Branch 1 was taken 794704 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">     794529 :     tVRDictionary::const_iterator findIterator = m_vrDict.find(dataType);</span>
+<span class="lineNum">     358 </span>                :            : 
+<span class="lineNum">     359 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 794580 times"> + </span>]:<span class="lineCov">     794704 :     if(findIterator == m_vrDict.end())</span>
+<span class="lineNum">     360 </span>                :            :     {
+<span class="lineNum">     361 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :         IMEBRA_THROW(DictionaryUnknownDataTypeError, &quot;Unregistered data type&quot; &lt;&lt; (std::uint16_t)dataType);</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>][<span class="branchNoExec" title="Branch 19 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 24 was not executed"> # </span><span class="branchNoExec" title="Branch 25 was not executed"> # </span>][<span class="branchNoExec" title="Branch 28 was not executed"> # </span><span class="branchNoExec" title="Branch 29 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 33 was not executed"> # </span>][<span class="branchNoExec" title="Branch 35 was not executed"> # </span><span class="branchNoExec" title="Branch 36 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 46 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span>][<span class="branchNoExec" title="Branch 49 was not executed"> # </span><span class="branchNoExec" title="Branch 50 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 53 was not executed"> # </span>][<span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 57 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 71 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span>]
+<span class="lineNum">     362 </span>                :            :     }
+<span class="lineNum">     363 </span>                :            : 
+<span class="lineNum">     364 </span>                :<span class="lineCov">     794580 :     return findIterator-&gt;second.m_wordLength;</span>
+<span class="lineNum">     365 </span>                :            : 
+<span class="lineNum">     366 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     367 </span>                :            : }
+<span class="lineNum">     368 </span>                :            : 
+<span class="lineNum">     369 </span>                :            : 
+<span class="lineNum">     370 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     371 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     372 </span>                :            : //
+<span class="lineNum">     373 </span>                :            : //
+<span class="lineNum">     374 </span>                :            : // Return the max size in bytes for the specified data
+<span class="lineNum">     375 </span>                :            : //  type
+<span class="lineNum">     376 </span>                :            : //
+<span class="lineNum">     377 </span>                :            : //
+<a name="378"><span class="lineNum">     378 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     379 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     380 </span>                :<span class="lineCov">          1 : std::uint32_t dicomDictionary::getMaxSize(tagVR_t dataType) const</span>
+<span class="lineNum">     381 </span>                :            : {
+<span class="lineNum">     382 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     383 </span>                :            : 
+<span class="lineNum">     384 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     tVRDictionary::const_iterator findIterator = m_vrDict.find(dataType);</span>
+<span class="lineNum">     385 </span>                :            : 
+<span class="lineNum">     386 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>]:<span class="lineCov">          1 :     if(findIterator == m_vrDict.end())</span>
+<span class="lineNum">     387 </span>                :            :     {
+<span class="lineNum">     388 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :         IMEBRA_THROW(DictionaryUnknownDataTypeError, &quot;Unregistered data type &quot; &lt;&lt; (std::uint16_t)dataType);</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>][<span class="branchNoExec" title="Branch 19 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 24 was not executed"> # </span><span class="branchNoExec" title="Branch 25 was not executed"> # </span>][<span class="branchNoExec" title="Branch 28 was not executed"> # </span><span class="branchNoExec" title="Branch 29 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 33 was not executed"> # </span>][<span class="branchNoExec" title="Branch 35 was not executed"> # </span><span class="branchNoExec" title="Branch 36 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 46 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span>][<span class="branchNoExec" title="Branch 49 was not executed"> # </span><span class="branchNoExec" title="Branch 50 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 53 was not executed"> # </span>][<span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 57 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 71 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span>]
+<span class="lineNum">     389 </span>                :            :     }
+<span class="lineNum">     390 </span>                :            : 
+<span class="lineNum">     391 </span>                :<span class="lineCov">          1 :     return findIterator-&gt;second.m_maxLength;</span>
+<span class="lineNum">     392 </span>                :            : 
+<span class="lineNum">     393 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     394 </span>                :            : }
+<span class="lineNum">     395 </span>                :            : 
+<span class="lineNum">     396 </span>                :            : 
+<span class="lineNum">     397 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     398 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     399 </span>                :            : //
+<span class="lineNum">     400 </span>                :            : //
+<span class="lineNum">     401 </span>                :            : // Return a pointer to the unique instance of
+<span class="lineNum">     402 </span>                :            : //  dicomDictionary
+<span class="lineNum">     403 </span>                :            : //
+<span class="lineNum">     404 </span>                :            : //
+<a name="405"><span class="lineNum">     405 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">     406 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     407 </span>                :<span class="lineCov">    2805362 : dicomDictionary* dicomDictionary::getDicomDictionary()</span>
+<span class="lineNum">     408 </span>                :            : {
+<span class="lineNum">     409 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     410 </span>                :            : 
+<span class="lineNum">     411 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 2805361 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">    2805362 :     static dicomDictionary m_imbxDicomDictionary;</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 6 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>]
+<span class="lineNum">     412 </span>                :<span class="lineCov">    2805381 :     return &amp;m_imbxDicomDictionary;</span>
+<span class="lineNum">     413 </span>                :            : 
+<span class="lineNum">     414 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     415 </span>                :            : }
+<span class="lineNum">     416 </span>                :            : 
+<span class="lineNum">     417 </span>                :            : 
+<a name="418"><span class="lineNum">     418 </span>                :            : } // namespace implementation</a>
+<span class="lineNum">     419 </span>                :            : 
+<span class="lineNum">     420 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 : } // namespace imebra</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

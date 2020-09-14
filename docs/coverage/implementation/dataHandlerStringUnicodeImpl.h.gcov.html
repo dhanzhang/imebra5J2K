@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/dataHandlerStringUnicodeImpl.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - dataHandlerStringUnicodeImpl.h<span style="font-size: 80%;"> (source / <a href="dataHandlerStringUnicodeImpl.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryLo">50.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">32</td>
+            <td class="headerCovTableEntryLo">25.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file dataHandlerStringUnicode.h
+<span class="lineNum">      15 </span>                :            :     \brief Declaration of the base class used by the string handlers that need to work
+<span class="lineNum">      16 </span>                :            :             with different charsets.
+<span class="lineNum">      17 </span>                :            : 
+<span class="lineNum">      18 </span>                :            : */
+<span class="lineNum">      19 </span>                :            : 
+<span class="lineNum">      20 </span>                :            : #if !defined(imebraDataHandlerStringUnicode_367AAE47_6FD7_4107_AB5B_25A355C5CB6E__INCLUDED_)
+<span class="lineNum">      21 </span>                :            : #define imebraDataHandlerStringUnicode_367AAE47_6FD7_4107_AB5B_25A355C5CB6E__INCLUDED_
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : #include &quot;charsetConversionImpl.h&quot;
+<span class="lineNum">      24 </span>                :            : #include &quot;dataHandlerImpl.h&quot;
+<span class="lineNum">      25 </span>                :            : #include &lt;memory&gt;
+<span class="lineNum">      26 </span>                :            : #include &lt;vector&gt;
+<span class="lineNum">      27 </span>                :            : #include &lt;string&gt;
+<span class="lineNum">      28 </span>                :            : 
+<span class="lineNum">      29 </span>                :            : 
+<span class="lineNum">      30 </span>                :            : namespace imebra
+<span class="lineNum">      31 </span>                :            : {
+<span class="lineNum">      32 </span>                :            : 
+<span class="lineNum">      33 </span>                :            : namespace implementation
+<span class="lineNum">      34 </span>                :            : {
+<span class="lineNum">      35 </span>                :            : 
+<span class="lineNum">      36 </span>                :            : namespace handlers
+<span class="lineNum">      37 </span>                :            : {
+<span class="lineNum">      38 </span>                :            : 
+<span class="lineNum">      39 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      40 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      41 </span>                :            : /// \brief This is the base class for all the data handlers
+<span class="lineNum">      42 </span>                :            : ///         that manage strings.
+<span class="lineNum">      43 </span>                :            : ///
+<a name="44"><span class="lineNum">      44 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      45 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      46 </span>                :<span class="lineCov">     170638 : class readingDataHandlerStringUnicode : public readingDataHandler</span>
+<span class="lineNum">      47 </span>                :            : {
+<span class="lineNum">      48 </span>                :            : public:
+<span class="lineNum">      49 </span>                :            :     readingDataHandlerStringUnicode(const memory&amp; parseMemory, const std::shared_ptr&lt;const charsetsList_t&gt;&amp; pCharsets, tagVR_t dataType, const wchar_t separator, const std::uint8_t paddingByte);
+<span class="lineNum">      50 </span>                :            : 
+<span class="lineNum">      51 </span>                :            :     // Get the data element as a signed long
+<span class="lineNum">      52 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      53 </span>                :            :     virtual std::int32_t getInt32(const size_t index) const override;
+<span class="lineNum">      54 </span>                :            : 
+<span class="lineNum">      55 </span>                :            :     // Get the data element as an unsigned long
+<span class="lineNum">      56 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      57 </span>                :            :     virtual std::uint32_t getUint32(const size_t index) const override;
+<span class="lineNum">      58 </span>                :            : 
+<span class="lineNum">      59 </span>                :            :     // Get the data element as a int16
+<span class="lineNum">      60 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      61 </span>                :            :     virtual std::int16_t getInt16(const size_t index) const override;
+<span class="lineNum">      62 </span>                :            : 
+<span class="lineNum">      63 </span>                :            :     // Get the data element as a uint16
+<span class="lineNum">      64 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      65 </span>                :            :     virtual std::uint16_t getUint16(const size_t index) const override;
+<span class="lineNum">      66 </span>                :            : 
+<span class="lineNum">      67 </span>                :            :     // Get the data element as a int9
+<span class="lineNum">      68 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      69 </span>                :            :     virtual std::int8_t getInt8(const size_t index) const override;
+<span class="lineNum">      70 </span>                :            : 
+<span class="lineNum">      71 </span>                :            :     // Get the data element as a uint8
+<span class="lineNum">      72 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      73 </span>                :            :     virtual std::uint8_t getUint8(const size_t index) const override;
+<span class="lineNum">      74 </span>                :            : 
+<span class="lineNum">      75 </span>                :            :     // Get the data element as a double
+<span class="lineNum">      76 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      77 </span>                :            :     virtual double getDouble(const size_t index) const override;
+<span class="lineNum">      78 </span>                :            : 
+<span class="lineNum">      79 </span>                :            :     // Get the data element as a double
+<span class="lineNum">      80 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      81 </span>                :            :     virtual float getFloat(const size_t index) const override;
+<span class="lineNum">      82 </span>                :            : 
+<span class="lineNum">      83 </span>                :            :     // Get the data element as a string
+<span class="lineNum">      84 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      85 </span>                :            :     virtual std::string getString(const size_t index) const override;
+<span class="lineNum">      86 </span>                :            : 
+<span class="lineNum">      87 </span>                :            :     // Get the data element as an unicode string
+<span class="lineNum">      88 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      89 </span>                :            :     virtual std::wstring getUnicodeString(const size_t index) const override;
+<span class="lineNum">      90 </span>                :            : 
+<span class="lineNum">      91 </span>                :            :     // Retrieve the data element as a string
+<span class="lineNum">      92 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      93 </span>                :            :     virtual size_t getSize() const override;
+<span class="lineNum">      94 </span>                :            : 
+<span class="lineNum">      95 </span>                :            : protected:
+<span class="lineNum">      96 </span>                :            :     std::vector&lt;std::wstring&gt; m_strings;
+<span class="lineNum">      97 </span>                :            : };
+<span class="lineNum">      98 </span>                :            : 
+<span class="lineNum">      99 </span>                :            : 
+<span class="lineNum">     100 </span>                :            : class writingDataHandlerStringUnicode : public writingDataHandler
+<span class="lineNum">     101 </span>                :            : {
+<span class="lineNum">     102 </span>                :            : public:
+<span class="lineNum">     103 </span>                :            :     writingDataHandlerStringUnicode(const std::shared_ptr&lt;buffer&gt;&amp; pBuffer, const std::shared_ptr&lt;const charsetsList_t&gt;&amp; pCharsets, tagVR_t dataType, const wchar_t separator, const size_t unitSize, const size_t maxSize);
+<span class="lineNum">     104 </span>                :            : 
+<span class="lineNum">     105 </span>                :            :     ~writingDataHandlerStringUnicode() override;
+<span class="lineNum">     106 </span>                :            : 
+<span class="lineNum">     107 </span>                :            :     // Set the data element as a signed long
+<span class="lineNum">     108 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     109 </span>                :            :     virtual void setInt32(const size_t index, const std::int32_t value) override;
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>                :            :     // Set the data element as an unsigned long
+<span class="lineNum">     112 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     113 </span>                :            :     virtual void setUint32(const size_t index, const std::uint32_t value) override;
+<span class="lineNum">     114 </span>                :            : 
+<span class="lineNum">     115 </span>                :            :     // Set the data element as a int16
+<span class="lineNum">     116 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     117 </span>                :            :     virtual void setInt16(const size_t index, const std::int16_t value) override;
+<span class="lineNum">     118 </span>                :            : 
+<span class="lineNum">     119 </span>                :            :     // Set the data element as a uint16
+<span class="lineNum">     120 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     121 </span>                :            :     virtual void setUint16(const size_t index, const std::uint16_t value) override;
+<span class="lineNum">     122 </span>                :            : 
+<span class="lineNum">     123 </span>                :            :     // Set the data element as a int8
+<span class="lineNum">     124 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     125 </span>                :            :     virtual void setInt8(const size_t index, const std::int8_t value) override;
+<span class="lineNum">     126 </span>                :            : 
+<span class="lineNum">     127 </span>                :            :     // Set the data element as a uint8
+<span class="lineNum">     128 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     129 </span>                :            :     virtual void setUint8(const size_t index, const std::uint8_t value) override;
+<span class="lineNum">     130 </span>                :            : 
+<span class="lineNum">     131 </span>                :            :     // Set the data element as a double
+<span class="lineNum">     132 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     133 </span>                :            :     virtual void setDouble(const size_t index, const double value) override;
+<span class="lineNum">     134 </span>                :            : 
+<span class="lineNum">     135 </span>                :            :     // Set the data element as a float
+<span class="lineNum">     136 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     137 </span>                :            :     virtual void setFloat(const size_t index, const float value) override;
+<span class="lineNum">     138 </span>                :            : 
+<span class="lineNum">     139 </span>                :            :     // Set the buffer's size, in data elements
+<span class="lineNum">     140 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     141 </span>                :            :     virtual void setSize(const size_t elementsNumber) override;
+<span class="lineNum">     142 </span>                :            : 
+<span class="lineNum">     143 </span>                :            :     virtual size_t getSize() const override;
+<span class="lineNum">     144 </span>                :            : 
+<span class="lineNum">     145 </span>                :            :     virtual void setString(const size_t index, const std::string&amp; value) override;
+<span class="lineNum">     146 </span>                :            : 
+<span class="lineNum">     147 </span>                :            :     virtual void setUnicodeString(const size_t index, const std::wstring&amp; value) override;
+<span class="lineNum">     148 </span>                :            : 
+<span class="lineNum">     149 </span>                :            :     // Throw an exception if the content is not valid
+<span class="lineNum">     150 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     151 </span>                :            :     virtual void validate() const;
+<a name="152"><span class="lineNum">     152 </span>                :            : </a>
+<span class="lineNum">     153 </span>                :            : protected:
+<span class="lineNum">     154 </span>                :<span class="lineCov">          2 :     template&lt;typename U&gt; void convertToString(const size_t index, const U value)</span>
+<span class="lineNum">     155 </span>                :            :     {
+<span class="lineNum">     156 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineCov">          4 :         std::wostringstream conversion;</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 11 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 12 was not taken"> - </span>][<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>]
+<span class="lineNum">     157 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineCov">          2 :         conversion &lt;&lt; +value;</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">     158 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          2 :         setUnicodeString(index, conversion.str());</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>][<span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 17 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>][<span class="branchCov" title="Branch 20 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 25 was not executed"> # </span><span class="branchNoExec" title="Branch 26 was not executed"> # </span>][<span class="branchNoExec" title="Branch 28 was not executed"> # </span><span class="branchNoExec" title="Branch 29 was not executed"> # </span>]
+<span class="lineNum">     159 </span>                :<span class="lineCov">          2 :     }</span>
+<span class="lineNum">     160 </span>                :            : 
+<span class="lineNum">     161 </span>                :            :     std::shared_ptr&lt;memory&gt; m_commitMemory;
+<span class="lineNum">     162 </span>                :            : 
+<span class="lineNum">     163 </span>                :            :     std::vector&lt;std::wstring&gt; m_strings;
+<span class="lineNum">     164 </span>                :            : 
+<span class="lineNum">     165 </span>                :            :     const std::shared_ptr&lt;const charsetsList_t&gt; m_pCharsets;
+<span class="lineNum">     166 </span>                :            : 
+<span class="lineNum">     167 </span>                :            :     wchar_t m_separator;
+<span class="lineNum">     168 </span>                :            :     size_t m_unitSize;
+<span class="lineNum">     169 </span>                :            :     size_t m_maxSize;
+<span class="lineNum">     170 </span>                :            : 
+<span class="lineNum">     171 </span>                :            : private:
+<span class="lineNum">     172 </span>                :            : 
+<span class="lineNum">     173 </span>                :            :     void buildCommitMemory();
+<span class="lineNum">     174 </span>                :            : 
+<span class="lineNum">     175 </span>                :            : 
+<span class="lineNum">     176 </span>                :            : };
+<span class="lineNum">     177 </span>                :            : 
+<span class="lineNum">     178 </span>                :            : 
+<span class="lineNum">     179 </span>                :            : } // namespace handlers
+<span class="lineNum">     180 </span>                :            : 
+<span class="lineNum">     181 </span>                :            : } // namespace implementation
+<span class="lineNum">     182 </span>                :            : 
+<span class="lineNum">     183 </span>                :            : } // namespace imebra
+<span class="lineNum">     184 </span>                :            : 
+<span class="lineNum">     185 </span>                :            : #endif // !defined(imebraDataHandlerStringUnicode_367AAE47_6FD7_4107_AB5B_25A355C5CB6E__INCLUDED_)
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

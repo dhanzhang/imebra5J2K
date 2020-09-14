@@ -1,0 +1,433 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/dicomDirImpl.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - dicomDirImpl.h<span style="font-size: 80%;"> (source / <a href="dicomDirImpl.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement 
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial 
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file dicomDir.h
+<span class="lineNum">      15 </span>                :            :     \brief Declaration of the classes that parse/create a DICOMDIR
+<span class="lineNum">      16 </span>                :            :                 structure (dicomDir and directoryRecord).
+<span class="lineNum">      17 </span>                :            : 
+<span class="lineNum">      18 </span>                :            : */
+<span class="lineNum">      19 </span>                :            : 
+<span class="lineNum">      20 </span>                :            : #if !defined(imebraDicomDir_93F684BF_0024_4bf3_89BA_D98E82A1F44C__INCLUDED_)
+<span class="lineNum">      21 </span>                :            : #define imebraDicomDir_93F684BF_0024_4bf3_89BA_D98E82A1F44C__INCLUDED_
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : #include &lt;memory&gt;
+<span class="lineNum">      24 </span>                :            : #include &lt;string&gt;
+<span class="lineNum">      25 </span>                :            : #include &lt;list&gt;
+<span class="lineNum">      26 </span>                :            : #include &quot;../include/imebra/definitions.h&quot;
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :            : namespace imebra
+<span class="lineNum">      29 </span>                :            : {
+<span class="lineNum">      30 </span>                :            : 
+<span class="lineNum">      31 </span>                :            : namespace implementation
+<span class="lineNum">      32 </span>                :            : {
+<span class="lineNum">      33 </span>                :            : 
+<span class="lineNum">      34 </span>                :            : 
+<span class="lineNum">      35 </span>                :            : class dataSet; // Used in this class
+<span class="lineNum">      36 </span>                :            : class dicomDir;
+<span class="lineNum">      37 </span>                :            : 
+<span class="lineNum">      38 </span>                :            : /// \addtogroup group_dicomdir Dicomdir
+<span class="lineNum">      39 </span>                :            : ///
+<span class="lineNum">      40 </span>                :            : /// @{
+<span class="lineNum">      41 </span>                :            : 
+<span class="lineNum">      42 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      43 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      44 </span>                :            : /// \brief directoryRecord represents a single record in
+<span class="lineNum">      45 </span>                :            : ///         a DICOMDIR structure (see dicomDir).
+<span class="lineNum">      46 </span>                :            : ///
+<span class="lineNum">      47 </span>                :            : /// A new directoryRecord object can be constructed
+<span class="lineNum">      48 </span>                :            : ///  by calling dicomDir::getNewRecord().
+<span class="lineNum">      49 </span>                :            : ///
+<span class="lineNum">      50 </span>                :            : /// 
+<a name="51"><span class="lineNum">      51 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      52 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      53 </span>                :<span class="lineCov">         12 : class directoryRecord</span>
+<span class="lineNum">      54 </span>                :            : {
+<span class="lineNum">      55 </span>                :            :     friend class dicomDir;
+<span class="lineNum">      56 </span>                :            : 
+<span class="lineNum">      57 </span>                :            : public:
+<span class="lineNum">      58 </span>                :            :     /// \brief Constructor. A directoryRecord object must be
+<span class="lineNum">      59 </span>                :            :     ///         connected to a dataSet object, which contains
+<span class="lineNum">      60 </span>                :            :     ///         the record's information.
+<span class="lineNum">      61 </span>                :            :     ///
+<span class="lineNum">      62 </span>                :            :     /// The dataSet object is an item of the sequence tag
+<span class="lineNum">      63 </span>                :            :     ///  0004,1220
+<span class="lineNum">      64 </span>                :            :     ///
+<span class="lineNum">      65 </span>                :            :     /// When a directoryRecord is connected to an empty dataSet
+<span class="lineNum">      66 </span>                :            :     ///  then the other constructor must be used, which allows
+<span class="lineNum">      67 </span>                :            :     ///  to define the record type.
+<span class="lineNum">      68 </span>                :            :     ///
+<span class="lineNum">      69 </span>                :            :     /// @param pDataSet  the dataSet that must be connected
+<span class="lineNum">      70 </span>                :            :     ///                   to the directoryRecord
+<span class="lineNum">      71 </span>                :            :     ///
+<span class="lineNum">      72 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">      73 </span>                :            :     directoryRecord(std::shared_ptr&lt;dataSet&gt; pDataSet);
+<span class="lineNum">      74 </span>                :            : 
+<span class="lineNum">      75 </span>                :            :         /// \brief Returns the dataSet that contains the
+<span class="lineNum">      76 </span>                :            :         ///         record's information.
+<span class="lineNum">      77 </span>                :            :         ///
+<span class="lineNum">      78 </span>                :            :         /// The record's dataSet is embedded in a sequence in the
+<span class="lineNum">      79 </span>                :            :         ///  DICOMDIR dataset.
+<span class="lineNum">      80 </span>                :            :         ///
+<span class="lineNum">      81 </span>                :            :         /// @return the dataSet that contains the record's 
+<span class="lineNum">      82 </span>                :            :         ///          information
+<span class="lineNum">      83 </span>                :            :         ///
+<span class="lineNum">      84 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">      85 </span>                :            :     std::shared_ptr&lt;dataSet&gt; getRecordDataSet() const;
+<span class="lineNum">      86 </span>                :            : 
+<span class="lineNum">      87 </span>                :            :         /// \brief Returns the next sibling record.
+<span class="lineNum">      88 </span>                :            :         ///
+<span class="lineNum">      89 </span>                :            :         /// @return the next sibling record, or 0 if this is the
+<span class="lineNum">      90 </span>                :            :         ///          last record
+<span class="lineNum">      91 </span>                :            :         ///
+<span class="lineNum">      92 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">      93 </span>                :            :     std::shared_ptr&lt;directoryRecord&gt; getNextRecord() const;
+<span class="lineNum">      94 </span>                :            : 
+<span class="lineNum">      95 </span>                :            :         /// \brief Returns the first child record.
+<span class="lineNum">      96 </span>                :            :         ///
+<span class="lineNum">      97 </span>                :            :         /// @return the first child record, or 0 if the record 
+<span class="lineNum">      98 </span>                :            :         ///          doesn't have any child
+<span class="lineNum">      99 </span>                :            :         ///
+<span class="lineNum">     100 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     101 </span>                :            :     std::shared_ptr&lt;directoryRecord&gt; getFirstChildRecord() const;
+<span class="lineNum">     102 </span>                :            :         
+<span class="lineNum">     103 </span>                :            :         /// \brief Sets the next sibling record.
+<span class="lineNum">     104 </span>                :            :         ///
+<span class="lineNum">     105 </span>                :            :         /// The new sibling record takes the place of the old
+<span class="lineNum">     106 </span>                :            :         ///  next sibling record, if it was already set.
+<span class="lineNum">     107 </span>                :            :         ///
+<span class="lineNum">     108 </span>                :            :         /// @param pNextRecord    the next sibling record
+<span class="lineNum">     109 </span>                :            :         ///
+<span class="lineNum">     110 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     111 </span>                :            :         void setNextRecord(std::shared_ptr&lt;directoryRecord&gt; pNextRecord);
+<span class="lineNum">     112 </span>                :            : 
+<span class="lineNum">     113 </span>                :            :         /// \brief Set the first child record.
+<span class="lineNum">     114 </span>                :            :         ///
+<span class="lineNum">     115 </span>                :            :         /// The new child record takes the place of the old child
+<span class="lineNum">     116 </span>                :            :         ///  record, if it was already set.
+<span class="lineNum">     117 </span>                :            :         ///
+<span class="lineNum">     118 </span>                :            :         /// @param pFirstChildRecord the first child record
+<span class="lineNum">     119 </span>                :            :         ///
+<span class="lineNum">     120 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     121 </span>                :            :         void setFirstChildRecord(std::shared_ptr&lt;directoryRecord&gt; pFirstChildRecord);
+<span class="lineNum">     122 </span>                :            : 
+<span class="lineNum">     123 </span>                :            :         /// \brief Get the full path to the  file referenced by
+<span class="lineNum">     124 </span>                :            :         ///         the record.
+<span class="lineNum">     125 </span>                :            :         ///
+<span class="lineNum">     126 </span>                :            :         /// Several calls to this function may have to be made to 
+<span class="lineNum">     127 </span>                :            :         ///  obtain the full file path.
+<span class="lineNum">     128 </span>                :            :         ///
+<span class="lineNum">     129 </span>                :            :         /// The full file path is formed by a list of folder and
+<span class="lineNum">     130 </span>                :            :         ///  by the file name; for each call to this function
+<span class="lineNum">     131 </span>                :            :         ///  the caller has to specify a zero based part number.
+<span class="lineNum">     132 </span>                :            :         ///
+<span class="lineNum">     133 </span>                :            :         /// The last valid part contains the file name, while
+<span class="lineNum">     134 </span>                :            :         ///  the parts before the last one contain the folder
+<span class="lineNum">     135 </span>                :            :         ///  in which the file is stored; each folder is a child
+<span class="lineNum">     136 </span>                :            :         ///  of the folder returned by the previous part.
+<span class="lineNum">     137 </span>                :            :         ///
+<span class="lineNum">     138 </span>                :            :         /// The function returns an empty string if the
+<span class="lineNum">     139 </span>                :            :         ///  specified part doesn't exist.
+<span class="lineNum">     140 </span>                :            :     ///
+<span class="lineNum">     141 </span>                :            :     /// See also setFilePart().
+<span class="lineNum">     142 </span>                :            :         /// 
+<span class="lineNum">     143 </span>                :            :         /// @param part the part to be returned, 0 based.
+<span class="lineNum">     144 </span>                :            :         /// @return the part's name (folder or file), or an
+<span class="lineNum">     145 </span>                :            :         ///          empty string if the requested part doesn't
+<span class="lineNum">     146 </span>                :            :         ///          exist
+<span class="lineNum">     147 </span>                :            :         ///
+<span class="lineNum">     148 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     149 </span>                :            :     fileParts_t getFileParts() const;
+<span class="lineNum">     150 </span>                :            : 
+<span class="lineNum">     151 </span>                :            :         /// \brief Set the full path to the  file referenced by
+<span class="lineNum">     152 </span>                :            :         ///         the record.
+<span class="lineNum">     153 </span>                :            :         ///
+<span class="lineNum">     154 </span>                :            :         /// Several calls to this function may have to be made to
+<span class="lineNum">     155 </span>                :            :         ///  set the full file path.
+<span class="lineNum">     156 </span>                :            :         ///
+<span class="lineNum">     157 </span>                :            :         /// The full file path is formed by a list of folder and
+<span class="lineNum">     158 </span>                :            :         ///  by the file name; for each call to this function
+<span class="lineNum">     159 </span>                :            :         ///  the caller has to specify a zero based part number.
+<span class="lineNum">     160 </span>                :            :         ///
+<span class="lineNum">     161 </span>                :            :         /// The last valid part contains the file name, while
+<span class="lineNum">     162 </span>                :            :         ///  the parts before the last one contain the folder
+<span class="lineNum">     163 </span>                :            :         ///  in which the file is stored; each folder is a child
+<span class="lineNum">     164 </span>                :            :         ///  of the folder set in the previous part.
+<span class="lineNum">     165 </span>                :            :         ///
+<span class="lineNum">     166 </span>                :            :     /// For instance, the file /folder/file.dcm is set
+<span class="lineNum">     167 </span>                :            :     ///  with two calls to setFilePart():
+<span class="lineNum">     168 </span>                :            :     /// - setFilePart(0, &quot;folder&quot;)
+<span class="lineNum">     169 </span>                :            :     /// - setFilePart(1, &quot;file.dcm&quot;)
+<span class="lineNum">     170 </span>                :            :     ///
+<span class="lineNum">     171 </span>                :            :     /// See also getFilePart().
+<span class="lineNum">     172 </span>                :            :         ///
+<span class="lineNum">     173 </span>                :            :         /// @param part the part to be set, 0 based.
+<span class="lineNum">     174 </span>                :            :     /// @param partName tha value to set for the part
+<span class="lineNum">     175 </span>                :            :         ///
+<span class="lineNum">     176 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     177 </span>                :            :     void setFileParts(const fileParts_t&amp; fileParts);
+<span class="lineNum">     178 </span>                :            : 
+<span class="lineNum">     179 </span>                :            :         /// \brief Returns a string representing the record's type.
+<span class="lineNum">     180 </span>                :            :         ///
+<span class="lineNum">     181 </span>                :            :         /// @return the record's type
+<span class="lineNum">     182 </span>                :            :         ///
+<span class="lineNum">     183 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     184 </span>                :            :     std::string getTypeString() const;
+<span class="lineNum">     185 </span>                :            : 
+<span class="lineNum">     186 </span>                :            :         /// \brief Sets the record's type.
+<span class="lineNum">     187 </span>                :            :         ///
+<span class="lineNum">     188 </span>                :            :         /// @param recordType  the string representing the record's
+<span class="lineNum">     189 </span>                :            :         ///                     type
+<span class="lineNum">     190 </span>                :            :         ///
+<span class="lineNum">     191 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     192 </span>                :            :     void setTypeString(const std::string&amp; recordType);
+<span class="lineNum">     193 </span>                :            : 
+<span class="lineNum">     194 </span>                :            : private:
+<span class="lineNum">     195 </span>                :            :     void checkCircularReference(directoryRecord* pStartRecord);
+<span class="lineNum">     196 </span>                :            : 
+<span class="lineNum">     197 </span>                :            :         void updateOffsets();
+<span class="lineNum">     198 </span>                :            : 
+<span class="lineNum">     199 </span>                :            :         std::shared_ptr&lt;directoryRecord&gt; m_pNextRecord;
+<span class="lineNum">     200 </span>                :            :         std::shared_ptr&lt;directoryRecord&gt; m_pFirstChildRecord;
+<span class="lineNum">     201 </span>                :            : 
+<span class="lineNum">     202 </span>                :            :     std::shared_ptr&lt;dataSet&gt; m_pDataSet;
+<span class="lineNum">     203 </span>                :            : };
+<span class="lineNum">     204 </span>                :            : 
+<span class="lineNum">     205 </span>                :            : 
+<span class="lineNum">     206 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     207 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     208 </span>                :            : /// \brief A dicomDir object contains the information about
+<span class="lineNum">     209 </span>                :            : ///         the tree structure of a DICOMDIR dataset.
+<span class="lineNum">     210 </span>                :            : ///
+<span class="lineNum">     211 </span>                :            : /// The dicomDir class connects to the DICOMDIR dataset
+<span class="lineNum">     212 </span>                :            : ///  specified in the constructor and detects the DICOMDIR
+<span class="lineNum">     213 </span>                :            : ///  tree structure that it contains.
+<span class="lineNum">     214 </span>                :            : ///
+<span class="lineNum">     215 </span>                :            : /// Each directory record in the DICOMDIR structure is
+<span class="lineNum">     216 </span>                :            : ///  represented by a directoryRecord class.
+<span class="lineNum">     217 </span>                :            : ///
+<span class="lineNum">     218 </span>                :            : /// The first root directoryRecord can be obtained with
+<span class="lineNum">     219 </span>                :            : ///  a call to getFirstRootRecord().
+<span class="lineNum">     220 </span>                :            : ///
+<span class="lineNum">     221 </span>                :            : /// Any change made to the dicomDir class is immediately
+<span class="lineNum">     222 </span>                :            : ///  reflected into the connected dataset.
+<span class="lineNum">     223 </span>                :            : ///
+<span class="lineNum">     224 </span>                :            : /// WARNING: all the directoryRecord allocated by this
+<span class="lineNum">     225 </span>                :            : ///  class are released only when the dicomDir itself
+<span class="lineNum">     226 </span>                :            : ///  is released, even if the directoryRecord are 
+<span class="lineNum">     227 </span>                :            : ///  explicitly released by your application.\n
+<span class="lineNum">     228 </span>                :            : /// 
+<span class="lineNum">     229 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     230 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">     231 </span>                :            : class dicomDir
+<span class="lineNum">     232 </span>                :            : {
+<span class="lineNum">     233 </span>                :            : public:
+<span class="lineNum">     234 </span>                :            :     dicomDir();
+<span class="lineNum">     235 </span>                :            : 
+<span class="lineNum">     236 </span>                :            :         /// \brief Initializes a dicomDir object and attach it to 
+<span class="lineNum">     237 </span>                :            :         ///         a dataset.
+<span class="lineNum">     238 </span>                :            :         ///
+<span class="lineNum">     239 </span>                :            :         /// If a dataSet is specified then the constructor parses
+<span class="lineNum">     240 </span>                :            :         ///  it and build an in memory representation of the
+<span class="lineNum">     241 </span>                :            :         ///  directory tree and its records. The first root record
+<span class="lineNum">     242 </span>                :            :         ///  can be retrieved with a call to getFirstRootRecord().
+<span class="lineNum">     243 </span>                :            :         ///
+<span class="lineNum">     244 </span>                :            :         /// @param pDataSet   the dataSet that contains or will 
+<span class="lineNum">     245 </span>                :            :         ///                    contain the DICOMDIR structure. 
+<span class="lineNum">     246 </span>                :            :         ///                   If a null pointer is passed, then a
+<span class="lineNum">     247 </span>                :            :         ///                    new dataSet is created by this
+<span class="lineNum">     248 </span>                :            :         ///                    constructor
+<span class="lineNum">     249 </span>                :            :         ///
+<span class="lineNum">     250 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     251 </span>                :            :         dicomDir(std::shared_ptr&lt;dataSet&gt; pDataSet);
+<span class="lineNum">     252 </span>                :            : 
+<span class="lineNum">     253 </span>                :            :     // Destructor.
+<span class="lineNum">     254 </span>                :            :     //
+<span class="lineNum">     255 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     256 </span>                :            :     virtual ~dicomDir();
+<span class="lineNum">     257 </span>                :            : 
+<span class="lineNum">     258 </span>                :            :         /// \brief Returns the DICOMDIR dataset.
+<span class="lineNum">     259 </span>                :            :         ///
+<span class="lineNum">     260 </span>                :            :         /// This is the same dataset specified in the constructor
+<span class="lineNum">     261 </span>                :            :         ///  dicomDir::dicomDir() and returned by buildDataSet().
+<span class="lineNum">     262 </span>                :            :         ///
+<span class="lineNum">     263 </span>                :            :         /// @return the dataset containing the DICOMDIR
+<span class="lineNum">     264 </span>                :            :         ///          information
+<span class="lineNum">     265 </span>                :            :         ///
+<span class="lineNum">     266 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     267 </span>                :            :     std::shared_ptr&lt;dataSet&gt; getDirectoryDataSet() const;
+<span class="lineNum">     268 </span>                :            : 
+<span class="lineNum">     269 </span>                :            :         /// \brief Creates a new directoryRecord and embeds its
+<span class="lineNum">     270 </span>                :            :         ///         dataSet into the DICOMDIR sequence of items.
+<span class="lineNum">     271 </span>                :            :         ///
+<span class="lineNum">     272 </span>                :            :         /// Once the new directoryRecord has been returned, the
+<span class="lineNum">     273 </span>                :            :         ///  calling application should set the proper record's
+<span class="lineNum">     274 </span>                :            :         ///  values and specify the relationship with other items
+<span class="lineNum">     275 </span>                :            :         ///  by calling setFirstRootRecord() or 
+<span class="lineNum">     276 </span>                :            :         ///  directoryRecord::setNextRecord() or 
+<span class="lineNum">     277 </span>                :            :     ///  directoryRecord::setFirstChildRecord().
+<span class="lineNum">     278 </span>                :            :         ///
+<span class="lineNum">     279 </span>                :            :         /// @return a new directoryRecord object belonging to the
+<span class="lineNum">     280 </span>                :            :         ///         DICOMDIR
+<span class="lineNum">     281 </span>                :            :         ///
+<span class="lineNum">     282 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     283 </span>                :            :     std::shared_ptr&lt;directoryRecord&gt; getNewRecord(const std::string&amp; recordType);
+<span class="lineNum">     284 </span>                :            : 
+<span class="lineNum">     285 </span>                :            :         /// \brief Returns the first root record in the DICOMDIR.
+<span class="lineNum">     286 </span>                :            :         ///
+<span class="lineNum">     287 </span>                :            :         /// Once the first root record has been retrieved, the
+<span class="lineNum">     288 </span>                :            :         ///  application can retrieve sibling root records by
+<span class="lineNum">     289 </span>                :            :         ///  calling directoryRecord::getNextRecord().
+<span class="lineNum">     290 </span>                :            :         ///
+<span class="lineNum">     291 </span>                :            :         /// @return the first root record in the DICOMDIR.
+<span class="lineNum">     292 </span>                :            :         ///
+<span class="lineNum">     293 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     294 </span>                :            :     std::shared_ptr&lt;directoryRecord&gt; getFirstRootRecord() const;
+<span class="lineNum">     295 </span>                :            : 
+<span class="lineNum">     296 </span>                :            :         /// \brief Sets the first root record in the DICOMDIR.
+<span class="lineNum">     297 </span>                :            :         ///
+<span class="lineNum">     298 </span>                :            :         /// @param pFirstRootRecord a directoryRecord obtained with
+<span class="lineNum">     299 </span>                :            :         ///                          a call to getNewRecord().
+<span class="lineNum">     300 </span>                :            :         ///                         The directoryRecord will be the
+<span class="lineNum">     301 </span>                :            :         ///                          first root record in the 
+<span class="lineNum">     302 </span>                :            :         ///                          directory
+<span class="lineNum">     303 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     304 </span>                :            :         void setFirstRootRecord(std::shared_ptr&lt;directoryRecord&gt; pFirstRootRecord);
+<span class="lineNum">     305 </span>                :            : 
+<span class="lineNum">     306 </span>                :            :         /// \brief Updates the dataSet containing the DICOMDIR
+<span class="lineNum">     307 </span>                :            :         ///         with the information contained in the directory
+<span class="lineNum">     308 </span>                :            :         ///         records.
+<span class="lineNum">     309 </span>                :            :         ///
+<span class="lineNum">     310 </span>                :            :         /// Before building the DICOMDIR dataSet remember to set
+<span class="lineNum">     311 </span>                :            :         ///  the following values in the dataSet (call
+<span class="lineNum">     312 </span>                :            :         ///  getDirectoryDataSet() to get the dataSet):
+<span class="lineNum">     313 </span>                :            :         /// - tag 0x2,0x3: Media Storage SOP instance UID
+<span class="lineNum">     314 </span>                :            :         /// - tag 0x2,0x12: Implementation class UID
+<span class="lineNum">     315 </span>                :            :         /// - tag 0x2,0x13: Implementation version name
+<span class="lineNum">     316 </span>                :            :         /// - tag 0x2,0x16: Source application Entity Title
+<span class="lineNum">     317 </span>                :            :         ///
+<span class="lineNum">     318 </span>                :            :         /// Please note that if any data is added to the directory
+<span class="lineNum">     319 </span>                :            :         ///  or any of the directoryItem objects after a call to
+<span class="lineNum">     320 </span>                :            :         ///  buildDataSet() then the dataset has to be rebuilt once
+<span class="lineNum">     321 </span>                :            :         ///  more with another call to buildDataSet().
+<span class="lineNum">     322 </span>                :            :         ///
+<span class="lineNum">     323 </span>                :            :         /// buildDataSet() doesn't return a new dataSet but 
+<span class="lineNum">     324 </span>                :            :         ///  modifies the dataSet specified in the constructor.
+<span class="lineNum">     325 </span>                :            :         ///
+<span class="lineNum">     326 </span>                :            :         /// @return a pointer to the updated dataSet
+<span class="lineNum">     327 </span>                :            :         ///
+<span class="lineNum">     328 </span>                :            :         ///////////////////////////////////////////////////////////
+<span class="lineNum">     329 </span>                :            :         std::shared_ptr&lt;dataSet&gt; buildDataSet();
+<span class="lineNum">     330 </span>                :            : 
+<span class="lineNum">     331 </span>                :            : protected:
+<span class="lineNum">     332 </span>                :            :         std::shared_ptr&lt;dataSet&gt; m_pDataSet;
+<span class="lineNum">     333 </span>                :            : 
+<span class="lineNum">     334 </span>                :            :         std::shared_ptr&lt;directoryRecord&gt; m_pFirstRootRecord;
+<span class="lineNum">     335 </span>                :            : 
+<span class="lineNum">     336 </span>                :            :         typedef std::list&lt;std::shared_ptr&lt;directoryRecord&gt; &gt; tRecordsList;
+<span class="lineNum">     337 </span>                :            :         tRecordsList m_recordsList;
+<span class="lineNum">     338 </span>                :            : };
+<span class="lineNum">     339 </span>                :            : 
+<span class="lineNum">     340 </span>                :            : 
+<span class="lineNum">     341 </span>                :            : 
+<span class="lineNum">     342 </span>                :            : /// @}
+<span class="lineNum">     343 </span>                :            : 
+<span class="lineNum">     344 </span>                :            : } // namespace implementation
+<span class="lineNum">     345 </span>                :            : 
+<span class="lineNum">     346 </span>                :            : } // namespace imebra
+<span class="lineNum">     347 </span>                :            : 
+<span class="lineNum">     348 </span>                :            : #endif // !defined(imebraDicomDir_93F684BF_0024_4bf3_89BA_D98E82A1F44C__INCLUDED_)
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

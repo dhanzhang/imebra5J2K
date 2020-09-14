@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - implementation/modalityVOILUTImpl.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">implementation</a> - modalityVOILUTImpl.cpp<span style="font-size: 80%;"> (source / <a href="modalityVOILUTImpl.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">36</td>
+            <td class="headerCovTableEntry">48</td>
+            <td class="headerCovTableEntryMed">75.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">35</td>
+            <td class="headerCovTableEntry">174</td>
+            <td class="headerCovTableEntryLo">20.1 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2017 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file modalityVOILUT.cpp
+<span class="lineNum">      15 </span>                :            :     \brief Implementation of the class modalityVOILUT.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #include &quot;exceptionImpl.h&quot;
+<span class="lineNum">      20 </span>                :            : #include &quot;modalityVOILUTImpl.h&quot;
+<span class="lineNum">      21 </span>                :            : #include &quot;dataSetImpl.h&quot;
+<span class="lineNum">      22 </span>                :            : #include &quot;colorTransformsFactoryImpl.h&quot;
+<span class="lineNum">      23 </span>                :            : #include &lt;math.h&gt;
+<span class="lineNum">      24 </span>                :            : #include &lt;limits&gt;
+<span class="lineNum">      25 </span>                :            : 
+<span class="lineNum">      26 </span>                :            : namespace imebra
+<span class="lineNum">      27 </span>                :            : {
+<span class="lineNum">      28 </span>                :            : 
+<span class="lineNum">      29 </span>                :            : namespace implementation
+<span class="lineNum">      30 </span>                :            : {
+<span class="lineNum">      31 </span>                :            : 
+<span class="lineNum">      32 </span>                :            : namespace transforms
+<span class="lineNum">      33 </span>                :            : {
+<span class="lineNum">      34 </span>                :            : 
+<span class="lineNum">      35 </span>                :            : 
+<span class="lineNum">      36 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      37 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      38 </span>                :            : //
+<span class="lineNum">      39 </span>                :            : //
+<span class="lineNum">      40 </span>                :            : // Modality VOILUT transform
+<span class="lineNum">      41 </span>                :            : //
+<span class="lineNum">      42 </span>                :            : //
+<a name="43"><span class="lineNum">      43 </span>                :            : ///////////////////////////////////////////////////////////</a>
+<span class="lineNum">      44 </span>                :            : ///////////////////////////////////////////////////////////
+<span class="lineNum">      45 </span>                :<span class="lineCov">         10 : modalityVOILUT::modalityVOILUT(std::shared_ptr&lt;const dataSet&gt; pDataSet):</span>
+<span class="lineNum">      46 </span>        [<span class="branchCov" title="Branch 5 was taken 10 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">         10 :         m_pDataSet(pDataSet), m_voiLut(0), m_rescaleIntercept(pDataSet-&gt;getDouble(0x0028, 0, 0x1052, 0, 0, 0)), m_rescaleSlope(1.0), m_bEmpty(true)</span>
+<span class="lineNum">      47 </span>                :            : 
+<span class="lineNum">      48 </span>                :            : {
+<span class="lineNum">      49 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">      50 </span>                :            : 
+<span class="lineNum">      51 </span>                :            :     try
+<span class="lineNum">      52 </span>                :            :     {
+<span class="lineNum">      53 </span>        [<span class="branchCov" title="Branch 2 was taken 7 times"> + </span><span class="branchCov" title="Branch 3 was taken 3 times"> + </span>]:<span class="lineCov">         10 :         m_rescaleSlope = m_pDataSet-&gt;getDouble(0x0028, 0, 0x1053, 0x0, 0);</span>
+<span class="lineNum">      54 </span>                :<span class="lineCov">          7 :         m_bEmpty = false;</span>
+<span class="lineNum">      55 </span>                :            :     }
+<span class="lineNum">      56 </span>  [<span class="branchCov" title="Branch 2 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span> :<span class="lineCov">          6 :     catch(const MissingDataElementError&amp;)</span>
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">      57 </span>                :            :     {
+<span class="lineNum">      58 </span>                :            :         try
+<span class="lineNum">      59 </span>                :            :         {
+<span class="lineNum">      60 </span>        [<span class="branchCov" title="Branch 2 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          3 :             m_voiLut = pDataSet-&gt;getLut(0x0028, 0x3000, 0);</span>
+<span class="lineNum">      61 </span>        [<span class="branchCov" title="Branch 2 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          3 :             m_bEmpty = m_voiLut-&gt;getSize() == 0;</span>
+<span class="lineNum">      62 </span>                :            :         }
+<span class="lineNum">      63 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         catch(const MissingDataElementError&amp;)</span>
+<span class="lineNum">      64 </span>                :            :         {
+<span class="lineNum">      65 </span>                :            :             // Nothing to do. Transform is empty
+<span class="lineNum">      66 </span>                :            :         }
+<span class="lineNum">      67 </span>                :            : 
+<span class="lineNum">      68 </span>                :            :     }
+<span class="lineNum">      69 </span>                :            : 
+<span class="lineNum">      70 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<a name="71"><span class="lineNum">      71 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">         13 : }</span></a>
+<span class="lineNum">      72 </span>                :            : 
+<span class="lineNum">      73 </span>                :<span class="lineCov">         27 : bool modalityVOILUT::isEmpty() const</span>
+<span class="lineNum">      74 </span>                :            : {
+<span class="lineNum">      75 </span>                :<span class="lineCov">         27 :     return m_bEmpty;</span>
+<span class="lineNum">      76 </span>                :            : }
+<a name="77"><span class="lineNum">      77 </span>                :            : </a>
+<span class="lineNum">      78 </span>                :            : 
+<span class="lineNum">      79 </span>                :<span class="lineCov">         10 : std::shared_ptr&lt;image&gt; modalityVOILUT::allocateOutputImage(</span>
+<span class="lineNum">      80 </span>                :            :         bitDepth_t inputDepth,
+<span class="lineNum">      81 </span>                :            :         const std::string&amp; inputColorSpace,
+<span class="lineNum">      82 </span>                :            :         std::uint32_t inputHighBit,
+<span class="lineNum">      83 </span>                :            :         std::shared_ptr&lt;palette&gt; /* inputPalette */,
+<span class="lineNum">      84 </span>                :            :         std::uint32_t outputWidth, std::uint32_t outputHeight) const
+<span class="lineNum">      85 </span>                :            : {
+<span class="lineNum">      86 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">      87 </span>                :            : 
+<span class="lineNum">      88 </span>[<span class="branchCov" title="Branch 1 was taken 10 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchCov" title="Branch 4 was taken 10 times"> + </span>]:<span class="lineCov">         10 :     if(!colorTransforms::colorTransformsFactory::isMonochrome(inputColorSpace))</span>
+<span class="lineNum">      89 </span>                :            :     {
+<span class="lineNum">      90 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :         IMEBRA_THROW(ModalityVOILUTError, &quot;modalityVOILUT can process only monochromatic images&quot;);</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>][<span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 22 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 25 was not executed"> # </span><span class="branchNoExec" title="Branch 26 was not executed"> # </span>][<span class="branchNoExec" title="Branch 29 was not executed"> # </span><span class="branchNoExec" title="Branch 30 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 33 was not executed"> # </span>][<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 46 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span>][<span class="branchNoExec" title="Branch 49 was not executed"> # </span><span class="branchNoExec" title="Branch 50 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 53 was not executed"> # </span><span class="branchNoExec" title="Branch 54 was not executed"> # </span>]
+<span class="lineNum">      91 </span>                :            :     }
+<span class="lineNum">      92 </span>                :            : 
+<span class="lineNum">      93 </span>[<span class="branchCov" title="Branch 1 was taken 10 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchCov" title="Branch 4 was taken 10 times"> + </span>]:<span class="lineCov">         10 :     if(isEmpty())</span>
+<span class="lineNum">      94 </span>                :            :     {
+<span class="lineNum">      95 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return std::make_shared&lt;image&gt;(outputWidth, outputHeight, inputDepth, inputColorSpace, inputHighBit);</span>
+<span class="lineNum">      96 </span>                :            :     }
+<span class="lineNum">      97 </span>                :            : 
+<span class="lineNum">      98 </span>                :            :     // LUT
+<span class="lineNum">      99 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     100 </span>[<span class="branchCov" title="Branch 1 was taken 3 times"> + </span><span class="branchCov" title="Branch 2 was taken 7 times"> + </span>][<span class="branchCov" title="Branch 5 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">         10 :     if(m_voiLut != 0 &amp;&amp; m_voiLut-&gt;getSize() != 0)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 3 times"> + </span><span class="branchCov" title="Branch 10 was taken 7 times"> + </span>]
+<span class="lineNum">     101 </span>                :            :     {
+<span class="lineNum">     102 </span>        [<span class="branchCov" title="Branch 2 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          3 :         std::uint8_t bits(m_voiLut-&gt;getBits());</span>
+<span class="lineNum">     103 </span>                :            : 
+<span class="lineNum">     104 </span>                :            :         bitDepth_t depth;
+<span class="lineNum">     105 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :         if(bits &gt; 8)</span>
+<span class="lineNum">     106 </span>                :            :         {
+<span class="lineNum">     107 </span>                :<span class="lineCov">          3 :             depth = bitDepth_t::depthU16;</span>
+<span class="lineNum">     108 </span>                :            :         }
+<span class="lineNum">     109 </span>                :            :         else
+<span class="lineNum">     110 </span>                :            :         {
+<span class="lineNum">     111 </span>                :<span class="lineNoCov">          0 :             depth = bitDepth_t::depthU8;</span>
+<span class="lineNum">     112 </span>                :            :         }
+<span class="lineNum">     113 </span>                :            : 
+<span class="lineNum">     114 </span>        [<span class="branchCov" title="Branch 1 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          3 :         return std::make_shared&lt;image&gt;(outputWidth, outputHeight, depth, inputColorSpace, bits - 1);</span>
+<span class="lineNum">     115 </span>                :            :     }
+<span class="lineNum">     116 </span>                :            : 
+<span class="lineNum">     117 </span>                :            :     // Rescale
+<span class="lineNum">     118 </span>                :            :     ///////////////////////////////////////////////////////////
+<span class="lineNum">     119 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 7 times"> + </span>]:<span class="lineCov">          7 :     if(fabs(m_rescaleSlope) &lt;= std::numeric_limits&lt;double&gt;::denorm_min())</span>
+<span class="lineNum">     120 </span>                :            :     {
+<span class="lineNum">     121 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return std::make_shared&lt;image&gt;(outputWidth, outputHeight, inputDepth, inputColorSpace, inputHighBit);</span>
+<span class="lineNum">     122 </span>                :            :     }
+<span class="lineNum">     123 </span>                :            : 
+<span class="lineNum">     124 </span>                :<span class="lineCov">          7 :     std::int32_t value0 = 0;</span>
+<span class="lineNum">     125 </span>                :<span class="lineCov">          7 :     std::int32_t value1 = ((std::int32_t)1 &lt;&lt; (inputHighBit + 1)) - 1;</span>
+<span class="lineNum">     126 </span>[<span class="branchCov" title="Branch 0 was taken 7 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 2 times"> + </span><span class="branchCov" title="Branch 3 was taken 5 times"> + </span>]:<span class="lineCov">          7 :     if(inputDepth == bitDepth_t::depthS16 || inputDepth == bitDepth_t::depthS8)</span>
+<span class="lineNum">     127 </span>                :            :     {
+<span class="lineNum">     128 </span>                :<span class="lineCov">          2 :         value0 = (std::int32_t)((std::int32_t)-1 * ((std::int32_t)1 &lt;&lt; inputHighBit));</span>
+<span class="lineNum">     129 </span>                :<span class="lineCov">          2 :         value1 = ((std::int32_t)1 &lt;&lt; inputHighBit);</span>
+<span class="lineNum">     130 </span>                :            :     }
+<span class="lineNum">     131 </span>                :<span class="lineCov">          7 :     std::int32_t finalValue0((std::int32_t) ((double)value0 * m_rescaleSlope + m_rescaleIntercept) );</span>
+<span class="lineNum">     132 </span>                :<span class="lineCov">          7 :     std::int32_t finalValue1((std::int32_t) ((double)value1 * m_rescaleSlope + m_rescaleIntercept) );</span>
+<span class="lineNum">     133 </span>                :            : 
+<span class="lineNum">     134 </span>                :            :     std::int32_t minValue, maxValue;
+<span class="lineNum">     135 </span>        [<span class="branchCov" title="Branch 0 was taken 7 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          7 :     if(finalValue0 &lt; finalValue1)</span>
+<span class="lineNum">     136 </span>                :            :     {
+<span class="lineNum">     137 </span>                :<span class="lineCov">          7 :         minValue = finalValue0;</span>
+<span class="lineNum">     138 </span>                :<span class="lineCov">          7 :         maxValue = finalValue1;</span>
+<span class="lineNum">     139 </span>                :            :     }
+<span class="lineNum">     140 </span>                :            :     else
+<span class="lineNum">     141 </span>                :            :     {
+<span class="lineNum">     142 </span>                :<span class="lineNoCov">          0 :         minValue = finalValue1;</span>
+<span class="lineNum">     143 </span>                :<span class="lineNoCov">          0 :         maxValue = finalValue0;</span>
+<span class="lineNum">     144 </span>                :            :     }
+<span class="lineNum">     145 </span>                :            : 
+<span class="lineNum">     146 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 7 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">          7 :     if(minValue &gt;= 0 &amp;&amp; maxValue &lt;= 255)</span>
+<span class="lineNum">     147 </span>                :            :     {
+<span class="lineNum">     148 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return std::make_shared&lt;image&gt;(outputWidth, outputHeight, bitDepth_t::depthU8, inputColorSpace, 7);</span>
+<span class="lineNum">     149 </span>                :            :     }
+<span class="lineNum">     150 </span>[<span class="branchCov" title="Branch 0 was taken 5 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 5 times"> + </span>]:<span class="lineCov">          7 :     if(minValue &gt;= -128 &amp;&amp; maxValue &lt;= 127)</span>
+<span class="lineNum">     151 </span>                :            :     {
+<span class="lineNum">     152 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return std::make_shared&lt;image&gt;(outputWidth, outputHeight, bitDepth_t::depthS8, inputColorSpace, 7);</span>
+<span class="lineNum">     153 </span>                :            :     }
+<span class="lineNum">     154 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 7 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">          7 :     if(minValue &gt;= 0 &amp;&amp; maxValue &lt;= 65535)</span>
+<span class="lineNum">     155 </span>                :            :     {
+<span class="lineNum">     156 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return std::make_shared&lt;image&gt;(outputWidth, outputHeight, bitDepth_t::depthU16, inputColorSpace, 15);</span>
+<span class="lineNum">     157 </span>                :            :     }
+<span class="lineNum">     158 </span>[<span class="branchCov" title="Branch 0 was taken 7 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 7 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          7 :     if(minValue &gt;= -32768 &amp;&amp; maxValue &lt;= 32767)</span>
+<span class="lineNum">     159 </span>                :            :     {
+<span class="lineNum">     160 </span>        [<span class="branchCov" title="Branch 1 was taken 7 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          7 :         return std::make_shared&lt;image&gt;(outputWidth, outputHeight, bitDepth_t::depthS16, inputColorSpace, 15);</span>
+<span class="lineNum">     161 </span>                :            :     }
+<span class="lineNum">     162 </span>                :            : 
+<span class="lineNum">     163 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineCov">         10 :     return std::make_shared&lt;image&gt;(outputWidth, outputHeight, bitDepth_t::depthS32, inputColorSpace, 31);</span>
+<span class="lineNum">     164 </span>                :            : 
+<span class="lineNum">     165 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     166 </span>                :            : }
+<span class="lineNum">     167 </span>                :            : 
+<span class="lineNum">     168 </span>                :            : 
+<span class="lineNum">     169 </span>                :            : 
+<span class="lineNum">     170 </span>                :            : } // namespace transforms
+<span class="lineNum">     171 </span>                :            : 
+<a name="172"><span class="lineNum">     172 </span>                :            : } // namespace implementation</a>
+<span class="lineNum">     173 </span>                :            : 
+<span class="lineNum">     174 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 : } // namespace imebra</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

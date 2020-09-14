@@ -1,0 +1,378 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - extracted.info - src/overlay.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - overlay.cpp<span style="font-size: 80%;"> (source / <a href="overlay.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">extracted.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">68</td>
+            <td class="headerCovTableEntry">82</td>
+            <td class="headerCovTableEntryMed">82.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-08-28 20:22:28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntry">33</td>
+            <td class="headerCovTableEntryMed">81.8 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">86</td>
+            <td class="headerCovTableEntry">282</td>
+            <td class="headerCovTableEntryLo">30.5 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            : Copyright 2005 - 2019 by Paolo Brandoli/Binarno s.p.
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : Imebra is available for free under the GNU General Public License.
+<span class="lineNum">       5 </span>                :            : 
+<span class="lineNum">       6 </span>                :            : The full text of the license is available in the file license.rst
+<span class="lineNum">       7 </span>                :            :  in the project root folder.
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : If you do not want to be bound by the GPL terms (such as the requirement
+<span class="lineNum">      10 </span>                :            :  that your application must also be GPL), you may purchase a commercial
+<span class="lineNum">      11 </span>                :            :  license for Imebra from the Imebra’s website (http://imebra.com).
+<span class="lineNum">      12 </span>                :            : */
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : /*! \file overlay.cpp
+<span class="lineNum">      15 </span>                :            :     \brief Implementation of the class Overlay.
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #include &quot;../include/imebra/definitions.h&quot;
+<span class="lineNum">      20 </span>                :            : #include &quot;../include/imebra/overlay.h&quot;
+<span class="lineNum">      21 </span>                :            : #include &quot;../include/imebra/image.h&quot;
+<span class="lineNum">      22 </span>                :            : #include &quot;../include/imebra/exceptions.h&quot;
+<span class="lineNum">      23 </span>                :            : #include &quot;../implementation/overlayImpl.h&quot;
+<span class="lineNum">      24 </span>                :            : #include &quot;../implementation/exceptionImpl.h&quot;
+<span class="lineNum">      25 </span>                :            : #include &lt;string&gt;
+<span class="lineNum">      26 </span>                :            : 
+<span class="lineNum">      27 </span>                :            : namespace imebra
+<a name="28"><span class="lineNum">      28 </span>                :            : {</a>
+<span class="lineNum">      29 </span>                :            : 
+<span class="lineNum">      30 </span>                :<span class="lineNoCov">          0 : Overlay::Overlay(const Overlay&amp; source): m_pOverlay(getOverlayImplementation(source))</span>
+<span class="lineNum">      31 </span>                :            : {
+<a name="32"><span class="lineNum">      32 </span>                :<span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      33 </span>                :            : 
+<span class="lineNum">      34 </span>                :<span class="lineCov">         72 : Overlay::~Overlay()</span>
+<span class="lineNum">      35 </span>                :            : {
+<a name="36"><span class="lineNum">      36 </span>                :<span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      37 </span>                :            : 
+<span class="lineNum">      38 </span>                :<span class="lineCov">         12 : std::uint32_t Overlay::getFirstFrame() const</span>
+<span class="lineNum">      39 </span>                :            : {
+<span class="lineNum">      40 </span>                :<span class="lineCov">         12 :     return m_pOverlay-&gt;getFirstFrame();</span>
+<a name="41"><span class="lineNum">      41 </span>                :            : }</a>
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>                :<span class="lineNoCov">          0 : std::uint32_t Overlay::getFramesCount() const</span>
+<span class="lineNum">      44 </span>                :            : {
+<span class="lineNum">      45 </span>                :<span class="lineNoCov">          0 :     return m_pOverlay-&gt;getFramesCount();</span>
+<a name="46"><span class="lineNum">      46 </span>                :            : }</a>
+<span class="lineNum">      47 </span>                :            : 
+<span class="lineNum">      48 </span>                :<span class="lineCov">         24 : std::int32_t Overlay::getZeroBasedOriginX() const</span>
+<span class="lineNum">      49 </span>                :            : {
+<span class="lineNum">      50 </span>                :<span class="lineCov">         24 :     return m_pOverlay-&gt;getZeroBasedOriginX();</span>
+<a name="51"><span class="lineNum">      51 </span>                :            : }</a>
+<span class="lineNum">      52 </span>                :            : 
+<span class="lineNum">      53 </span>                :<span class="lineCov">         24 : std::int32_t Overlay::getZeroBasedOriginY() const</span>
+<span class="lineNum">      54 </span>                :            : {
+<span class="lineNum">      55 </span>                :<span class="lineCov">         24 :     return m_pOverlay-&gt;getZeroBasedOriginY();</span>
+<a name="56"><span class="lineNum">      56 </span>                :            : }</a>
+<span class="lineNum">      57 </span>                :            : 
+<span class="lineNum">      58 </span>                :<span class="lineCov">         24 : std::int32_t Overlay::getOneBasedOriginX() const</span>
+<span class="lineNum">      59 </span>                :            : {
+<span class="lineNum">      60 </span>                :<span class="lineCov">         24 :     return m_pOverlay-&gt;getOneBasedOriginX();</span>
+<a name="61"><span class="lineNum">      61 </span>                :            : }</a>
+<span class="lineNum">      62 </span>                :            : 
+<span class="lineNum">      63 </span>                :<span class="lineCov">         24 : std::int32_t Overlay::getOneBasedOriginY() const</span>
+<span class="lineNum">      64 </span>                :            : {
+<span class="lineNum">      65 </span>                :<span class="lineCov">         24 :     return m_pOverlay-&gt;getOneBasedOriginY();</span>
+<a name="66"><span class="lineNum">      66 </span>                :            : }</a>
+<span class="lineNum">      67 </span>                :            : 
+<span class="lineNum">      68 </span>                :<span class="lineCov">         24 : overlayType_t Overlay::getType() const</span>
+<span class="lineNum">      69 </span>                :            : {
+<span class="lineNum">      70 </span>                :<span class="lineCov">         24 :     return m_pOverlay-&gt;getType();</span>
+<a name="71"><span class="lineNum">      71 </span>                :            : }</a>
+<span class="lineNum">      72 </span>                :            : 
+<span class="lineNum">      73 </span>                :<span class="lineCov">         24 : std::string Overlay::getSubType() const</span>
+<span class="lineNum">      74 </span>                :            : {
+<span class="lineNum">      75 </span>                :<span class="lineCov">         24 :     return m_pOverlay-&gt;getSubType();</span>
+<a name="76"><span class="lineNum">      76 </span>                :            : }</a>
+<span class="lineNum">      77 </span>                :            : 
+<span class="lineNum">      78 </span>                :<span class="lineCov">         24 : std::wstring Overlay::getUnicodeLabel() const</span>
+<span class="lineNum">      79 </span>                :            : {
+<span class="lineNum">      80 </span>                :<span class="lineCov">         24 :     return m_pOverlay-&gt;getUnicodeLabel();</span>
+<a name="81"><span class="lineNum">      81 </span>                :            : }</a>
+<span class="lineNum">      82 </span>                :            : 
+<span class="lineNum">      83 </span>                :<span class="lineCov">         24 : std::string Overlay::getLabel() const</span>
+<span class="lineNum">      84 </span>                :            : {
+<span class="lineNum">      85 </span>                :<span class="lineCov">         24 :     return m_pOverlay-&gt;getLabel();</span>
+<a name="86"><span class="lineNum">      86 </span>                :            : }</a>
+<span class="lineNum">      87 </span>                :            : 
+<span class="lineNum">      88 </span>                :<span class="lineCov">         24 : std::wstring Overlay::getUnicodeDescription() const</span>
+<span class="lineNum">      89 </span>                :            : {
+<span class="lineNum">      90 </span>                :<span class="lineCov">         24 :     return m_pOverlay-&gt;getUnicodeDescription();</span>
+<a name="91"><span class="lineNum">      91 </span>                :            : }</a>
+<span class="lineNum">      92 </span>                :            : 
+<span class="lineNum">      93 </span>                :<span class="lineCov">         24 : std::string Overlay::getDescription() const</span>
+<span class="lineNum">      94 </span>                :            : {
+<span class="lineNum">      95 </span>                :<span class="lineCov">         24 :     return m_pOverlay-&gt;getDescription();</span>
+<a name="96"><span class="lineNum">      96 </span>                :            : }</a>
+<span class="lineNum">      97 </span>                :            : 
+<span class="lineNum">      98 </span>                :<span class="lineCov">         24 : std::uint32_t Overlay::getROIArea() const</span>
+<span class="lineNum">      99 </span>                :            : {
+<span class="lineNum">     100 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     101 </span>                :            : 
+<span class="lineNum">     102 </span>[<span class="branchCov" title="Branch 2 was taken 24 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 12 times"> + </span><span class="branchCov" title="Branch 5 was taken 12 times"> + </span>]:<span class="lineCov">         24 :     if(m_pOverlay-&gt;getROIAreaPresent())</span>
+<span class="lineNum">     103 </span>                :            :     {
+<span class="lineNum">     104 </span>        [<span class="branchCov" title="Branch 2 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         12 :         return m_pOverlay-&gt;getROIArea();</span>
+<span class="lineNum">     105 </span>                :            :     }
+<span class="lineNum">     106 </span>                :            :     else
+<span class="lineNum">     107 </span>                :            :     {
+<span class="lineNum">     108 </span>[<span class="branchCov" title="Branch 1 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         12 :         IMEBRA_THROW(MissingTagError, &quot;ROI Area not present&quot;);</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 16 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 17 was not taken"> - </span>][<span class="branchCov" title="Branch 21 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 22 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 25 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 26 was not taken"> - </span>][<span class="branchCov" title="Branch 29 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 30 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 32 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 33 was not taken"> - </span>][<span class="branchCov" title="Branch 43 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 44 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 46 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 47 was not taken"> - </span>][<span class="branchCov" title="Branch 49 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 50 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 53 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 54 was not taken"> - </span>][<span class="branchCov" title="Branch 68 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 69 was not taken"> - </span>]
+<span class="lineNum">     109 </span>                :            :     }
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>[<span class="branchCov" title="Branch 4 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">         12 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 17 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 34 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span>][<span class="branchCov" title="Branch 37 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span><span class="branchNoExec" title="Branch 73 was not executed"> # </span> 
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<a name="112"><span class="lineNum">     112 </span>                :            : }</a>
+<span class="lineNum">     113 </span>                :            : 
+<span class="lineNum">     114 </span>                :<span class="lineCov">         24 : double Overlay::getROIMean() const</span>
+<span class="lineNum">     115 </span>                :            : {
+<span class="lineNum">     116 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     117 </span>                :            : 
+<span class="lineNum">     118 </span>[<span class="branchCov" title="Branch 2 was taken 24 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 12 times"> + </span><span class="branchCov" title="Branch 5 was taken 12 times"> + </span>]:<span class="lineCov">         24 :     if(m_pOverlay-&gt;getROIMeanPresent())</span>
+<span class="lineNum">     119 </span>                :            :     {
+<span class="lineNum">     120 </span>        [<span class="branchCov" title="Branch 2 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         12 :         return m_pOverlay-&gt;getROIMean();</span>
+<span class="lineNum">     121 </span>                :            :     }
+<span class="lineNum">     122 </span>                :            :     else
+<span class="lineNum">     123 </span>                :            :     {
+<span class="lineNum">     124 </span>[<span class="branchCov" title="Branch 1 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         12 :         IMEBRA_THROW(MissingTagError, &quot;ROI Mean not present&quot;);</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 16 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 17 was not taken"> - </span>][<span class="branchCov" title="Branch 21 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 22 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 25 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 26 was not taken"> - </span>][<span class="branchCov" title="Branch 29 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 30 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 32 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 33 was not taken"> - </span>][<span class="branchCov" title="Branch 43 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 44 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 46 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 47 was not taken"> - </span>][<span class="branchCov" title="Branch 49 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 50 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 53 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 54 was not taken"> - </span>][<span class="branchCov" title="Branch 68 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 69 was not taken"> - </span>]
+<span class="lineNum">     125 </span>                :            :     }
+<span class="lineNum">     126 </span>                :            : 
+<span class="lineNum">     127 </span>[<span class="branchCov" title="Branch 4 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">         12 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 17 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 34 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span>][<span class="branchCov" title="Branch 37 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span><span class="branchNoExec" title="Branch 73 was not executed"> # </span> 
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<a name="128"><span class="lineNum">     128 </span>                :            : }</a>
+<span class="lineNum">     129 </span>                :            : 
+<span class="lineNum">     130 </span>                :<span class="lineCov">         24 : double Overlay::getROIStandardDeviation()</span>
+<span class="lineNum">     131 </span>                :            : {
+<span class="lineNum">     132 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     133 </span>                :            : 
+<span class="lineNum">     134 </span>[<span class="branchCov" title="Branch 2 was taken 24 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 12 times"> + </span><span class="branchCov" title="Branch 5 was taken 12 times"> + </span>]:<span class="lineCov">         24 :     if(m_pOverlay-&gt;getROIStandardDeviationPresent())</span>
+<span class="lineNum">     135 </span>                :            :     {
+<span class="lineNum">     136 </span>        [<span class="branchCov" title="Branch 2 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         12 :         return m_pOverlay-&gt;getROIStandardDeviation();</span>
+<span class="lineNum">     137 </span>                :            :     }
+<span class="lineNum">     138 </span>                :            :     else
+<span class="lineNum">     139 </span>                :            :     {
+<span class="lineNum">     140 </span>[<span class="branchCov" title="Branch 1 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         12 :         IMEBRA_THROW(MissingTagError, &quot;ROI Standard Deviation not present&quot;);</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 16 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 17 was not taken"> - </span>][<span class="branchCov" title="Branch 21 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 22 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 25 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 26 was not taken"> - </span>][<span class="branchCov" title="Branch 29 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 30 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 32 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 33 was not taken"> - </span>][<span class="branchCov" title="Branch 43 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 44 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 46 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 47 was not taken"> - </span>][<span class="branchCov" title="Branch 49 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 50 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 53 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 54 was not taken"> - </span>][<span class="branchCov" title="Branch 68 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 69 was not taken"> - </span>]
+<span class="lineNum">     141 </span>                :            :     }
+<span class="lineNum">     142 </span>                :            : 
+<span class="lineNum">     143 </span>[<span class="branchCov" title="Branch 4 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]:<span class="lineCov">         12 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchCov" title="Branch 17 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 31 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 34 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span>][<span class="branchCov" title="Branch 37 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span><span class="branchNoExec" title="Branch 73 was not executed"> # </span> 
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<span class="lineNum">     144 </span>                :            : }
+<a name="145"><span class="lineNum">     145 </span>                :            : </a>
+<span class="lineNum">     146 </span>                :            : 
+<span class="lineNum">     147 </span>                :<span class="lineCov">         36 : const Image Overlay::getImage(std::uint32_t frame) const</span>
+<span class="lineNum">     148 </span>                :            : {
+<span class="lineNum">     149 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     150 </span>                :            : 
+<span class="lineNum">     151 </span>[<span class="branchCov" title="Branch 2 was taken 36 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 36 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">         36 :     return Image(m_pOverlay-&gt;getImage(frame));</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>]
+<span class="lineNum">     152 </span>                :            : 
+<span class="lineNum">     153 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<a name="154"><span class="lineNum">     154 </span>                :            : }</a>
+<span class="lineNum">     155 </span>                :            : 
+<span class="lineNum">     156 </span>                :<span class="lineCov">         72 : Overlay::Overlay(const std::shared_ptr&lt;imebra::implementation::overlay&gt;&amp; pOverlay): m_pOverlay(pOverlay)</span>
+<span class="lineNum">     157 </span>                :            : {
+<a name="158"><span class="lineNum">     158 </span>                :<span class="lineCov">         36 : }</span></a>
+<span class="lineNum">     159 </span>                :            : 
+<span class="lineNum">     160 </span>                :<span class="lineCov">         48 : const std::shared_ptr&lt;implementation::overlay&gt;&amp; getOverlayImplementation(const Overlay&amp; overlay)</span>
+<span class="lineNum">     161 </span>                :            : {
+<span class="lineNum">     162 </span>                :<span class="lineCov">         48 :     return overlay.m_pOverlay;</span>
+<span class="lineNum">     163 </span>                :            : }
+<a name="164"><span class="lineNum">     164 </span>                :            : </a>
+<span class="lineNum">     165 </span>                :            : 
+<span class="lineNum">     166 </span>                :<span class="lineCov">          4 : MutableOverlay::MutableOverlay(</span>
+<span class="lineNum">     167 </span>                :            :         overlayType_t overlayType,
+<span class="lineNum">     168 </span>                :            :         const std::string&amp; overlaySubType,
+<span class="lineNum">     169 </span>                :            :         std::uint32_t firstFrame,
+<span class="lineNum">     170 </span>                :            :         std::int32_t zeroBasedOriginX, std::int32_t zeroBasedOriginY,
+<span class="lineNum">     171 </span>                :            :         const std::wstring&amp; label,
+<span class="lineNum">     172 </span>                :<span class="lineCov">          4 :         const std::wstring&amp; description):</span>
+<span class="lineNum">     173 </span>                :<span class="lineCov">          8 :     Overlay(std::make_shared&lt;implementation::overlay&gt;(</span>
+<span class="lineNum">     174 </span>                :            :                 overlayType, overlaySubType,
+<span class="lineNum">     175 </span>                :            :                 firstFrame,
+<span class="lineNum">     176 </span>                :            :                 zeroBasedOriginX,
+<span class="lineNum">     177 </span>                :            :                 zeroBasedOriginY,
+<span class="lineNum">     178 </span>                :            :                 label,
+<span class="lineNum">     179 </span>        [<span class="branchCov" title="Branch 1 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          4 :                 description))</span>
+<span class="lineNum">     180 </span>                :            : {
+<span class="lineNum">     181 </span>                :<span class="lineCov">          4 : }</span>
+<a name="182"><span class="lineNum">     182 </span>                :            : </a>
+<span class="lineNum">     183 </span>                :            : 
+<span class="lineNum">     184 </span>                :<span class="lineCov">          8 : MutableOverlay::MutableOverlay(</span>
+<span class="lineNum">     185 </span>                :            :         overlayType_t overlayType,
+<span class="lineNum">     186 </span>                :            :         const std::string&amp; overlaySubType,
+<span class="lineNum">     187 </span>                :            :         std::uint32_t firstFrame,
+<span class="lineNum">     188 </span>                :            :         std::int32_t zeroBasedOriginX, std::int32_t zeroBasedOriginY,
+<span class="lineNum">     189 </span>                :            :         const std::string&amp; label,
+<span class="lineNum">     190 </span>                :<span class="lineCov">          8 :         const std::string&amp; description):</span>
+<span class="lineNum">     191 </span>                :<span class="lineCov">         16 :     Overlay(std::make_shared&lt;implementation::overlay&gt;(</span>
+<span class="lineNum">     192 </span>                :            :                 overlayType, overlaySubType,
+<span class="lineNum">     193 </span>                :            :                 firstFrame,
+<span class="lineNum">     194 </span>                :            :                 zeroBasedOriginX,
+<span class="lineNum">     195 </span>                :            :                 zeroBasedOriginY,
+<span class="lineNum">     196 </span>                :            :                 label,
+<span class="lineNum">     197 </span>        [<span class="branchCov" title="Branch 1 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          8 :                 description))</span>
+<span class="lineNum">     198 </span>                :            : {
+<a name="199"><span class="lineNum">     199 </span>                :<span class="lineCov">          8 : }</span></a>
+<span class="lineNum">     200 </span>                :            : 
+<span class="lineNum">     201 </span>                :<span class="lineNoCov">          0 : MutableOverlay::MutableOverlay(const MutableOverlay&amp; source):</span>
+<span class="lineNum">     202 </span>                :<span class="lineNoCov">          0 :     Overlay(source)</span>
+<span class="lineNum">     203 </span>                :            : {
+<a name="204"><span class="lineNum">     204 </span>                :<span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     205 </span>                :            : 
+<span class="lineNum">     206 </span>                :<span class="lineCov">         24 : MutableOverlay::~MutableOverlay()</span>
+<span class="lineNum">     207 </span>                :            : {
+<a name="208"><span class="lineNum">     208 </span>                :<span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     209 </span>                :            : 
+<span class="lineNum">     210 </span>                :<span class="lineCov">          8 : void MutableOverlay::setROIArea(std::uint32_t pixels)</span>
+<span class="lineNum">     211 </span>                :            : {
+<span class="lineNum">     212 </span>                :<span class="lineCov">          8 :     getOverlayImplementation(*this)-&gt;setROIArea(pixels);</span>
+<a name="213"><span class="lineNum">     213 </span>                :<span class="lineCov">          8 : }</span></a>
+<span class="lineNum">     214 </span>                :            : 
+<span class="lineNum">     215 </span>                :<span class="lineCov">          4 : void MutableOverlay::setROIMean(double mean)</span>
+<span class="lineNum">     216 </span>                :            : {
+<span class="lineNum">     217 </span>                :<span class="lineCov">          4 :     getOverlayImplementation(*this)-&gt;setROIMean(mean);</span>
+<a name="218"><span class="lineNum">     218 </span>                :<span class="lineCov">          4 : }</span></a>
+<span class="lineNum">     219 </span>                :            : 
+<span class="lineNum">     220 </span>                :<span class="lineCov">          4 : void MutableOverlay::setROIStandardDeviation(double standardDeviation)</span>
+<span class="lineNum">     221 </span>                :            : {
+<span class="lineNum">     222 </span>                :<span class="lineCov">          4 :     getOverlayImplementation(*this)-&gt;setROIStandardDeviation(standardDeviation);</span>
+<a name="223"><span class="lineNum">     223 </span>                :<span class="lineCov">          4 : }</span></a>
+<span class="lineNum">     224 </span>                :            : 
+<span class="lineNum">     225 </span>                :<span class="lineCov">         20 : void MutableOverlay::setImage(std::uint32_t frame, const Image&amp; image)</span>
+<span class="lineNum">     226 </span>                :            : {
+<span class="lineNum">     227 </span>                :            :     IMEBRA_FUNCTION_START();
+<span class="lineNum">     228 </span>                :            : 
+<span class="lineNum">     229 </span>[<span class="branchCov" title="Branch 3 was taken 20 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>][<span class="branchCov" title="Branch 7 was taken 20 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>]:<span class="lineCov">         20 :     getOverlayImplementation(*this)-&gt;setImage(frame, getImageImplementation(image));</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">     230 </span>                :            : 
+<span class="lineNum">     231 </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span> :<span class="lineNoCov">          0 :     IMEBRA_FUNCTION_END();</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 58 was not executed"> # </span><span class="branchNoExec" title="Branch 59 was not executed"> # </span><span class="branchNoExec" title="Branch 69 was not executed"> # </span><span class="branchNoExec" title="Branch 70 was not executed"> # </span><span class="branchNoExec" title="Branch 72 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 73 was not executed"> # </span><span class="branchNoExec" title="Branch 75 was not executed"> # </span><span class="branchNoExec" title="Branch 76 was not executed"> # </span>]
+<a name="232"><span class="lineNum">     232 </span>                :<span class="lineCov">         20 : }</span></a>
+<span class="lineNum">     233 </span>                :            : 
+<span class="lineNum">     234 </span>                :<span class="lineNoCov">          0 : MutableOverlay::MutableOverlay(std::shared_ptr&lt;imebra::implementation::overlay&gt; pOverlay):</span>
+<span class="lineNum">     235 </span>                :<span class="lineNoCov">          0 :     Overlay(pOverlay)</span>
+<span class="lineNum">     236 </span>                :            : {
+<a name="237"><span class="lineNum">     237 </span>                :<span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     238 </span>                :            : 
+<span class="lineNum">     239 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 : }</span>
+<span class="lineNum">     240 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
